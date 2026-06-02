@@ -1,0 +1,29 @@
+scenarios:
+  normal_day:
+    description: "Hari cerah, semua panel sehat"
+    generator: normal
+    days: 1
+    speed: 60          # 1 detik = 60 menit data
+
+  soiling_gradual:
+    description: "Panel mulai kotor hari ke-5"
+    generator: anomaly
+    type: soiling
+    severity: 0.3
+    days: 14
+    speed: 120
+
+  inverter_fault_sudden:
+    description: "Inverter-02 trip jam 10:30"
+    generator: anomaly
+    type: inverter_fault
+    start_idx: 540     # 540 × 5 menit = 45 jam = hari ke-2 jam 9
+    duration: 24       # 2 jam fault
+    speed: 30
+
+  mixed:
+    description: "Campuran normal + beberapa anomali acak"
+    generator: anomaly
+    type: shading
+    days: 7
+    speed: 60
