@@ -1,0 +1,220 @@
+# identitas solar plant
+plant:
+  id:             "plant_001"
+  name:           "Orbit's Solar Plant"
+  capacity_kwp:   500          # kapasitas terpasang dalam kWp
+  panel_area_m2:  2500         # total luas panel dalam m²
+  n_strings:      4            # jumlah string paralel
+  n_inverters:    2            # jumlah inverter
+  latitude:       -6.854       # untuk koreksi irradiance berdasarkan lokasi
+  longitude:      107.921
+
+# mqtt broker: koneksi antara simulator/sensor dan pipeline
+mqtt:
+  broker:          "localhost"
+  port:            1883
+  keepalive_sec:   60
+  qos:             1            # at-least-once delivery
+  topic_pattern:   "solar/{plant_id}/{device_type}/{device_id}/data"
+  subscribe_all:   "solar/+/+/+/data"  # wildcard untuk subscribe semua device
+
+  # Buffer: kumpulkan N pesan sebelum batch insert ke DB
+  buffer_size:     10
+  buffer_timeout_sec: 30       # flush buffer walau belum penuh setelah N detik
+
+# timescaleDB: semua tabel dan retentiaon policy
+database:
+  host:         "localhost"
+  port:         5432
+  name:         "solar_db"
+  user:         "postgres"
+  password:     "${DB_PASSWORD}"    # baca dari .env
+  url:          "postgresql://postgres:${DB_PASSWORD}@localhost:5432/solar_db"
+
+  retention:
+    sensor_data_days:  90     # data raw disimpan 90 hari
+    audit_log_days:    -1     # -1 = permanent, tidak dihapus
+    model_health_days: 365    # metrik kesehatan model 1 tahun
+
+  batch_insert:
+    page_size: 100             # jumlah row per batch di execute_batch
+
+  fallback_path: "data/raw/failed_writes.csv"
+
+
+# simulator: parameter fisik panel dan default publishing
+simulator:
+  panel:
+    efficiency:       0.18      # efisiensi konversi panel (18%)
+    temp_coefficient: -0.004   # degradasi per °C di atas 25°C (-0.4%/°C)
+    noise_std:        0.02      # noise Gaussian (2%)
+    irradiance_peak:  1000      # W/m² maksimum saat tengah hari
+    sunrise_hour:     6
+    sunset_hour:      18
+
+  publisher:
+    interval_min:     5         # satu data point = 5 menit
+    default_speed:    60        # 1 detik = 60 menit data
+    default_days:     90
+
+  anomaly:
+    soiling_rate_per_day:  0.005   # PR turun 0.5%/hari kalau tidak dibersihkan
+    degradation_per_year:  0.007   # degradasi normal 0.7%/tahun
+
+# feature engineering: parameter kalkulasi
+features:
+  rolling_window_rows:   3      # 3 rows × 5 menit = rolling window 15 menit
+  min_irradiance_for_pr: 10     # W/m² — di bawah ini PR tidak dihitung (malam)
+  feature_list:                  # fitur yang masuk ke model ML
+    - power_kw
+    - voltage_v
+    - current_a
+    - pr
+    - string_imbalance
+
+# model ml: semua hyperparameter di satu tempat
+models:
+  saved_dir: "models/saved"
+
+  isolation_forest:            # offline, untuk fallback + perbandingan
+    contamination: 0.05        # asumsi 5% data adalah anomali
+    n_estimators:  100
+    random_state:  42
+
+  autoencoder:                 # offline training + continual update
+    input_dim:     5           # sesuai jumlah feature_list
+    hidden_dims:   [16, 8, 4]  # arsitektur encoder
+    epochs:        50
+    batch_size:    32
+    learning_rate: 0.001
+    threshold_percentile: 95   # recon error di atas persentil ini = anomali
+
+  lstm:
+    input_dim:     5
+    hidden_size:   64
+    num_layers:    2
+    sequence_len:  72           # 72 × 5 menit = 6 jam lookback
+    forecast_steps: 1
+    epochs:        100
+    learning_rate: 0.001
+    min_data_days: 90          # butuh 90 hari data sebelum training
+
+  kmeans:
+    n_clusters:    5            # soiling, shading, cell_crack, inv_fault, wiring
+    random_state:  42
+    cluster_labels:            # mapping cluster ID → nama fault
+      0: "soiling"
+      1: "partial_shading"
+      2: "cell_crack"
+      3: "inverter_fault"
+      4: "wiring_fault"
+
+# real-time learning: parameter online dan continual learning
+online_learning:
+  half_space_trees:
+    n_trees:      25
+    height:       8
+    window_size:  250           # belajar dari 250 data point terakhir
+    warmup_rows:  250           # belum reliable sebelum lihat 250 data
+    save_every_n: 100           # save state ke disk setiap 100 rows
+
+  continual_ae:
+    update_interval_hours: 1   # incremental update setiap jam
+    ewc_lambda:    1000         # makin besar = makin protektif ke data lama
+    min_rows:      10           # skip update kalau data < 10 rows
+    inner_epochs:  3            # epoch per incremental update
+    learning_rate: 0.0001       # lebih kecil dari training awal
+
+# agent orchestrator: threshold and guardrail parameters
+agent:
+  thresholds:
+    risk_log_only:   40         # di bawah ini: log saja, tidak ada aksi
+    risk_alert:      70         # di atas ini: wajib human approval
+    confidence_min:  0.6        # model confidence minimum sebelum lanjut ke LLM
+    disagreement_delta: 0.5    # selisih score dua model yang dianggap disagreement
+
+  guardrails:
+    sensor_bounds:             # Guardrail 1: range fisik yang valid
+      voltage_v:    [0, 1500]
+      current_a:    [0, 20]
+      irradiance:   [0, 1400]
+      temp_ambient: [-10, 85]
+      power_kw:     [0, 1100]
+    max_data_gap_min: 5        # Guardrail 1: gap data > 5 menit = skip
+
+    action_whitelist:          # Guardrail 3: LLM hanya boleh pilih dari ini
+      - send_alert
+      - create_ticket
+      - schedule_inspection
+      - log_only
+      - request_human_review
+
+    approval_timeout_hours: 4  # Guardrail 4: eskalasi kalau tidak ada respons
+
+  aggregator:                  # bobot risk score per model
+    weights:
+      isolation_forest: 0.30
+      autoencoder:      0.40
+      lstm:             0.30
+    lstm_night_weight:  0.0    # LSTM diabaikan saat malam (irradiance=0)
+
+# llm: claude api conf
+# llm:
+#   model:       "claude-sonnet-4-20250514"
+#   max_tokens:  1000
+#   temperature: 0.1             # rendah = output lebih deterministik
+#   api_key:     "${ANTHROPIC_API_KEY}"  # baca dari .env
+
+#   cost_guard:
+#     daily_budget_usd:  5.0     # maksimum biaya API per hari
+#     fallback_on_exceed: true   # kalau budget habis, pakai rules-based
+
+#   memory:                      # ChromaDB vector memory
+#     db_path:          "./agent_memory"
+#     embedding_model:  "all-MiniLM-L6-v2"
+#     n_recall:         3        # ambil 3 keputusan masa lalu yang paling mirip
+#     min_to_remember:  1        # simpan ke memori minimal setelah 1 konfirmasi
+
+# alert
+alert:
+  telegram:
+    token:        "${TELEGRAM_TOKEN}"    # baca dari .env
+    chat_id:      "${TELEGRAM_CHAT_ID}"  # group atau personal chat
+    admin_ids:               # user ID yang bisa approve high-risk
+      - "${ADMIN_TELEGRAM_ID_1}"
+      - "${ADMIN_TELEGRAM_ID_2}"
+
+  levels:
+    low:          "log_only"    # risk < 40: tidak ada notif
+    medium:       "notify"      # risk 40–70: notif tanpa tombol
+    high:         "approve"     # risk > 70: wajib approve
+
+  escalation_hours: 4          # eskalasi ke admin kalau tidak ada respons
+
+# drift monitor: deteksi kalau model sudah mulai tidak akurat
+drift_monitor:
+  check_interval_hours:  24
+  ks_threshold:          0.1   # KS statistic di atas ini = drift terdeteksi
+  fp_rate_threshold:     0.3   # false positive rate > 30% = perlu retrain
+  lookback_days:         7     # analisis 7 hari terakhir
+  min_samples:           20    # skip check kalau data < 20 sampel
+
+# jadwal task otomatis: dipakai oleh scheduled_tasks.py
+scheduled_tasks:
+  ae_update:
+    interval_hours:    1
+    enabled:           true
+
+  drift_check:
+    interval_hours:    24
+    enabled:           true
+
+  model_retrain:
+    interval_days:     7
+    min_labeled_rows:  50      # minimum labeled data sebelum retrain
+    enabled:           true
+
+  fallback_flush:
+    interval_hours:    1        # coba kirim ulang data yang gagal masuk DB
+    enabled:           true
+
