@@ -695,14 +695,11 @@ def page_demo(agent, engine, rootcause, bot, feature_means, feature_order):
 # ─────────────────────────────────────────
 def page_realtime(auto_refresh: bool):
     icon_header("cpu", "Realtime Feed", 26, COLOR_NORMAL, tag="h1")
-    st.caption("Hasil analisis real-time dari pipeline MQTT → Agent.")
+    st.caption("Hasil analisis real-time yang diproses otomatis oleh sistem.")
 
     data = read_realtime()
     if not data:
-        st.warning(
-            "Belum ada data realtime. Jalankan pipeline dulu:\n\n"
-            "`python scripts/run_realtime.py`"
-        )
+        st.warning("Data realtime sedang diproses otomatis oleh sistem.")
         return
 
     df = pd.DataFrame(data)

@@ -1,8 +1,10 @@
 """
 scripts/run_realtime.py
 ────────────────────────────────────────────────────────────
-Jalankan pipeline ingestion real-time:
-    MQTT → guardrails → agent → keputusan → alert → realtime_results.json
+Runner pipeline realtime untuk development lokal (TANPA MQTT, tanpa Docker).
+
+Cukup jalankan realtime_simulator.py langsung — baca dataset, analisis agent,
+tulis realtime_results.json, kirim alert Telegram bila perlu.
 
 Cara pakai (dari root repo):
     python scripts/run_realtime.py
@@ -11,8 +13,6 @@ Hentikan dengan Ctrl+C.
 """
 
 import sys
-import time
-import threading
 from pathlib import Path
 
 # ── Path setup: root repo masuk sys.path ──
@@ -27,28 +27,15 @@ except Exception:
 
 
 def main():
-    print("=" * 60)
-    print("  AI-ORBIT SOLAR — REALTIME INGESTION PIPELINE")
-    print("=" * 60)
-
-    # Import di dalam main supaya error import (mis. model belum ada) tertangkap rapi
+    print("[REALTIME] Mode lokal — menjalankan simulator tanpa MQTT...")
     try:
-        from ingestion import mqtt_client
+        from scripts.realtime_simulator import run
     except Exception as e:
-        print(f"[REALTIME] Gagal inisialisasi pipeline: {e}")
+        print(f"[REALTIME] Gagal import simulator: {e}")
         sys.exit(1)
 
-    # Jalankan loop MQTT di thread terpisah (daemon → ikut mati saat program berhenti)
-    t = threading.Thread(target=mqtt_client.start, daemon=True)
-    t.start()
-
-    print("[REALTIME] Pipeline aktif, menunggu data dari MQTT...")
-    print("[REALTIME] Tekan Ctrl+C untuk berhenti.\n")
-
     try:
-        # Main thread tetap hidup selama thread MQTT jalan
-        while t.is_alive():
-            time.sleep(0.5)
+        run()
     except KeyboardInterrupt:
         print("\n[REALTIME] Pipeline dihentikan")
         sys.exit(0)

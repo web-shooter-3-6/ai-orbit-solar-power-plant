@@ -109,22 +109,29 @@ streamlit run dashboard.py
 python scripts/run_demo.py
 ```
 
-#### 📡 Mode 3 — Realtime Pipeline (requires Docker)
+#### 📡 Mode 3 — Realtime Pipeline (no Docker, no MQTT)
 ```bash
-# Terminal 1 — MQTT broker + TimescaleDB + Grafana
-docker-compose up
-
-# Terminal 2 — simulate sensor data over MQTT
-python simulator/mqtt_publisher.py --csv data/Condition_Monitoring_Dataset.csv --speed 3600
-
-# Terminal 3 — ingestion → guardrails → agent → alerts
+# Terminal 1 — realtime simulator (reads dataset → agent → realtime_results.json)
 python scripts/run_realtime.py
 
-# Terminal 4 — dashboard (open the "Realtime Feed" page)
+# Terminal 2 — dashboard (open the "Realtime Feed" page)
 streamlit run dashboard.py
 ```
 
-> The DB write is **optional and non-fatal**: if TimescaleDB is not running, the pipeline still analyzes data and writes `realtime_results.json`, while raw sensor rows fall back to `data/raw/failed_writes.csv`. Terminals 3 + 4 are enough for a quick demo without Docker.
+> The realtime feed now runs **MQTT-free** so it can be deployed to the cloud (e.g. **Railway**). `scripts/realtime_simulator.py` streams the dataset row-by-row directly into the agent. The legacy MQTT pipeline (`simulator/mqtt_publisher.py`, `ingestion/mqtt_client.py`) is kept for architecture reference but is no longer required.
+
+<details>
+<summary><b>☁️ Cloud deployment (Railway)</b></summary>
+
+Deployment runs both processes from one start command (see `railway.json` / `Procfile`):
+
+```bash
+python scripts/realtime_simulator.py & streamlit run dashboard.py --server.port $PORT --server.address 0.0.0.0
+```
+
+The simulator runs in the background and continuously feeds `realtime_results.json`, which the dashboard reads on every refresh.
+
+</details>
 
 #### 🔁 Mode 4 — Retrain All Models
 ```bash

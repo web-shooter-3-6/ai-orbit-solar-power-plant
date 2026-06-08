@@ -1465,5 +1465,24 @@
       "grid_voltage": 220.0,
       "sensor_latency": 20.0
     }
+  },
+  {
+    "timestamp": "2026-06-08T21:16:18",
+    "risk_score": 1.0,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 437.0,
+      "pv_power_output": 7.5,
+      "battery_temperature": 85.0,
+      "grid_voltage": 220.0,
+      "sensor_latency": 20.0
+    }
   }
 ]
