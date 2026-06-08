@@ -24,10 +24,16 @@ DATA_PATH = REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv"
 
 
 def baseline_means() -> dict:
-    """Nilai rata-rata tiap fitur dari dataset (fitur tak diinput)."""
+    """Nilai rata-rata tiap fitur dari baris berlabel 'Normal' (baseline normal asli).
+
+    Dipakai untuk mengisi fitur yang tidak di-override sehingga benar-benar
+    merepresentasikan sampel normal (bukan campuran semua kelas).
+    """
     if not DATA_PATH.exists():
         return {c: 0.0 for c in FEATURE_ORDER}
     df = pd.read_csv(DATA_PATH)
+    if "System_Condition_Label" in df.columns:
+        df = df[df["System_Condition_Label"] == "Normal"]
     num = df.select_dtypes(include="number")
     return {c: float(num[c].mean()) for c in FEATURE_ORDER if c in num.columns}
 
@@ -56,10 +62,8 @@ def run():
     def t1(r):
         ok = r["risk_score"] < 0.25 and r["risk_level"] == "LOW"
         return ok, "risk_score < 0.25 & level == LOW"
-    cases.append(("Input normal", {
-        "PV_Voltage": 437, "Battery_Temperature": 35, "Grid_Voltage": 415,
-        "Sensor_Latency": 100, "PV_Panel_Temperature": 38,
-    }, t1))
+    # Sampel normal asli = semua fitur di nilai rata-rata kelas Normal
+    cases.append(("Input normal", {}, t1))
 
     # Test 2: Battery_Temperature=85 → risk_score >= 0.75, level CRITICAL
     def t2(r):
@@ -83,10 +87,7 @@ def run():
     def t5(r):
         ok = r["dominant_fault"] == "Normal"
         return ok, 'dominant_fault == "Normal"'
-    cases.append(("Semua normal (fault)", {
-        "PV_Voltage": 437, "Battery_Temperature": 35, "Grid_Voltage": 415,
-        "Sensor_Latency": 100, "PV_Panel_Temperature": 38,
-    }, t5))
+    cases.append(("Semua normal (fault)", {}, t5))
 
     # Test 6: Battery_Temperature=85 AND PV_Voltage=150 → risk_score >= 0.90, CRITICAL
     def t6(r):
