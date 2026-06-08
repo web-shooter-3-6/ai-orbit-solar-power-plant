@@ -70,14 +70,26 @@ class TelegramAlert:
     _medium_buffer = []
     _medium_window_start = None
 
-    def __init__(self, token: str = None, chat_id: str = None):
+    def __init__(self, token: str = None, chat_id=None):
         self.token = token or os.getenv("TELEGRAM_TOKEN", "").strip()
-        self.chat_id = chat_id or os.getenv("TELEGRAM_CHAT_ID", "").strip()
+        # Kumpulkan SEMUA chat id tujuan (bisa lebih dari satu).
+        # Sumber: argumen chat_id (str/list) ATAU env TELEGRAM_CHAT_ID,
+        # TELEGRAM_CHAT_ID_2, TELEGRAM_CHAT_ID_3, ... (dibaca berurutan).
+        if chat_id is not None:
+            ids = chat_id if isinstance(chat_id, (list, tuple)) else [chat_id]
+        else:
+            ids = [
+                os.getenv("TELEGRAM_CHAT_ID", ""),
+                os.getenv("TELEGRAM_CHAT_ID_2", ""),
+                os.getenv("TELEGRAM_CHAT_ID_3", ""),
+            ]
+        # buang yang kosong & duplikat, jaga urutan
+        self.chat_ids = list(dict.fromkeys(str(c).strip() for c in ids if str(c).strip()))
 
     # ─────────────────────────────────────────
     def is_configured(self) -> bool:
-        """True kalau TOKEN & CHAT_ID terisi (dan bukan placeholder)."""
-        if not self.token or not self.chat_id:
+        """True kalau TOKEN & minimal 1 CHAT_ID terisi (dan bukan placeholder)."""
+        if not self.token or not self.chat_ids:
             return False
         if self.token.startswith("123456789:") or "xxxx" in self.token.lower():
             return False
@@ -87,19 +99,30 @@ class TelegramAlert:
     # Pengiriman low-level
     # ─────────────────────────────────────────
     def _post(self, text: str) -> bool:
-        """Sekali kirim ke Telegram (tanpa retry, tanpa simpan). True kalau sukses."""
+        """Kirim ke SEMUA chat id (tanpa retry, tanpa simpan).
+
+        Return True kalau minimal satu chat berhasil dikirim (supaya cooldown/
+        antrian tidak memicu kirim ulang yang menyebabkan duplikat ke chat yang
+        sudah berhasil).
+        """
         if not self.is_configured():
             return False
-        try:
-            resp = requests.post(
-                API_BASE.format(token=self.token),
-                data={"chat_id": self.chat_id, "text": text},
-                timeout=TIMEOUT,
-            )
-            return resp.status_code == 200 and resp.json().get("ok", False)
-        except Exception as e:
-            print(f"[Telegram] gagal kirim: {e}")
-            return False
+        url = API_BASE.format(token=self.token)
+        ada_sukses = False
+        for cid in self.chat_ids:
+            try:
+                resp = requests.post(
+                    url,
+                    data={"chat_id": cid, "text": text},
+                    timeout=TIMEOUT,
+                )
+                if resp.status_code == 200 and resp.json().get("ok", False):
+                    ada_sukses = True
+                else:
+                    print(f"[Telegram] gagal kirim ke {cid}: {resp.text[:120]}")
+            except Exception as e:
+                print(f"[Telegram] gagal kirim ke {cid}: {e}")
+        return ada_sukses
 
     def _send_with_retry(self, text: str, level: str = "UNKNOWN") -> bool:
         """Kirim dengan retry MAX_RETRY x (delay RETRY_DELAY). Gagal total → simpan."""

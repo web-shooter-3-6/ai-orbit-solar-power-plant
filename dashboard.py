@@ -17,6 +17,8 @@ Jalankan dari root repo:
 import sys
 import json
 import time
+import threading
+import subprocess
 from pathlib import Path
 from datetime import datetime
 
@@ -39,6 +41,41 @@ APP_VERSION = "1.2.0"
 
 # Kolom yang dibuang waktu training (bukan fitur model)
 DROP_COLS = ["Timestamp", "PV_DC_Power", "System_Condition_Label"]
+
+# ─────────────────────────────────────────
+# Auto-start realtime simulator (untuk deploy cloud, mis. Railway)
+# ─────────────────────────────────────────
+# Guard level-PROSES (bukan per-session): module global ini hidup selama proses
+# server Streamlit, dipakai bersama semua browser session → simulator hanya
+# di-start SEKALI walau banyak orang buka dashboard. Set env DISABLE_AUTO_SIM=1
+# untuk mematikan (mis. saat dev lokal sudah menjalankan run_realtime.py sendiri).
+_simulator_started = False
+
+
+def _start_simulator():
+    """Jalankan scripts/realtime_simulator.py sebagai proses background."""
+    try:
+        subprocess.Popen(
+            [sys.executable, str(REPO_DIR / "scripts" / "realtime_simulator.py")],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        print("[dashboard] Realtime simulator dijalankan di background.")
+    except Exception as e:
+        print(f"[dashboard] Gagal start simulator: {e}")
+
+
+def ensure_simulator_started():
+    """Start simulator sekali per proses server (aman dari multi-session/rerun)."""
+    global _simulator_started
+    import os
+    if os.getenv("DISABLE_AUTO_SIM") == "1":
+        return
+    if _simulator_started or st.session_state.get("sim_started"):
+        return
+    _simulator_started = True
+    st.session_state["sim_started"] = True
+    threading.Thread(target=_start_simulator, daemon=True).start()
 
 # Level yang dianggap perlu alert (selaras dengan alert/telegram_alert.py)
 ALERT_LEVELS = {"MEDIUM", "HIGH", "CRITICAL"}
@@ -836,6 +873,9 @@ NAV_ITEMS = {
 
 
 def main():
+    # Auto-start simulator realtime di background (sekali per proses server)
+    ensure_simulator_started()
+
     # Sidebar — logo (icon zap) + judul
     st.sidebar.markdown(
         f'<div style="display:flex;align-items:center;gap:10px;">'
