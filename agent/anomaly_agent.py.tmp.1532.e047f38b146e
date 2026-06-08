@@ -1,0 +1,425 @@
+"""
+agent/anomaly_agent.py
+────────────────────────────────────────────────────────────
+AnomalyAgent — otak deteksi anomali multi-model.
+
+Tugas: terima 1 baris data sensor (dict) → jalankan SEMUA model terlatih →
+gabungkan hasilnya jadi satu risk_score 0.0–1.0 + ringkasan analisis.
+
+Model yang dipakai (semua dari models/output/):
+    XGBoost           -> prediksi label (supervised, 10 kelas)
+    Isolation Forest  -> anomaly flag (-1 = anomali)
+    Autoencoder       -> reconstruction error (tinggi = anomali)
+    KMeans            -> jarak ke centroid terdekat (jauh = anomali)
+    LSTM              -> prediksi label (supervised, 10 kelas)
+"""
+
+import sys
+import pickle
+from pathlib import Path
+from datetime import datetime
+from collections import Counter
+
+# Paksa stdout UTF-8 supaya simbol tidak crash di konsol Windows
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
+# ── Path setup: tambahkan root repo ke sys.path supaya bisa import paket models ──
+REPO_DIR = Path(__file__).resolve().parent.parent
+if str(REPO_DIR) not in sys.path:
+    sys.path.insert(0, str(REPO_DIR))
+
+OUTPUT_DIR = REPO_DIR / "models" / "output"
+
+import numpy as np
+import pandas as pd
+
+# torch + class model di-import dari paket models (aman: training code dijaga __main__)
+import torch
+from models.autoencoder import Autoencoder
+from models.lstm import LSTMClassifier
+
+# ─────────────────────────────────────────
+# Konstanta global
+# ─────────────────────────────────────────
+LABEL_NAMES = [
+    "Battery_Degradation",    # 0
+    "Battery_Overheating",    # 1
+    "Communication_Failure",  # 2
+    "EV_Charging_Fault",      # 3
+    "Grid_Instability",       # 4
+    "Inverter_Fault",         # 5
+    "Normal",                 # 6
+    "Overload_Condition",     # 7
+    "PV_Fault",               # 8
+    "Sensor_Failure",         # 9
+]
+NORMAL_LABEL = "Normal"
+
+# Urutan 49 fitur HARUS sama persis seperti waktu training (lihat X_train.csv)
+FEATURE_ORDER = [
+    "Hour", "Day_Index", "PV_Voltage", "PV_Current", "PV_Power_Output",
+    "PV_Panel_Temperature", "Solar_Irradiance", "PV_Efficiency",
+    "PV_AC_Power", "PV_Inverter_Temperature", "PV_Frequency",
+    "Battery_SOC", "Battery_SOH", "Battery_Voltage", "Battery_Current",
+    "Battery_Temperature", "Battery_Charge_Rate", "Battery_Discharge_Rate",
+    "Battery_Internal_Resistance", "Battery_Cycle_Count",
+    "EV_Charging_Load", "EV_Charging_Current", "EV_Charging_Voltage",
+    "Charging_Station_Temperature", "Active_EV_Count", "Charging_Duration",
+    "Fast_Charging_Status", "Grid_Voltage", "Grid_Current", "Grid_Frequency",
+    "Power_Demand", "Reactive_Power", "Load_Factor", "Energy_Export",
+    "Energy_Import", "Power_Factor", "Sensor_Latency", "Packet_Loss_Rate",
+    "Signal_Strength", "Data_Transmission_Rate", "Edge_Node_CPU_Usage",
+    "Cloud_Response_Time", "DWT_Coeff_A1", "DWT_Coeff_D1", "DWT_Coeff_D2",
+    "Signal_Energy", "Signal_Entropy", "RMS_Value", "Crest_Factor",
+]
+
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+class AnomalyAgent:
+    """Agent yang menggabungkan 5 model jadi satu keputusan risk score."""
+
+    def __init__(self, output_dir: Path = OUTPUT_DIR):
+        self.output_dir = Path(output_dir)
+        print("[AnomalyAgent] Inisialisasi & load semua model...")
+
+        # Penampung model
+        self.scaler = None
+        self.label_encoder = None
+        self.xgb = None
+        self.iforest = None
+        self.kmeans = None
+        self.autoencoder = None
+        self.ae_threshold = None
+        self.lstm = None
+        self.lstm_n_features = len(FEATURE_ORDER)
+        self.kmeans_threshold = None
+
+        self._load_preprocessors()
+        self._load_sklearn_models()
+        self._load_autoencoder()
+        self._load_lstm()
+        self._calibrate_kmeans_threshold()
+
+        print("[AnomalyAgent] ✓ Semua model siap.\n")
+
+    # ─────────────────────────────────────────
+    # LOADERS
+    # ─────────────────────────────────────────
+    def _load_preprocessors(self):
+        try:
+            with open(self.output_dir / "scaler.pkl", "rb") as f:
+                self.scaler = pickle.load(f)
+            with open(self.output_dir / "label_encoder.pkl", "rb") as f:
+                self.label_encoder = pickle.load(f)
+            print("   ✓ scaler.pkl & label_encoder.pkl")
+        except Exception as e:
+            raise RuntimeError(f"Gagal load preprocessor: {e}")
+
+    def _load_sklearn_models(self):
+        try:
+            with open(self.output_dir / "xgboost_model.pkl", "rb") as f:
+                self.xgb = pickle.load(f)
+            with open(self.output_dir / "isolation_forest_model.pkl", "rb") as f:
+                self.iforest = pickle.load(f)
+            with open(self.output_dir / "kmeans_model.pkl", "rb") as f:
+                self.kmeans = pickle.load(f)
+            print("   ✓ xgboost / isolation_forest / kmeans")
+        except Exception as e:
+            raise RuntimeError(f"Gagal load model sklearn/xgboost: {e}")
+
+    def _load_autoencoder(self):
+        try:
+            ckpt = torch.load(self.output_dir / "autoencoder_model.pt",
+                              map_location=DEVICE, weights_only=False)
+            model = Autoencoder(ckpt["input_dim"]).to(DEVICE)
+            model.load_state_dict(ckpt["state_dict"])
+            model.eval()
+            self.autoencoder = model
+            self.ae_threshold = float(ckpt["threshold"])
+            print(f"   ✓ autoencoder (threshold={self.ae_threshold:.4f})")
+        except Exception as e:
+            raise RuntimeError(f"Gagal load autoencoder: {e}")
+
+    def _load_lstm(self):
+        try:
+            ckpt = torch.load(self.output_dir / "lstm_model.pt",
+                              map_location=DEVICE, weights_only=False)
+            model = LSTMClassifier(
+                1, ckpt["hidden_size"], ckpt["num_layers"], ckpt["n_classes"]
+            ).to(DEVICE)
+            model.load_state_dict(ckpt["state_dict"])
+            model.eval()
+            self.lstm = model
+            self.lstm_n_features = ckpt["n_features"]
+            print("   ✓ lstm")
+        except Exception as e:
+            raise RuntimeError(f"Gagal load lstm: {e}")
+
+    def _calibrate_kmeans_threshold(self):
+        """Threshold jarak KMeans = persentil-95 jarak data train ke centroid."""
+        try:
+            xtrain_path = self.output_dir / "X_train.csv"
+            if xtrain_path.exists():
+                X = pd.read_csv(xtrain_path)
+                dist = self.kmeans.transform(X).min(axis=1)  # jarak ke centroid terdekat
+                self.kmeans_threshold = float(np.percentile(dist, 95))
+            else:
+                self.kmeans_threshold = 5.0  # fallback default
+            print(f"   ✓ kmeans threshold jarak = {self.kmeans_threshold:.4f}")
+        except Exception as e:
+            self.kmeans_threshold = 5.0
+            print(f"   ! Kalibrasi KMeans gagal ({e}), pakai default {self.kmeans_threshold}")
+
+    # ─────────────────────────────────────────
+    # PRE-PROCESS satu baris sensor
+    # ─────────────────────────────────────────
+    def _to_scaled_frame(self, sensor_data: dict) -> pd.DataFrame:
+        """Susun dict sensor → DataFrame urut 49 fitur → di-scale pakai scaler train."""
+        row = {}
+        for col in FEATURE_ORDER:
+            val = sensor_data.get(col, 0.0)
+            try:
+                row[col] = float(val)
+            except (TypeError, ValueError):
+                row[col] = 0.0  # nilai non-numerik diganti 0
+        df = pd.DataFrame([row], columns=FEATURE_ORDER)
+        scaled = self.scaler.transform(df)
+        return pd.DataFrame(scaled, columns=FEATURE_ORDER)
+
+    # ─────────────────────────────────────────
+    # ANALYZE — fungsi utama
+    # ─────────────────────────────────────────
+    def analyze(self, sensor_data: dict) -> dict:
+        """Terima 1 baris sensor (dict) → kembalikan hasil analisis lengkap."""
+        details = {}                     # nilai numerik mentah tiap model
+        predictions = {}                 # ringkasan label tiap model (buat display)
+        risk_score = 0.0
+        votes = []                       # vote label dari model supervised
+        ae_anomaly = False               # flag autoencoder error > threshold
+        kmeans_anomaly = False           # flag kmeans jarak > threshold
+
+        try:
+            X = self._to_scaled_frame(sensor_data)
+            X_np = X.values.astype(np.float32)
+
+            # 1) XGBoost ────────────────────────────────────
+            try:
+                xgb_idx = int(self.xgb.predict(X)[0])
+                xgb_label = LABEL_NAMES[xgb_idx]
+                predictions["XGBoost"] = xgb_label
+                details["xgboost_label"] = xgb_label
+                votes.append(xgb_label)
+                if xgb_label != NORMAL_LABEL:
+                    risk_score += 0.15   # Layer 1: XGBoost tidak Normal
+            except Exception as e:
+                predictions["XGBoost"] = f"ERROR ({e})"
+
+            # 2) Isolation Forest ───────────────────────────
+            try:
+                if_pred = int(self.iforest.predict(X)[0])  # -1 anomali, 1 normal
+                is_anom = if_pred == -1
+                predictions["Isolation Forest"] = "ANOMALI" if is_anom else "NORMAL"
+                details["iforest_pred"] = if_pred
+                if is_anom:
+                    risk_score += 0.10   # Layer 1: Isolation Forest = -1
+            except Exception as e:
+                predictions["Isolation Forest"] = f"ERROR ({e})"
+
+            # 3) Autoencoder ────────────────────────────────
+            try:
+                with torch.no_grad():
+                    t = torch.from_numpy(X_np).to(DEVICE)
+                    recon = self.autoencoder(t)
+                    ae_err = float(((recon - t) ** 2).mean().item())
+                details["ae_error"] = ae_err
+                details["ae_threshold"] = self.ae_threshold
+                if ae_err > self.ae_threshold:
+                    predictions["Autoencoder"] = f"Error tinggi ({ae_err:.3f})"
+                    risk_score += 0.10   # Layer 1: Autoencoder error > threshold
+                    ae_anomaly = True
+                else:
+                    predictions["Autoencoder"] = f"Normal ({ae_err:.3f})"
+            except Exception as e:
+                predictions["Autoencoder"] = f"ERROR ({e})"
+
+            # 4) KMeans ─────────────────────────────────────
+            try:
+                km_dist = float(self.kmeans.transform(X).min(axis=1)[0])
+                details["kmeans_dist"] = km_dist
+                details["kmeans_threshold"] = self.kmeans_threshold
+                if km_dist > self.kmeans_threshold:
+                    predictions["KMeans"] = f"Jarak jauh ({km_dist:.3f})"
+                    risk_score += 0.10   # Layer 1: KMeans jarak > threshold
+                    kmeans_anomaly = True
+                else:
+                    predictions["KMeans"] = f"Normal ({km_dist:.3f})"
+            except Exception as e:
+                predictions["KMeans"] = f"ERROR ({e})"
+
+            # 5) LSTM ───────────────────────────────────────
+            try:
+                seq = X_np.reshape(1, self.lstm_n_features, 1)
+                with torch.no_grad():
+                    logits = self.lstm(torch.from_numpy(seq).to(DEVICE))
+                    lstm_idx = int(logits.argmax(1).item())
+                lstm_label = LABEL_NAMES[lstm_idx]
+                predictions["LSTM"] = lstm_label
+                details["lstm_label"] = lstm_label
+                votes.append(lstm_label)
+                if lstm_label != NORMAL_LABEL:
+                    risk_score += 0.10   # Layer 1: LSTM tidak Normal
+            except Exception as e:
+                predictions["LSTM"] = f"ERROR ({e})"
+
+        except Exception as e:
+            # kalau pre-processing gagal total, kembalikan hasil aman
+            print(f"[AnomalyAgent] ✗ Gagal menganalisis baris: {e}")
+            return {
+                "timestamp": datetime.now().isoformat(timespec="seconds"),
+                "predictions": {"error": str(e)},
+                "risk_score": 0.0,
+                "risk_level": "UNKNOWN",
+                "anomaly_detected": False,
+                "dominant_fault": "UNKNOWN",
+                "model_details": {},
+            }
+
+        # ── LAYER 2: Rule-based sensor mentah ───────────────
+        # Ambang sensor langsung (independen prediksi model). Jalan paralel:
+        # skornya dijumlahkan ke skor Layer 1 model di atas, lalu di-cap 1.0.
+        # Selain skor, Layer 2 juga menentukan fault & top_fault (bobot tertinggi).
+        rule_score, rules_fired, rule_top_fault = self._rule_based_score(sensor_data)
+        risk_score += rule_score
+        predictions["Rule-Based"] = (
+            "; ".join(rules_fired) if rules_fired else "Normal (tidak ada ambang terlampaui)"
+        )
+        details["rule_score"] = round(rule_score, 3)
+        details["rules_fired"] = rules_fired
+        details["rule_fault"] = rule_top_fault
+
+        # ── Gabungkan ───────────────────────────────────────
+        risk_score = round(min(risk_score, 1.0), 3)
+        risk_level = self._risk_level(risk_score)
+        dominant_fault = self._dominant_fault(votes, rule_top_fault)
+
+        # anomaly_detected: True bila skor > 0.25, ATAU ada rule Layer 2 aktif,
+        # ATAU autoencoder error tinggi, ATAU kmeans jarak jauh.
+        anomaly_detected = (
+            risk_score > 0.25
+            or bool(rules_fired)
+            or ae_anomaly
+            or kmeans_anomaly
+        )
+
+        return {
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+            "predictions": predictions,
+            "risk_score": risk_score,
+            "risk_level": risk_level,
+            "anomaly_detected": anomaly_detected,
+            "dominant_fault": dominant_fault,
+            "model_details": details,
+        }
+
+    # ─────────────────────────────────────────
+    # Helper
+    # ─────────────────────────────────────────
+    @staticmethod
+    def _rule_based_score(sensor_data: dict) -> tuple:
+        """LAYER 2 — rule-based: ambang sensor mentah (independen dari model).
+
+        Return (total_skor, daftar_rule_aktif, fault_dominan_rule).
+        fault_dominan_rule = fault dari rule berbobot terbesar yang aktif
+        (None kalau tidak ada rule yang trigger). Skor di-cap di pemanggil.
+        """
+        def _num(key):
+            # key absen → None (rule tidak nyala, hindari false positive)
+            if key not in sensor_data:
+                return None
+            try:
+                return float(sensor_data[key])
+            except (TypeError, ValueError):
+                return None
+
+        # Tiap rule: (kondisi_aktif, bobot, fault, deskripsi)
+        v_batt_temp = _num("Battery_Temperature")
+        v_pv_volt = _num("PV_Voltage")
+        v_grid_volt = _num("Grid_Voltage")
+        v_latency = _num("Sensor_Latency")
+        v_panel_temp = _num("PV_Panel_Temperature")
+        v_soc = _num("Battery_SOC")
+        v_packet = _num("Packet_Loss_Rate")
+
+        rules = [
+            (v_batt_temp is not None and v_batt_temp > 70, 0.25, "Battery_Overheating",
+             f"Battery_Temperature {v_batt_temp}°C > 70 (+0.25)" if v_batt_temp is not None else ""),
+            (v_pv_volt is not None and v_pv_volt < 200, 0.20, "PV_Fault",
+             f"PV_Voltage {v_pv_volt}V < 200 (+0.20)" if v_pv_volt is not None else ""),
+            (v_grid_volt is not None and v_grid_volt > 500, 0.20, "Grid_Instability",
+             f"Grid_Voltage {v_grid_volt}V > 500 (+0.20)" if v_grid_volt is not None else ""),
+            (v_grid_volt is not None and v_grid_volt < 300, 0.20, "Grid_Instability",
+             f"Grid_Voltage {v_grid_volt}V < 300 (+0.20)" if v_grid_volt is not None else ""),
+            (v_latency is not None and v_latency > 5000, 0.15, "Communication_Failure",
+             f"Sensor_Latency {v_latency}ms > 5000 (+0.15)" if v_latency is not None else ""),
+            (v_panel_temp is not None and v_panel_temp > 75, 0.15, "PV_Fault",
+             f"PV_Panel_Temperature {v_panel_temp}°C > 75 (+0.15)" if v_panel_temp is not None else ""),
+            (v_soc is not None and v_soc < 15, 0.10, "Battery_Degradation",
+             f"Battery_SOC {v_soc} < 15 (+0.10)" if v_soc is not None else ""),
+            (v_packet is not None and v_packet > 0.8, 0.10, "Communication_Failure",
+             f"Packet_Loss_Rate {v_packet} > 0.8 (+0.10)" if v_packet is not None else ""),
+        ]
+
+        score = 0.0
+        fired = []
+        top_weight = -1.0
+        top_fault = None
+        for active, weight, fault, desc in rules:
+            if active:
+                score += weight
+                fired.append(desc)
+                # fault dominan = rule dengan bobot tertinggi (urutan stabil saat seri)
+                if weight > top_weight:
+                    top_weight = weight
+                    top_fault = fault
+
+        return score, fired, top_fault
+
+    @staticmethod
+    def _risk_level(score: float) -> str:
+        # Mapping: 0-0.25 LOW | 0.25-0.50 MEDIUM | 0.50-0.75 HIGH | 0.75-1.0 CRITICAL
+        if score < 0.25:
+            return "LOW"
+        elif score < 0.50:
+            return "MEDIUM"
+        elif score < 0.75:
+            return "HIGH"
+        return "CRITICAL"
+
+    @staticmethod
+    def _dominant_fault(votes: list) -> str:
+        """Label yang paling sering muncul dari model supervised (XGBoost+LSTM)."""
+        if not votes:
+            return "UNKNOWN"
+        # prioritaskan fault non-Normal kalau jumlahnya seimbang
+        counter = Counter(votes)
+        # urutkan: frekuensi terbanyak, lalu non-Normal didahulukan
+        best = sorted(
+            counter.items(),
+            key=lambda kv: (kv[1], kv[0] != NORMAL_LABEL),
+            reverse=True,
+        )
+        return best[0][0]
+
+
+# Quick self-test
+if __name__ == "__main__":
+    agent = AnomalyAgent()
+    dummy = {col: 0.0 for col in FEATURE_ORDER}
+    hasil = agent.analyze(dummy)
+    print("Contoh hasil analisis (input nol):")
+    for k, v in hasil.items():
+        print(f"   {k}: {v}")

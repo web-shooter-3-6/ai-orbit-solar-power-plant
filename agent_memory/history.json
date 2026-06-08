@@ -1,0 +1,488 @@
+[
+  {
+    "timestamp": "2026-06-06T10:24:53",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:24:54",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:24:55",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:24:56",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:24:57",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:24:58",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:47",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:48",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:49",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:50",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-06T10:25:51",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:08:56",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:39",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:52",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:52",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:52",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:53",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:53",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T01:11:53",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:07:43",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:07:59",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:07:59",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:07:59",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:08:00",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:08:00",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:08:00",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:45:37",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:45:47",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T10:46:27",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T11:21:35",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T11:24:56",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T11:25:10",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T11:26:50",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T11:30:46",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:26",
+    "risk_score": 1.0,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:49",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:49",
+    "risk_score": 0.55,
+    "risk_level": "HIGH",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:51",
+    "risk_score": 1.0,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:53",
+    "risk_score": 0.55,
+    "risk_level": "HIGH",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:55",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:51:55",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ]
+  },
+  {
+    "timestamp": "2026-06-08T12:55:39",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  }
+]
