@@ -33,8 +33,9 @@ if str(REPO_DIR) not in sys.path:
 OUTPUT_DIR = REPO_DIR / "models" / "output"
 DATA_PATH = REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv"
 HISTORY_PATH = REPO_DIR / "agent_memory" / "history.json"
+REALTIME_PATH = REPO_DIR / "realtime_results.json"
 
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 
 # Kolom yang dibuang waktu training (bukan fitur model)
 DROP_COLS = ["Timestamp", "PV_DC_Power", "System_Condition_Label"]
@@ -218,12 +219,24 @@ def load_telegram():
 
 @st.cache_data(show_spinner="Memuat dataset...")
 def load_feature_means():
-    """Hitung nilai rata-rata tiap fitur dari dataset (untuk fitur tak diinput)."""
+    """Hitung rata-rata tiap fitur dari dataset (untuk fitur tak diinput).
+
+    Casing-agnostic: dataset bisa lowercase (mis. 'pv_voltage'), tapi key
+    hasil dipetakan ke nama FEATURE_ORDER (kapital, mis. 'PV_Voltage') supaya
+    cocok dengan yang dipakai build_sensor_data → AnomalyAgent.analyze().
+    """
     if not DATA_PATH.exists():
         return {}
+    from agent.anomaly_agent import FEATURE_ORDER
     df = pd.read_csv(DATA_PATH)
-    numeric = df.select_dtypes(include="number")
-    return {c: float(numeric[c].mean()) for c in numeric.columns}
+    # peta lowercase → nama kolom asli, supaya tahan apapun casing CSV
+    lower_map = {str(c).lower(): c for c in df.columns}
+    means = {}
+    for feat in FEATURE_ORDER:
+        col = lower_map.get(feat.lower())
+        if col is not None and pd.api.types.is_numeric_dtype(df[col]):
+            means[feat] = float(df[col].mean())
+    return means
 
 
 def models_available() -> bool:
@@ -255,6 +268,18 @@ def clear_history():
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(HISTORY_PATH, "w", encoding="utf-8") as f:
         json.dump([], f, ensure_ascii=False, indent=2)
+
+
+def read_realtime() -> list:
+    """Baca realtime_results.json → list (kosong kalau tidak ada / rusak)."""
+    try:
+        with open(REALTIME_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+    except Exception:
+        return []
 
 
 def build_sensor_data(feature_means: dict, overrides: dict, feature_order: list) -> dict:
@@ -666,6 +691,121 @@ def page_demo(agent, engine, rootcause, bot, feature_means, feature_order):
 
 
 # ─────────────────────────────────────────
+# HALAMAN 5 — Realtime Feed
+# ─────────────────────────────────────────
+def page_realtime(auto_refresh: bool):
+    icon_header("cpu", "Realtime Feed", 26, COLOR_NORMAL, tag="h1")
+    st.caption("Hasil analisis real-time dari pipeline MQTT → Agent.")
+
+    data = read_realtime()
+    if not data:
+        st.warning(
+            "Belum ada data realtime. Jalankan pipeline dulu:\n\n"
+            "`python scripts/run_realtime.py`"
+        )
+        return
+
+    df = pd.DataFrame(data)
+    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
+    df = df.sort_values("timestamp").reset_index(drop=True)
+
+    # ── Metric row ──────────────────────────────────────────
+    total = len(df)
+    anomali = int((pd.to_numeric(df["risk_score"], errors="coerce") > 0.25).sum())
+    fault_sering = df["dominant_fault"].mode()
+    fault_sering = fault_sering.iloc[0] if not fault_sering.empty else "-"
+    last_ts = df["timestamp"].max()
+    last_str = last_ts.strftime("%H:%M:%S") if pd.notnull(last_ts) else "-"
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.markdown(labeled_value("list", "Total Realtime", total, COLOR_NORMAL),
+                unsafe_allow_html=True)
+    m2.markdown(labeled_value("alert-triangle", "Anomali", anomali, COLOR_HIGH),
+                unsafe_allow_html=True)
+    m3.markdown(labeled_value("cpu", "Fault Tersering", fault_sering, COLOR_NORMAL),
+                unsafe_allow_html=True)
+    m4.markdown(labeled_value("clock", "Last Update", last_str, COLOR_MEDIUM),
+                unsafe_allow_html=True)
+
+    st.divider()
+
+    # ── Tabel 10 analisis terbaru ───────────────────────────
+    icon_header("list", "10 Analisis Terbaru", 18, COLOR_NORMAL, tag="h3")
+    recent = df.tail(10).iloc[::-1]  # terbaru di atas
+
+    def trunc(recs):
+        txt = "; ".join(recs) if isinstance(recs, list) else str(recs)
+        return txt[:50] + "…" if len(txt) > 50 else txt
+
+    table = pd.DataFrame({
+        "Waktu": recent["timestamp"].dt.strftime("%H:%M:%S"),
+        "Risk Score": recent["risk_score"],
+        "Level": recent["risk_level"],
+        "Fault": recent["dominant_fault"],
+        "Rekomendasi": recent["recommendations"].apply(trunc),
+    })
+
+    def color_row(row):
+        color = LEVEL_COLORS.get(row["Level"], "#888888")
+        return [f"background-color: {color}22; color: #e8e8e8"] * len(row)
+
+    st.dataframe(table.style.apply(color_row, axis=1),
+                 use_container_width=True, hide_index=True)
+
+    # ── Line chart risk score 20 terakhir ───────────────────
+    icon_header("activity", "Risk Score (20 data terakhir)", 18, COLOR_NORMAL, tag="h3")
+    last20 = df.tail(20)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=last20["timestamp"], y=last20["risk_score"],
+        mode="lines+markers", line=dict(color=COLOR_MEDIUM), name="Risk Score",
+    ))
+    fig.add_hline(y=0.25, line_dash="dash", line_color=COLOR_MEDIUM,
+                  annotation_text="MEDIUM (0.25)")
+    fig.add_hline(y=0.50, line_dash="dash", line_color=COLOR_HIGH,
+                  annotation_text="HIGH (0.50)")
+    fig.add_hline(y=0.75, line_dash="dash", line_color=COLOR_CRITICAL,
+                  annotation_text="CRITICAL (0.75)")
+    fig.update_layout(template="plotly_dark", height=340, margin=dict(t=20, b=20),
+                      yaxis_range=[0, 1.05])
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ── Card "Analisis Terbaru" ─────────────────────────────
+    st.divider()
+    icon_header("activity", "Analisis Terbaru", 18, COLOR_NORMAL, tag="h3")
+    latest = df.iloc[-1]
+    level = latest["risk_level"]
+    score = float(latest["risk_score"]) if pd.notnull(latest["risk_score"]) else 0.0
+
+    c1, c2 = st.columns([1.2, 1.8])
+    with c1:
+        risk_card(level, score)
+    with c2:
+        st.markdown(
+            labeled_value("cpu", "Fault Terdeteksi", latest["dominant_fault"]),
+            unsafe_allow_html=True,
+        )
+        snap = latest.get("sensor_snapshot", {}) or {}
+        snap_txt = " | ".join(f"{k}={v}" for k, v in snap.items())
+        st.markdown(
+            labeled_value("sun", "Sensor Snapshot", snap_txt or "-", "#aaa"),
+            unsafe_allow_html=True,
+        )
+
+    with st.expander("Penjelasan & Rekomendasi", expanded=True):
+        st.info(latest.get("explanation", "-"))
+        recs = latest.get("recommendations", [])
+        if isinstance(recs, list):
+            for rec in recs:
+                st.markdown(f"- {rec}")
+
+    # ── Auto-refresh: tunggu 3 detik lalu rerun ─────────────
+    if auto_refresh:
+        time.sleep(3)
+        st.rerun()
+
+
+# ─────────────────────────────────────────
 # Sidebar helper
 # ─────────────────────────────────────────
 def icon_sidebar(icon_name, text, color="#aaa", size=16):
@@ -691,6 +831,7 @@ def sidebar_status(icon_name, label, value, color):
 # ─────────────────────────────────────────
 NAV_ITEMS = {
     "Live Monitor": "activity",
+    "Realtime Feed": "cpu",
     "Statistik & Grafik": "bar-chart",
     "History Anomali": "list",
     "Demo Otomatis": "play",
@@ -718,6 +859,10 @@ def main():
     page = st.sidebar.radio(
         "Navigasi", list(NAV_ITEMS.keys()), label_visibility="collapsed",
     )
+
+    # Toggle auto-refresh untuk halaman Realtime Feed
+    st.sidebar.divider()
+    auto_refresh = st.sidebar.toggle("Auto-refresh (Realtime, 3 detik)", value=False)
 
     model_ok = models_available()
     bot = load_telegram()
@@ -780,6 +925,8 @@ def main():
     # Routing halaman
     if page == "Live Monitor":
         page_live_monitor(agent, engine, rootcause, bot, feature_means, feature_order)
+    elif page == "Realtime Feed":
+        page_realtime(auto_refresh)
     elif page == "Statistik & Grafik":
         page_statistics()
     elif page == "History Anomali":

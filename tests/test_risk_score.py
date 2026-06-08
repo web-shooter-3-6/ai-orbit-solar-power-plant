@@ -32,10 +32,17 @@ def baseline_means() -> dict:
     if not DATA_PATH.exists():
         return {c: 0.0 for c in FEATURE_ORDER}
     df = pd.read_csv(DATA_PATH)
-    if "System_Condition_Label" in df.columns:
-        df = df[df["System_Condition_Label"] == "Normal"]
-    num = df.select_dtypes(include="number")
-    return {c: float(num[c].mean()) for c in FEATURE_ORDER if c in num.columns}
+    # casing-agnostic: dataset bisa lowercase, map ke FEATURE_ORDER (kapital)
+    lower_map = {str(c).lower(): c for c in df.columns}
+    label_col = lower_map.get("system_condition_label")
+    if label_col is not None:
+        df = df[df[label_col] == "Normal"]
+    means = {}
+    for feat in FEATURE_ORDER:
+        col = lower_map.get(feat.lower())
+        if col is not None and pd.api.types.is_numeric_dtype(df[col]):
+            means[feat] = float(df[col].mean())
+    return means
 
 
 def make_input(means: dict, overrides: dict) -> dict:

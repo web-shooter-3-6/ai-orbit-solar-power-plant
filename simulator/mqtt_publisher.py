@@ -16,9 +16,9 @@ def publish(csv_path: str, speed: int = 1,
         payload["timestamp"] = str(payload["timestamp"])
 
         client.publish(topic, json.dumps(payload))
-        print(f"  → power={payload.get('power_kw',0):.2f} kW | "
-              f"PR={payload.get('pr',0):.3f} | "
-              f"irr={payload.get('irradiance',0):.0f} W/m²")
+        print(f"  → power={payload.get('pv_power_output',0):.2f} kW | "
+            f"irr={payload.get('solar_irradiance',0):.0f} W/m² | "
+            f"label={payload.get('system_condition_label','?')}")
 
         # interval 5 menit data, dibagi speed
         time.sleep(5 * 60 / speed)
