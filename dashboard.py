@@ -307,6 +307,27 @@ def clear_history():
         json.dump([], f, ensure_ascii=False, indent=2)
 
 
+def clear_realtime():
+    """Kosongkan realtime_results.json supaya statistik Realtime Feed kembali 0.
+
+    Pakai FileLock (lock yang sama dengan simulator) agar reset tidak tabrakan
+    dengan penulis konkuren. Kalau filelock tak tersedia, fallback tulis biasa.
+    """
+    try:
+        from filelock import FileLock
+        lock = FileLock(str(REALTIME_PATH) + ".lock", timeout=5)
+        with lock:
+            with open(REALTIME_PATH, "w", encoding="utf-8") as f:
+                json.dump([], f, ensure_ascii=False, indent=2)
+    except Exception:
+        # Fallback: tetap coba tulis kosong walau lock gagal/tidak ada
+        try:
+            with open(REALTIME_PATH, "w", encoding="utf-8") as f:
+                json.dump([], f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"[dashboard] Gagal reset realtime: {e}")
+
+
 def read_realtime() -> list:
     """Baca realtime_results.json → list (kosong kalau tidak ada / rusak)."""
     try:
@@ -862,8 +883,32 @@ def page_realtime(auto_refresh: bool):
             for rec in recs:
                 st.markdown(f"- {rec}")
 
+    # ── Reset data realtime (Total kembali 0) ───────────────
+    st.divider()
+    st.markdown(
+        f'<div class="status-line">{lucide_icon("trash", 14, COLOR_HIGH)}'
+        f'<span>Hapus semua data realtime — statistik kembali 0</span></div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("Reset Data Realtime"):
+        st.session_state["confirm_reset_rt"] = True
+
+    if st.session_state.get("confirm_reset_rt"):
+        st.warning("Yakin hapus SEMUA data realtime? Tindakan ini tidak bisa dibatalkan.")
+        rc1, rc2 = st.columns(2)
+        if rc1.button("Ya, reset"):
+            clear_realtime()
+            st.session_state["confirm_reset_rt"] = False
+            st.success("Data realtime berhasil direset.")
+            st.rerun()
+        if rc2.button("Batal"):
+            st.session_state["confirm_reset_rt"] = False
+            st.rerun()
+
     # ── Auto-refresh: tunggu 3 detik lalu rerun ─────────────
-    if auto_refresh:
+    # Saat dialog konfirmasi reset terbuka, jangan auto-rerun supaya tombol
+    # konfirmasi tidak hilang sebelum sempat diklik.
+    if auto_refresh and not st.session_state.get("confirm_reset_rt"):
         time.sleep(3)
         st.rerun()
 
