@@ -14,18 +14,22 @@ Jalankan dari root repo:
     streamlit run dashboard.py
 """
 
+import os
 import sys
 import json
 import time
-import threading
 import subprocess
 from pathlib import Path
 from datetime import datetime
 
+import psutil
 import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+
+import torch
+torch.classes.__path__ = []  # fix warning Streamlit watcher pada torch.classes
 
 # ── Path setup: root repo masuk sys.path supaya import paket agent/alert jalan ──
 REPO_DIR = Path(__file__).resolve().parent
@@ -45,37 +49,39 @@ DROP_COLS = ["Timestamp", "PV_DC_Power", "System_Condition_Label"]
 # ─────────────────────────────────────────
 # Auto-start realtime simulator (untuk deploy cloud, mis. Railway)
 # ─────────────────────────────────────────
-# Guard level-PROSES (bukan per-session): module global ini hidup selama proses
-# server Streamlit, dipakai bersama semua browser session → simulator hanya
-# di-start SEKALI walau banyak orang buka dashboard. Set env DISABLE_AUTO_SIM=1
-# untuk mematikan (mis. saat dev lokal sudah menjalankan run_realtime.py sendiri).
-_simulator_started = False
+# Guard level-PROSES: cek apakah proses simulator sudah benar-benar berjalan
+# (pakai psutil), BUKAN st.session_state. Di Railway, session_state tidak
+# persistent antar re-render → guard lama bisa men-spawn simulator berkali-kali.
+# Set env DISABLE_AUTO_SIM=1 untuk mematikan auto-start (mis. saat dev lokal
+# sudah menjalankan run_realtime.py sendiri).
+def is_simulator_running():
+    """True kalau ada proses python yang menjalankan realtime_simulator."""
+    for proc in psutil.process_iter(['pid', 'cmdline']):
+        try:
+            cmdline = ' '.join(proc.info['cmdline'] or [])
+            if 'realtime_simulator' in cmdline:
+                return True
+        except Exception:
+            pass
+    return False
 
 
-def _start_simulator():
-    """Jalankan scripts/realtime_simulator.py sebagai proses background."""
-    try:
-        subprocess.Popen(
-            [sys.executable, str(REPO_DIR / "scripts" / "realtime_simulator.py")],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        print("[dashboard] Realtime simulator dijalankan di background.")
-    except Exception as e:
-        print(f"[dashboard] Gagal start simulator: {e}")
-
-
-def ensure_simulator_started():
-    """Start simulator sekali per proses server (aman dari multi-session/rerun)."""
-    global _simulator_started
-    import os
+def start_simulator_once():
+    """Start simulator HANYA bila belum ada prosesnya (anti spawn ganda)."""
     if os.getenv("DISABLE_AUTO_SIM") == "1":
         return
-    if _simulator_started or st.session_state.get("sim_started"):
-        return
-    _simulator_started = True
-    st.session_state["sim_started"] = True
-    threading.Thread(target=_start_simulator, daemon=True).start()
+    if not is_simulator_running():
+        try:
+            subprocess.Popen(
+                [sys.executable, str(REPO_DIR / "scripts" / "realtime_simulator.py")],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            print("[dashboard] Simulator started")
+        except Exception as e:
+            print(f"[dashboard] Gagal start simulator: {e}")
+    else:
+        print("[dashboard] Simulator sudah jalan, skip")
 
 # Level yang dianggap perlu alert (selaras dengan alert/telegram_alert.py)
 ALERT_LEVELS = {"MEDIUM", "HIGH", "CRITICAL"}
@@ -947,8 +953,8 @@ NAV_ITEMS = {
 
 
 def main():
-    # Auto-start simulator realtime di background (sekali per proses server)
-    ensure_simulator_started()
+    # Auto-start simulator realtime di background (anti spawn ganda via psutil)
+    start_simulator_once()
 
     # Sidebar — logo (icon zap) + judul
     st.sidebar.markdown(
