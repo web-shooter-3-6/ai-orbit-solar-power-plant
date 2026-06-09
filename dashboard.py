@@ -407,7 +407,7 @@ def show_result(result: dict):
         df_pred = pd.DataFrame(
             [{"Model": k, "Hasil": str(v)} for k, v in preds.items()]
         )
-        st.dataframe(df_pred, use_container_width=True, hide_index=True)
+        st.dataframe(df_pred, width='stretch', hide_index=True)
 
         details = analysis.get("model_details", {})
         if details:
@@ -444,7 +444,7 @@ def page_live_monitor(agent, engine, rootcause, bot, feature_means, feature_orde
             f'<span>Klik untuk menjalankan 5 model deteksi anomali</span></div>',
             unsafe_allow_html=True,
         )
-        submitted = st.form_submit_button("Analisis Sekarang", use_container_width=True)
+        submitted = st.form_submit_button("Analisis Sekarang", width='stretch')
 
     if submitted:
         overrides = {
@@ -518,7 +518,7 @@ def page_statistics():
             x=fault_counts["fault"], y=fault_counts["jumlah"], marker_color=colors,
         ))
         fig1.update_layout(template="plotly_dark", height=350, margin=dict(t=20, b=20))
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1, width='stretch')
 
     with col2:
         icon_header("activity", "Distribusi Risk Level", 18, COLOR_NORMAL, tag="h3")
@@ -529,7 +529,7 @@ def page_statistics():
             color="level", color_discrete_map=LEVEL_COLORS,
         )
         fig3.update_layout(template="plotly_dark", height=350, margin=dict(t=20, b=20))
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width='stretch')
 
     icon_header("activity", "Risk Score Timeline", 18, COLOR_NORMAL, tag="h3")
     df_sorted = df.sort_values("timestamp")
@@ -544,7 +544,7 @@ def page_statistics():
                    annotation_text="HIGH (0.6)")
     fig2.update_layout(template="plotly_dark", height=350, margin=dict(t=20, b=20),
                        yaxis_range=[0, 1.05])
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width='stretch')
 
     icon_header("clock", "Anomali per Jam", 18, COLOR_NORMAL, tag="h3")
     anom_df = df[df["dominant_fault"] != "Normal"]
@@ -558,7 +558,7 @@ def page_statistics():
         ))
         fig4.update_layout(template="plotly_dark", height=320, margin=dict(t=20, b=20),
                            xaxis_title="Jam (0-23)", yaxis_title="Jumlah anomali")
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width='stretch')
 
 
 # ─────────────────────────────────────────
@@ -608,7 +608,7 @@ def page_history():
     else:
         st.dataframe(
             table.style.apply(color_row, axis=1),
-            use_container_width=True, hide_index=True,
+            width='stretch', hide_index=True,
         )
 
     st.divider()
@@ -622,7 +622,7 @@ def page_history():
         csv = table.to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download CSV", data=csv, file_name="history_anomali.csv",
-            mime="text/csv", use_container_width=True,
+            mime="text/csv", width='stretch',
         )
     with c2:
         st.markdown(
@@ -630,18 +630,18 @@ def page_history():
             f'<span>Hapus seluruh riwayat</span></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Clear History", use_container_width=True):
+        if st.button("Clear History", width='stretch'):
             st.session_state["confirm_clear"] = True
 
     if st.session_state.get("confirm_clear"):
         st.warning("Yakin ingin menghapus SEMUA riwayat? Tindakan ini tidak bisa dibatalkan.")
         cc1, cc2 = st.columns(2)
-        if cc1.button("Ya, hapus", use_container_width=True):
+        if cc1.button("Ya, hapus", width='stretch'):
             clear_history()
             st.session_state["confirm_clear"] = False
             st.success("History berhasil dihapus.")
             st.rerun()
-        if cc2.button("Batal", use_container_width=True):
+        if cc2.button("Batal", width='stretch'):
             st.session_state["confirm_clear"] = False
             st.rerun()
 
@@ -664,7 +664,7 @@ def page_demo(agent, engine, rootcause, bot, feature_means, feature_order):
         f'<span>Jalankan 6 skenario sekaligus</span></div>',
         unsafe_allow_html=True,
     )
-    if st.button("Jalankan Demo", use_container_width=True):
+    if st.button("Jalankan Demo", width='stretch'):
         progress = st.progress(0, text="Memulai demo...")
         results = []
         alert_sent = 0
@@ -734,9 +734,19 @@ def page_realtime(auto_refresh: bool):
     icon_header("cpu", "Realtime Feed", 26, COLOR_NORMAL, tag="h1")
     st.caption("Hasil analisis real-time yang diproses otomatis oleh sistem.")
 
+    # read_realtime() sudah membaca file dengan try/except dan hanya
+    # mengembalikan list bila file ADA, TIDAK kosong, dan JSON valid.
     data = read_realtime()
     if not data:
-        st.warning("Data realtime sedang diproses otomatis oleh sistem.")
+        # Bedakan dua kondisi:
+        # - File belum ada sama sekali → sistem memang belum memproses.
+        # - File ada tapi kosong/korup/belum valid → sedang loading, coba lagi.
+        if REALTIME_PATH.exists():
+            st.info("Memuat data...")
+            time.sleep(2)
+            st.rerun()
+        else:
+            st.warning("Data realtime sedang diproses otomatis oleh sistem.")
         return
 
     df = pd.DataFrame(data)
@@ -744,10 +754,29 @@ def page_realtime(auto_refresh: bool):
     df = df.sort_values("timestamp").reset_index(drop=True)
 
     # ── Metric row ──────────────────────────────────────────
+    # Total Realtime = jumlah semua entri di file
     total = len(df)
-    anomali = int((pd.to_numeric(df["risk_score"], errors="coerce") > 0.25).sum())
-    fault_sering = df["dominant_fault"].mode()
-    fault_sering = fault_sering.iloc[0] if not fault_sering.empty else "-"
+
+    # Anomali = entri dengan anomaly_detected == True ATAU risk_score > 0.25
+    risk_num = pd.to_numeric(df["risk_score"], errors="coerce").fillna(0.0)
+    anomaly_flag = risk_num > 0.25
+    if "anomaly_detected" in df.columns:
+        anomaly_flag = df["anomaly_detected"].fillna(False).astype(bool) | anomaly_flag
+    anomali = int(anomaly_flag.sum())
+
+    # Fault Tersering = dominant_fault paling sering; kecualikan "Normal"
+    # selama masih ada fault lain (biar tidak selalu "Normal").
+    faults = df["dominant_fault"].dropna().astype(str)
+    faults = faults[faults.str.strip() != ""]
+    non_normal = faults[faults != "Normal"]
+    if not non_normal.empty:
+        fault_sering = non_normal.value_counts().idxmax()
+    elif not faults.empty:
+        fault_sering = faults.value_counts().idxmax()
+    else:
+        fault_sering = "-"
+
+    # Last Update = timestamp entri paling terakhir
     last_ts = df["timestamp"].max()
     last_str = last_ts.strftime("%H:%M:%S") if pd.notnull(last_ts) else "-"
 
@@ -784,7 +813,7 @@ def page_realtime(auto_refresh: bool):
         return [f"background-color: {color}22; color: #e8e8e8"] * len(row)
 
     st.dataframe(table.style.apply(color_row, axis=1),
-                 use_container_width=True, hide_index=True)
+                 width='stretch', hide_index=True)
 
     # ── Line chart risk score 20 terakhir ───────────────────
     icon_header("activity", "Risk Score (20 data terakhir)", 18, COLOR_NORMAL, tag="h3")
@@ -802,7 +831,7 @@ def page_realtime(auto_refresh: bool):
                   annotation_text="CRITICAL (0.75)")
     fig.update_layout(template="plotly_dark", height=340, margin=dict(t=20, b=20),
                       yaxis_range=[0, 1.05])
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     # ── Card "Analisis Terbaru" ─────────────────────────────
     st.divider()
@@ -885,17 +914,32 @@ def main():
     )
     st.sidebar.caption("Solar Power Plant Anomaly Monitor")
 
-    # Legend navigasi (icon + label) — radio di bawahnya untuk seleksi
-    nav_legend = "".join(
-        f'<div class="status-line">{lucide_icon(ic, 16, "#9aa")}'
-        f'<span>{name}</span></div>'
-        for name, ic in NAV_ITEMS.items()
-    )
-    st.sidebar.markdown(nav_legend, unsafe_allow_html=True)
+    # ── Navigasi: SATU menu saja — tombol dengan icon Lucide SVG ──
+    # (Sebelumnya ada 2 elemen: legend statis + st.radio → tampak double.
+    #  Sekarang icon Lucide langsung jadi tombol yang bisa diklik.)
+    if "page" not in st.session_state:
+        st.session_state["page"] = "Live Monitor"
 
-    page = st.sidebar.radio(
-        "Navigasi", list(NAV_ITEMS.keys()), label_visibility="collapsed",
-    )
+    st.sidebar.markdown('<div style="height:4px;"></div>', unsafe_allow_html=True)
+    for name, ic in NAV_ITEMS.items():
+        active = st.session_state["page"] == name
+        color = COLOR_NORMAL if active else "#9aa"
+        col_icon, col_btn = st.sidebar.columns([1, 5], vertical_alignment="center")
+        with col_icon:
+            st.markdown(
+                f'<div style="padding-top:6px;text-align:center;">'
+                f'{lucide_icon(ic, 18, color)}</div>',
+                unsafe_allow_html=True,
+            )
+        with col_btn:
+            if st.button(
+                name, key=f"nav_{name}", width='stretch',
+                type="primary" if active else "secondary",
+            ):
+                st.session_state["page"] = name
+                st.rerun()
+
+    page = st.session_state["page"]
 
     # Toggle auto-refresh untuk halaman Realtime Feed
     st.sidebar.divider()
@@ -923,19 +967,28 @@ def main():
     else:
         sidebar_status("wifi-off", "Telegram", "Tidak dikonfigurasi", COLOR_HIGH)
 
+    # Status bot interaktif (polling jalan bila token Telegram terkonfigurasi)
+    if telegram_ok:
+        sidebar_status("activity", "Bot Interaktif", "Aktif", COLOR_NORMAL)
+    else:
+        sidebar_status("x-circle", "Bot Interaktif", "Nonaktif", COLOR_HIGH)
+
     # Tombol test Telegram
     st.sidebar.markdown(
         f'<div class="status-line">{lucide_icon("send", 14, "#aaa")}'
         f'<span>Verifikasi koneksi bot</span></div>',
         unsafe_allow_html=True,
     )
-    if st.sidebar.button("Kirim Test", use_container_width=True):
+    if st.sidebar.button("Kirim Test", width='stretch'):
         if bot is None or not bot.is_configured():
             st.sidebar.warning("Telegram belum dikonfigurasi (.env kosong).")
         elif bot.send_test():
             st.sidebar.success("Pesan test terkirim ke Telegram!")
         else:
             st.sidebar.error("Gagal kirim — cek TOKEN/CHAT_ID di .env.")
+
+    # Info bot interaktif
+    st.sidebar.caption("Ketik /help di bot Telegram untuk command interaktif")
 
     # Guard: model belum ada
     if not model_ok:

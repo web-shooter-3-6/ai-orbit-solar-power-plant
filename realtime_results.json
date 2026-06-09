@@ -1,9 +1,1810 @@
 [
   {
-    "timestamp": "2026-06-08T20:02:41",
+    "timestamp": "2026-06-09T20:46:06",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 392.2372729198173,
+      "pv_power_output": 6.547065248656245,
+      "battery_temperature": 41.31159049451121,
+      "grid_voltage": 221.55348776356612,
+      "sensor_latency": 22.08489409437808
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:07",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 434.84556489602073,
+      "pv_power_output": 6.528683479717622,
+      "battery_temperature": 35.05815966173553,
+      "grid_voltage": 226.66946943996336,
+      "sensor_latency": 12.121978053566968
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:08",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.3410677507156,
+      "pv_power_output": 6.697966632422463,
+      "battery_temperature": 24.00378120816169,
+      "grid_voltage": 239.5826179993061,
+      "sensor_latency": 14.407009943935302
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 389.0019638505783,
+      "pv_power_output": 4.878646944793422,
+      "battery_temperature": 44.293023921928246,
+      "grid_voltage": 229.7043963824876,
+      "sensor_latency": 17.39219195501499
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:11",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 416.335854836774,
+      "pv_power_output": 11.735909690049168,
+      "battery_temperature": 24.875336266814287,
+      "grid_voltage": 240.82297582966905,
+      "sensor_latency": 10.689616355446674
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:12",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 420.50062785287935,
+      "pv_power_output": 5.373672132698858,
+      "battery_temperature": 36.12244927103533,
+      "grid_voltage": 217.60534187430704,
+      "sensor_latency": 12.182845399505103
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 434.8407972816991,
+      "pv_power_output": 5.220403366016972,
+      "battery_temperature": 40.12946449617319,
+      "grid_voltage": 236.2770579589293,
+      "sensor_latency": 14.618910774846784
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:14",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 360.2927240548162,
+      "pv_power_output": 6.108257089291884,
+      "battery_temperature": 40.095454533202485,
+      "grid_voltage": 237.9349826223136,
+      "sensor_latency": 42.40025966360906
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:15",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.7034057469165,
+      "pv_power_output": 5.362937639310053,
+      "battery_temperature": 30.13673423736789,
+      "grid_voltage": 227.31123062633503,
+      "sensor_latency": 21.40286161871485
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:16",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 407.2034985791152,
+      "pv_power_output": 7.528405834839621,
+      "battery_temperature": 16.413281085910047,
+      "grid_voltage": 226.3720653467933,
+      "sensor_latency": 16.93101220964676
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:18",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 440.2468361602623,
+      "pv_power_output": 10.81549154141224,
+      "battery_temperature": 40.72995106929965,
+      "grid_voltage": 243.67680501447143,
+      "sensor_latency": 29.39111361457767
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:19",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 419.9533463428941,
+      "pv_power_output": 7.836681625471892,
+      "battery_temperature": 47.24014951936498,
+      "grid_voltage": 240.6472370520197,
+      "sensor_latency": 15.190390720730507
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:20",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.6654623911263,
+      "pv_power_output": 7.9679197750479585,
+      "battery_temperature": 37.36628376353587,
+      "grid_voltage": 243.95331292053504,
+      "sensor_latency": 19.621770596172727
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:21",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.5624900930935,
+      "pv_power_output": 6.996480659378054,
+      "battery_temperature": 49.29314882327093,
+      "grid_voltage": 247.6856387508253,
+      "sensor_latency": 15.03130297602208
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:22",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 428.3352435547778,
+      "pv_power_output": 5.926454600479618,
+      "battery_temperature": 34.12925591906393,
+      "grid_voltage": 228.9656422708872,
+      "sensor_latency": 16.12456145862393
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:23",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 442.6977351917839,
+      "pv_power_output": 7.450947110640778,
+      "battery_temperature": 39.60243938514911,
+      "grid_voltage": 251.90609730208368,
+      "sensor_latency": 17.07548576416601
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:24",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 397.72221755812353,
+      "pv_power_output": 8.836771053825741,
+      "battery_temperature": 25.996648449327616,
+      "grid_voltage": 234.5187983057488,
+      "sensor_latency": 10.891065685530547
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:25",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Communication_Failure",
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.4085035141924,
+      "pv_power_output": 9.639329527590013,
+      "battery_temperature": 34.33326176522443,
+      "grid_voltage": 237.1898428168801,
+      "sensor_latency": 25.55131054617664
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:27",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 456.7336512704669,
+      "pv_power_output": 8.297226598076156,
+      "battery_temperature": 45.34836594919179,
+      "grid_voltage": 234.44129144696325,
+      "sensor_latency": 9.979974961480956
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:28",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 410.9722076678258,
+      "pv_power_output": 8.840008820260682,
+      "battery_temperature": 51.35619610461755,
+      "grid_voltage": 236.52551620224736,
+      "sensor_latency": 21.327968466696227
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:29",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.1812432703817,
+      "pv_power_output": 6.39515591126222,
+      "battery_temperature": 34.203770457764335,
+      "grid_voltage": 235.15056113542053,
+      "sensor_latency": 28.69060925119196
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:30",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 389.1452015578433,
+      "pv_power_output": 6.047000922456034,
+      "battery_temperature": 43.67652666951686,
+      "grid_voltage": 219.7664951300829,
+      "sensor_latency": 21.89232751260604
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:31",
+    "risk_score": 0.25,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Degradation",
+    "explanation": "Kapasitas baterai menurun dari spesifikasi awal.",
+    "recommendations": [
+      "Lakukan battery health check",
+      "Pertimbangkan penggantian sel baterai",
+      "Kurangi depth of discharge"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 377.1373177209133,
+      "pv_power_output": 4.374785973759537,
+      "battery_temperature": 34.61823944942118,
+      "grid_voltage": 236.6287897647067,
+      "sensor_latency": 10.206801622277448
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:32",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 393.9948783738009,
+      "pv_power_output": 8.8398715010162,
+      "battery_temperature": 37.01089540720375,
+      "grid_voltage": 223.92903897728584,
+      "sensor_latency": 6.6023971443971305
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:33",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 402.752698599558,
+      "pv_power_output": 6.321633320618919,
+      "battery_temperature": 28.47859586415023,
+      "grid_voltage": 220.2251678720856,
+      "sensor_latency": 31.938753637810752
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:34",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 445.9977791011896,
+      "pv_power_output": 5.658860232036086,
+      "battery_temperature": 31.13703773128484,
+      "grid_voltage": 225.3857994066949,
+      "sensor_latency": 20.809934779036123
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:36",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 448.73815656718426,
+      "pv_power_output": 8.977373706158913,
+      "battery_temperature": 31.688216739820344,
+      "grid_voltage": 230.5824862864449,
+      "sensor_latency": 17.488418118807765
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:37",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 371.8669923276137,
+      "pv_power_output": 8.691813860726896,
+      "battery_temperature": 54.56540476576666,
+      "grid_voltage": 233.1169856656544,
+      "sensor_latency": 34.12989106570708
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:38",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 406.46887151770346,
+      "pv_power_output": 6.712966684531198,
+      "battery_temperature": 26.34912124829119,
+      "grid_voltage": 225.5383936634304,
+      "sensor_latency": 26.820201895813216
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:39",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 437.4447349260121,
+      "pv_power_output": 4.775003227013303,
+      "battery_temperature": 30.61092113298741,
+      "grid_voltage": 224.75031557420763,
+      "sensor_latency": 30.48432253115332
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:40",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 417.3661718892194,
+      "pv_power_output": 6.971843857137014,
+      "battery_temperature": 38.476435316554266,
+      "grid_voltage": 225.5523538995808,
+      "sensor_latency": 27.241533045800868
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:41",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 457.61396164543567,
+      "pv_power_output": 8.67465560724061,
+      "battery_temperature": 48.64637394239081,
+      "grid_voltage": 217.58841259167875,
+      "sensor_latency": 30.26677631829451
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:42",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 436.83752355328255,
+      "pv_power_output": 8.903437507990516,
+      "battery_temperature": 25.810201818976623,
+      "grid_voltage": 241.52649792568823,
+      "sensor_latency": 14.308131192256814
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:44",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 413.3078723927797,
+      "pv_power_output": 8.723695792524605,
+      "battery_temperature": 44.59871507401918,
+      "grid_voltage": 230.53410179519608,
+      "sensor_latency": 17.57291207201976
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.5332657217731,
+      "pv_power_output": 7.605808917931192,
+      "battery_temperature": 48.98614405460247,
+      "grid_voltage": 227.62692591199576,
+      "sensor_latency": 4.354337274944307
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 418.5802541848788,
+      "pv_power_output": 7.1013409770677285,
+      "battery_temperature": 40.68269896820669,
+      "grid_voltage": 242.00714285416288,
+      "sensor_latency": 31.86281668309708
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 398.85106508097647,
+      "pv_power_output": 8.273231185900958,
+      "battery_temperature": 49.84114204689834,
+      "grid_voltage": 232.88813570271915,
+      "sensor_latency": 17.56494741103753
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 443.4803533912375,
+      "pv_power_output": 5.635505473535046,
+      "battery_temperature": 40.68663669679184,
+      "grid_voltage": 236.43469495323103,
+      "sensor_latency": 19.1134400222438
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:50",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 438.5607204435388,
+      "pv_power_output": 6.194582046419039,
+      "battery_temperature": 51.93424546570302,
+      "grid_voltage": 244.14300838615347,
+      "sensor_latency": 30.66368022484449
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:51",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 431.3567691913108,
+      "pv_power_output": 6.509743860227968,
+      "battery_temperature": 29.576179752098245,
+      "grid_voltage": 237.5382104454266,
+      "sensor_latency": 29.45625858137757
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:52",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 426.0643672339249,
+      "pv_power_output": 6.916177562106878,
+      "battery_temperature": 36.030986884680566,
+      "grid_voltage": 222.6645413002512,
+      "sensor_latency": 17.71092186537637
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:53",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 394.5450555241747,
+      "pv_power_output": 4.919335487402502,
+      "battery_temperature": 37.89205127670963,
+      "grid_voltage": 238.7530381486552,
+      "sensor_latency": 12.78334677073184
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:54",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 432.6048299785437,
+      "pv_power_output": 9.469120394947485,
+      "battery_temperature": 33.682817003840434,
+      "grid_voltage": 223.2173546768123,
+      "sensor_latency": 18.671502222047906
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:55",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 423.2275618166188,
+      "pv_power_output": 5.566076258945418,
+      "battery_temperature": 34.72475848336915,
+      "grid_voltage": 214.97843358323323,
+      "sensor_latency": 22.03207426261136
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:56",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 470.0567273743603,
+      "pv_power_output": 3.406263925441668,
+      "battery_temperature": 39.38204357020928,
+      "grid_voltage": 217.4201100306432,
+      "sensor_latency": 37.07493695371757
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:57",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Sensor_Failure",
+    "explanation": "Sensor terindikasi rusak atau tidak akurat.",
+    "recommendations": [
+      "Kalibrasi sensor yang bermasalah",
+      "Bandingkan dengan pembacaan manual",
+      "Ganti sensor jika diperlukan"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 387.6677225521345,
+      "pv_power_output": 8.50783383278075,
+      "battery_temperature": 41.77318072596932,
+      "grid_voltage": 218.69701578437736,
+      "sensor_latency": 14.527574743442347
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:46:58",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 401.9176153027676,
+      "pv_power_output": 8.063338857737413,
+      "battery_temperature": 38.10246937849351,
+      "grid_voltage": 222.21601123863863,
+      "sensor_latency": 37.05140467323401
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:00",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 380.33388607207087,
+      "pv_power_output": 6.753748398398233,
+      "battery_temperature": 40.307199696721845,
+      "grid_voltage": 246.25459597776688,
+      "sensor_latency": 14.06177134363946
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:01",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 414.54950520582327,
+      "pv_power_output": 8.238507568181449,
+      "battery_temperature": 24.94621011296388,
+      "grid_voltage": 240.3324508778697,
+      "sensor_latency": 34.462280694560334
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:02",
+    "risk_score": 0.3,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 376.4775158001127,
+      "pv_power_output": 6.940190016657656,
+      "battery_temperature": 45.08539503740913,
+      "grid_voltage": 228.9287540845069,
+      "sensor_latency": 13.893636722120124
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:03",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 449.6375409042144,
+      "pv_power_output": 10.186297995684464,
+      "battery_temperature": 36.305204151197856,
+      "grid_voltage": 221.89177670010608,
+      "sensor_latency": 20.04357467764373
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:04",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 447.3059327217542,
+      "pv_power_output": 6.676705494050361,
+      "battery_temperature": 25.024834629363585,
+      "grid_voltage": 226.7101909510576,
+      "sensor_latency": 17.671290578326218
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:05",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 416.0092005402339,
+      "pv_power_output": 10.37545704412658,
+      "battery_temperature": 28.7906098087082,
+      "grid_voltage": 245.27307311406443,
+      "sensor_latency": 33.098115544760475
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:06",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 394.6569552942408,
+      "pv_power_output": 8.59979138539599,
+      "battery_temperature": 35.87913900502836,
+      "grid_voltage": 225.1783030010552,
+      "sensor_latency": 1.0
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:08",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 381.8974362860185,
+      "pv_power_output": 5.947708136357537,
+      "battery_temperature": 37.7060906805462,
+      "grid_voltage": 227.12416053114697,
+      "sensor_latency": 23.769642207119183
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:09",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 402.4033846339898,
+      "pv_power_output": 6.010366564129419,
+      "battery_temperature": 15.78087732204444,
+      "grid_voltage": 219.32252476710468,
+      "sensor_latency": 23.460540710507846
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 435.6342843085208,
+      "pv_power_output": 8.096612816108111,
+      "battery_temperature": 34.65797164263958,
+      "grid_voltage": 236.34383348096816,
+      "sensor_latency": 17.378812047485656
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:11",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 400.3236827502533,
+      "pv_power_output": 5.406515216224418,
+      "battery_temperature": 43.46357100397033,
+      "grid_voltage": 217.14927882373323,
+      "sensor_latency": 22.52571152874896
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:12",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 467.714404400168,
+      "pv_power_output": 8.034468224310885,
+      "battery_temperature": 45.0032841236016,
+      "grid_voltage": 226.49207792317765,
+      "sensor_latency": 19.516629074656667
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 457.26738599745374,
+      "pv_power_output": 10.692645607998916,
+      "battery_temperature": 34.9813897148301,
+      "grid_voltage": 224.74153160170428,
+      "sensor_latency": 32.21501875154629
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:14",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "EV_Charging_Fault",
+    "explanation": "Gangguan pada stasiun pengisian EV.",
+    "recommendations": [
+      "Hentikan sesi charging sementara",
+      "Periksa konektor charging",
+      "Reset charging station"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 420.0205985851109,
+      "pv_power_output": 7.866973880323623,
+      "battery_temperature": 48.71058373848571,
+      "grid_voltage": 218.8840592940261,
+      "sensor_latency": 17.44305082780254
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:16",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 408.4532936199529,
+      "pv_power_output": 10.773866360000442,
+      "battery_temperature": 25.29464191544639,
+      "grid_voltage": 218.8175020766417,
+      "sensor_latency": 18.018308791726675
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:17",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 405.77010250633873,
+      "pv_power_output": 6.054206469269659,
+      "battery_temperature": 36.7790026236064,
+      "grid_voltage": 240.10083837857388,
+      "sensor_latency": 21.256268214626942
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:18",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 459.95941901315024,
+      "pv_power_output": 9.111545353864964,
+      "battery_temperature": 42.37576498662345,
+      "grid_voltage": 231.181126760362,
+      "sensor_latency": 18.699351037291542
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:19",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 403.5826167110677,
+      "pv_power_output": 6.405041030155817,
+      "battery_temperature": 23.71955149184182,
+      "grid_voltage": 235.54333366103737,
+      "sensor_latency": 20.65333110036829
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:20",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 443.3592238183341,
+      "pv_power_output": 7.613277904002609,
+      "battery_temperature": 39.9055362656073,
+      "grid_voltage": 215.33608986935155,
+      "sensor_latency": 19.0271528559191
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:21",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 420.5448053267076,
+      "pv_power_output": 8.411398575402607,
+      "battery_temperature": 41.05616496999468,
+      "grid_voltage": 247.23932221458924,
+      "sensor_latency": 11.782521258906684
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:22",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 437.8390553481044,
+      "pv_power_output": 6.596195915459982,
+      "battery_temperature": 23.48828214406884,
+      "grid_voltage": 232.6608057758804,
+      "sensor_latency": 21.618120134252624
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:23",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 399.49006771078086,
+      "pv_power_output": 5.813223659608326,
+      "battery_temperature": 37.06995606468597,
+      "grid_voltage": 235.57982804747863,
+      "sensor_latency": 16.124727778410072
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:25",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.6770351119568,
+      "pv_power_output": 6.643015082456141,
+      "battery_temperature": 39.30303513537064,
+      "grid_voltage": 227.52657015435832,
+      "sensor_latency": 24.79925059750101
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:26",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 419.3954370074085,
+      "pv_power_output": 6.646558480799228,
+      "battery_temperature": 37.61977722448835,
+      "grid_voltage": 237.7951004603492,
+      "sensor_latency": 13.1595497122712
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:27",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 404.21583455823577,
+      "pv_power_output": 5.643200096469771,
+      "battery_temperature": 31.55289364350636,
+      "grid_voltage": 220.65854406540777,
+      "sensor_latency": 16.55951360670199
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:28",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 451.2306042343624,
+      "pv_power_output": 10.729620544579832,
+      "battery_temperature": 18.79712001392064,
+      "grid_voltage": 231.93866055452327,
+      "sensor_latency": 29.94274249053675
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:29",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 400.892296758349,
+      "pv_power_output": 6.728853068870917,
+      "battery_temperature": 30.08109887608564,
+      "grid_voltage": 228.98108938353937,
+      "sensor_latency": 6.833845780045982
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:30",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 405.57419645974505,
+      "pv_power_output": 8.64705921702919,
+      "battery_temperature": 36.28900958628534,
+      "grid_voltage": 238.72064129027385,
+      "sensor_latency": 17.331069506910197
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:31",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 453.9675005906994,
+      "pv_power_output": 9.548657683235025,
+      "battery_temperature": 31.31090888805525,
+      "grid_voltage": 228.29373086992504,
+      "sensor_latency": 25.3649476341917
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:33",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 449.1231809198876,
+      "pv_power_output": 9.925453148276835,
+      "battery_temperature": 19.604554523111496,
+      "grid_voltage": 239.47337001461705,
+      "sensor_latency": 11.588702722634835
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:34",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 459.6994693081408,
+      "pv_power_output": 5.818201684372907,
+      "battery_temperature": 42.68739627212528,
+      "grid_voltage": 230.5832223202551,
+      "sensor_latency": 22.478947609856327
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:35",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 372.2931708980617,
+      "pv_power_output": 6.1808291343084285,
+      "battery_temperature": 45.70944466394912,
+      "grid_voltage": 239.234623021252,
+      "sensor_latency": 16.359151211794476
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:36",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 425.0180687260464,
+      "pv_power_output": 8.817991543823757,
+      "battery_temperature": 40.05223824494932,
+      "grid_voltage": 231.72371188855783,
+      "sensor_latency": 18.520775273718968
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:37",
+    "risk_score": 0.3,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 422.2570331157776,
+      "pv_power_output": 6.561276317602873,
+      "battery_temperature": 24.45491933954098,
+      "grid_voltage": 244.5028089762332,
+      "sensor_latency": 13.49115579976635
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:38",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 405.9566778888537,
+      "pv_power_output": 9.723275072414056,
+      "battery_temperature": 52.30854340103974,
+      "grid_voltage": 220.84748436350705,
+      "sensor_latency": 33.010097636573505
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:39",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 428.11148474642886,
+      "pv_power_output": 5.602807459028362,
+      "battery_temperature": 41.936073376318085,
+      "grid_voltage": 224.6507895037559,
+      "sensor_latency": 24.751171392193942
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:41",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Grid_Instability",
+    "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
+    "recommendations": [
+      "Monitor frekuensi grid secara intensif",
+      "Siapkan mode island operation",
+      "Hubungi operator PLN jika berlanjut"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.96395674123,
+      "pv_power_output": 8.76734499374674,
+      "battery_temperature": 36.22629910024965,
+      "grid_voltage": 238.8143287452588,
+      "sensor_latency": 20.195782291645347
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:42",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Sensor_Failure",
+    "explanation": "Sensor terindikasi rusak atau tidak akurat.",
+    "recommendations": [
+      "Kalibrasi sensor yang bermasalah",
+      "Bandingkan dengan pembacaan manual",
+      "Ganti sensor jika diperlukan"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 424.0498067100711,
+      "pv_power_output": 6.875610064890886,
+      "battery_temperature": 38.71822878038882,
+      "grid_voltage": 228.513943473914,
+      "sensor_latency": 13.202518154310985
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:43",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 500.0,
+      "pv_power_output": 11.101292930372292,
+      "battery_temperature": 47.571538119618495,
+      "grid_voltage": 239.10027606596623,
+      "sensor_latency": 1.1983231579923697
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:44",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 427.92826910321145,
+      "pv_power_output": 8.164146077775468,
+      "battery_temperature": 22.359333126597967,
+      "grid_voltage": 229.8167856430492,
+      "sensor_latency": 26.896576156619783
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 428.97828995257214,
+      "pv_power_output": 6.270891236965929,
+      "battery_temperature": 45.16486658480943,
+      "grid_voltage": 238.45503761515684,
+      "sensor_latency": 37.68040132645771
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 440.5304833753961,
+      "pv_power_output": 9.37433654129882,
+      "battery_temperature": 27.044656387038728,
+      "grid_voltage": 231.6359940995773,
+      "sensor_latency": 35.08580905287823
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 424.5161132749079,
+      "pv_power_output": 4.706466750360601,
+      "battery_temperature": 40.53017045820563,
+      "grid_voltage": 226.8426699680876,
+      "sensor_latency": 28.66500329944473
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 392.5491830959981,
+      "pv_power_output": 6.519648967267845,
+      "battery_temperature": 41.58949155757006,
+      "grid_voltage": 245.453352626452,
+      "sensor_latency": 24.96492250569356
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:49",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 378.8322067714182,
+      "pv_power_output": 6.128322797015134,
+      "battery_temperature": 34.93176540820036,
+      "grid_voltage": 215.0021821142641,
+      "sensor_latency": 17.360076592382857
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:50",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 419.2677234324522,
+      "pv_power_output": 8.271704518891484,
+      "battery_temperature": 37.906994364104506,
+      "grid_voltage": 236.2032650160534,
+      "sensor_latency": 20.978519388166664
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:51",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 413.272224290668,
+      "pv_power_output": 2.9960690590693906,
+      "battery_temperature": 31.232332800559128,
+      "grid_voltage": 247.5198396976305,
+      "sensor_latency": 20.890712783665133
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:52",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "PV_Fault",
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 370.9099479304582,
+      "pv_power_output": 7.022406221220353,
+      "battery_temperature": 19.61993583582657,
+      "grid_voltage": 229.32347359434817,
+      "sensor_latency": 30.56705695833471
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:54",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 460.7348187905697,
+      "pv_power_output": 8.980119491767557,
+      "battery_temperature": 32.13366738414901,
+      "grid_voltage": 213.80769732305032,
+      "sensor_latency": 30.69820064320849
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:55",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Inverter_Fault",
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 422.6750760841378,
+      "pv_power_output": 6.265280873603813,
+      "battery_temperature": 29.83804015936256,
+      "grid_voltage": 217.96322514035444,
+      "sensor_latency": 8.665435954430787
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:56",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 455.9859088666106,
+      "pv_power_output": 7.653490288376666,
+      "battery_temperature": 41.96484638856418,
+      "grid_voltage": 219.1028061189632,
+      "sensor_latency": 21.81773776012026
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:57",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 364.203442897696,
+      "pv_power_output": 6.606806462370924,
+      "battery_temperature": 34.81006999774256,
+      "grid_voltage": 216.49054413978087,
+      "sensor_latency": 19.4463096726658
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:47:58",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 456.4621763938932,
+      "pv_power_output": 9.943967058794769,
+      "battery_temperature": 46.965187711491545,
+      "grid_voltage": 243.622396624905,
+      "sensor_latency": 15.377651443868624
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:52:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 422.4551536419765,
+      "pv_power_output": 9.345712745604176,
+      "battery_temperature": 45.246461766442025,
+      "grid_voltage": 230.44929200967056,
+      "sensor_latency": 23.459903802733013
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:52:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 418.3972942780849,
+      "pv_power_output": 5.597562063153801,
+      "battery_temperature": 20.305186821862705,
+      "grid_voltage": 227.33797690795444,
+      "sensor_latency": 17.06913903136763
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:52:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 443.7947689004884,
+      "pv_power_output": 9.009809899617878,
+      "battery_temperature": 36.34246204499333,
+      "grid_voltage": 225.73455484973127,
+      "sensor_latency": 11.613230977845342
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:52:49",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "anomaly_detected": true,
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 458.3207785356555,
+      "pv_power_output": 7.114534604666851,
+      "battery_temperature": 37.63224724167196,
+      "grid_voltage": 244.75616504822065,
+      "sensor_latency": 19.10256169949936
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:52:50",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -17,10 +1818,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:02:46",
+    "timestamp": "2026-06-09T20:52:51",
     "risk_score": 0.25,
     "risk_level": "MEDIUM",
     "dominant_fault": "Sensor_Failure",
+    "anomaly_detected": true,
     "explanation": "Sensor terindikasi rusak atau tidak akurat.",
     "recommendations": [
       "Kalibrasi sensor yang bermasalah",
@@ -36,10 +1838,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:02:51",
+    "timestamp": "2026-06-09T20:52:52",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -53,10 +1856,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:02:56",
+    "timestamp": "2026-06-09T20:52:53",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "Battery_Overheating",
+    "anomaly_detected": false,
     "explanation": "Suhu baterai melebihi batas aman.",
     "recommendations": [
       "Segera kurangi beban charging",
@@ -72,10 +1876,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:01",
+    "timestamp": "2026-06-09T20:52:54",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -89,10 +1894,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:06",
+    "timestamp": "2026-06-09T20:52:55",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -106,10 +1912,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:11",
+    "timestamp": "2026-06-09T20:52:57",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -123,10 +1930,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:16",
+    "timestamp": "2026-06-09T20:52:58",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -140,10 +1948,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:21",
+    "timestamp": "2026-06-09T20:52:59",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -157,10 +1966,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:26",
+    "timestamp": "2026-06-09T20:53:00",
     "risk_score": 0.1,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": true,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -174,10 +1984,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:31",
+    "timestamp": "2026-06-09T20:53:01",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -191,10 +2002,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:36",
+    "timestamp": "2026-06-09T20:53:02",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -208,10 +2020,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:41",
+    "timestamp": "2026-06-09T20:53:03",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -225,10 +2038,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:46",
+    "timestamp": "2026-06-09T20:53:04",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -242,10 +2056,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:51",
+    "timestamp": "2026-06-09T20:53:05",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -259,10 +2074,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:03:56",
+    "timestamp": "2026-06-09T20:53:06",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -276,10 +2092,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:01",
+    "timestamp": "2026-06-09T20:53:07",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -293,10 +2110,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:06",
+    "timestamp": "2026-06-09T20:53:08",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -310,10 +2128,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:11",
+    "timestamp": "2026-06-09T20:53:09",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -327,10 +2146,431 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:16",
+    "timestamp": "2026-06-09T20:55:37",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 422.4551536419765,
+      "pv_power_output": 9.345712745604176,
+      "battery_temperature": 45.246461766442025,
+      "grid_voltage": 230.44929200967056,
+      "sensor_latency": 23.459903802733013
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:38",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 418.3972942780849,
+      "pv_power_output": 5.597562063153801,
+      "battery_temperature": 20.305186821862705,
+      "grid_voltage": 227.33797690795444,
+      "sensor_latency": 17.06913903136763
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:39",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 443.7947689004884,
+      "pv_power_output": 9.009809899617878,
+      "battery_temperature": 36.34246204499333,
+      "grid_voltage": 225.73455484973127,
+      "sensor_latency": 11.613230977845342
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:40",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Inverter_Fault",
+    "anomaly_detected": true,
+    "explanation": "Inverter terdeteksi tidak bekerja optimal.",
+    "recommendations": [
+      "Restart inverter",
+      "Cek log error inverter",
+      "Periksa koneksi DC/AC inverter"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 458.3207785356555,
+      "pv_power_output": 7.114534604666851,
+      "battery_temperature": 37.63224724167196,
+      "grid_voltage": 244.75616504822065,
+      "sensor_latency": 19.10256169949936
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:41",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 437.1711736033654,
+      "pv_power_output": 7.296556848451678,
+      "battery_temperature": 35.24924894986502,
+      "grid_voltage": 238.8138696896098,
+      "sensor_latency": 25.79595379887464
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:42",
+    "risk_score": 0.25,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Sensor_Failure",
+    "anomaly_detected": true,
+    "explanation": "Sensor terindikasi rusak atau tidak akurat.",
+    "recommendations": [
+      "Kalibrasi sensor yang bermasalah",
+      "Bandingkan dengan pembacaan manual",
+      "Ganti sensor jika diperlukan"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 445.2885937792616,
+      "pv_power_output": 8.099985236230959,
+      "battery_temperature": 19.80444383617548,
+      "grid_voltage": 206.4507872826688,
+      "sensor_latency": 6.513349794731825
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:43",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 414.5648941923397,
+      "pv_power_output": 7.264020914598304,
+      "battery_temperature": 18.574582449144746,
+      "grid_voltage": 230.38304214310352,
+      "sensor_latency": 28.52302435356409
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:44",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Battery_Overheating",
+    "anomaly_detected": false,
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 423.1351201534784,
+      "pv_power_output": 4.7795555147504665,
+      "battery_temperature": 35.986436192139784,
+      "grid_voltage": 230.765691965682,
+      "sensor_latency": 14.666747629816744
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 457.143301839991,
+      "pv_power_output": 10.755323872627,
+      "battery_temperature": 34.8081592308016,
+      "grid_voltage": 241.37759256913355,
+      "sensor_latency": 18.56140188839654
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 433.1677865064557,
+      "pv_power_output": 9.76257827824544,
+      "battery_temperature": 24.520251242798835,
+      "grid_voltage": 223.58631677395908,
+      "sensor_latency": 16.48229054329583
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 413.9492531059296,
+      "pv_power_output": 7.208816143720171,
+      "battery_temperature": 43.38086415901057,
+      "grid_voltage": 230.3949326755599,
+      "sensor_latency": 13.630939643494973
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 420.8137638696844,
+      "pv_power_output": 9.14747896192844,
+      "battery_temperature": 33.80637302507028,
+      "grid_voltage": 231.5012308349176,
+      "sensor_latency": 17.461536102636742
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:49",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 445.92878225761376,
+      "pv_power_output": 7.317343204616294,
+      "battery_temperature": 42.759999372750826,
+      "grid_voltage": 234.6265244195993,
+      "sensor_latency": 13.266498560070694
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:50",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": true,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 448.1556752581037,
+      "pv_power_output": 6.306092720093496,
+      "battery_temperature": 47.82655252120718,
+      "grid_voltage": 218.47715196325825,
+      "sensor_latency": 19.1859215985216
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:51",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 398.9467214595057,
+      "pv_power_output": 7.2678725607512975,
+      "battery_temperature": 42.35584405331915,
+      "grid_voltage": 216.6001306060241,
+      "sensor_latency": 16.495537387932956
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:53",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.06478187617176,
+      "pv_power_output": 5.71702587373037,
+      "battery_temperature": 57.858243394420285,
+      "grid_voltage": 227.06129581729763,
+      "sensor_latency": 14.847812921921763
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:54",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 419.8039289361672,
+      "pv_power_output": 8.579198099488297,
+      "battery_temperature": 26.25719823922592,
+      "grid_voltage": 236.99886323471992,
+      "sensor_latency": 23.081801123841835
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:55",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 418.36160379740727,
+      "pv_power_output": 6.354807753857624,
+      "battery_temperature": 41.56312398752594,
+      "grid_voltage": 229.0151178098417,
+      "sensor_latency": 16.407507521708165
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:56",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 453.2576987607679,
+      "pv_power_output": 5.257733320624589,
+      "battery_temperature": 19.32877878330215,
+      "grid_voltage": 257.44625025275104,
+      "sensor_latency": 26.78691444042748
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:57",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 414.0615465026519,
+      "pv_power_output": 2.0703077325132595,
+      "battery_temperature": 22.87476527300981,
+      "grid_voltage": 230.0344540722464,
+      "sensor_latency": 27.1301929080103
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:58",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 405.61057241812193,
+      "pv_power_output": 7.094848758630168,
+      "battery_temperature": 36.362185252404416,
+      "grid_voltage": 239.08516550389763,
+      "sensor_latency": 23.94972628269779
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:55:59",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 399.6252173907872,
+      "pv_power_output": 7.705897121753264,
+      "battery_temperature": 22.471376705320395,
+      "grid_voltage": 226.4155861361625,
+      "sensor_latency": 25.89098703975854
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:56:00",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.6363267198589,
+      "pv_power_output": 9.70550121828154,
+      "battery_temperature": 27.88521251179199,
+      "grid_voltage": 238.48233517907,
+      "sensor_latency": 21.84035820187468
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:56:01",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "Sensor_Failure",
+    "anomaly_detected": false,
     "explanation": "Sensor terindikasi rusak atau tidak akurat.",
     "recommendations": [
       "Kalibrasi sensor yang bermasalah",
@@ -346,10 +2586,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:21",
+    "timestamp": "2026-06-09T20:56:02",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -363,10 +2604,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:26",
+    "timestamp": "2026-06-09T20:56:03",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -380,10 +2622,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:31",
+    "timestamp": "2026-06-09T20:56:04",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -397,10 +2640,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:36",
+    "timestamp": "2026-06-09T20:56:05",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -414,10 +2658,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:41",
+    "timestamp": "2026-06-09T20:56:06",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -431,10 +2676,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:46",
+    "timestamp": "2026-06-09T20:56:07",
     "risk_score": 0.2,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": true,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -448,10 +2694,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:51",
+    "timestamp": "2026-06-09T20:56:09",
     "risk_score": 0.2,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": true,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -465,10 +2712,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:04:56",
+    "timestamp": "2026-06-09T20:56:10",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -482,10 +2730,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:01",
+    "timestamp": "2026-06-09T20:56:11",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -499,10 +2748,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:06",
+    "timestamp": "2026-06-09T20:56:12",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -516,10 +2766,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:11",
+    "timestamp": "2026-06-09T20:56:13",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -533,10 +2784,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:16",
+    "timestamp": "2026-06-09T20:56:14",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -550,10 +2802,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:21",
+    "timestamp": "2026-06-09T20:56:15",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -567,10 +2820,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:26",
+    "timestamp": "2026-06-09T20:56:16",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -584,10 +2838,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:31",
+    "timestamp": "2026-06-09T20:56:17",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -601,10 +2856,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:36",
+    "timestamp": "2026-06-09T20:56:18",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -618,10 +2874,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:41",
+    "timestamp": "2026-06-09T20:56:19",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -635,10 +2892,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:46",
+    "timestamp": "2026-06-09T20:56:20",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -652,10 +2910,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:51",
+    "timestamp": "2026-06-09T20:56:21",
     "risk_score": 0.1,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -669,10 +2928,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:05:56",
+    "timestamp": "2026-06-09T20:56:22",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -686,10 +2946,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:01",
+    "timestamp": "2026-06-09T20:56:23",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -703,10 +2964,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:06",
+    "timestamp": "2026-06-09T20:56:25",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -720,10 +2982,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:11",
+    "timestamp": "2026-06-09T20:56:26",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -737,10 +3000,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:16",
+    "timestamp": "2026-06-09T20:56:27",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -754,10 +3018,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:21",
+    "timestamp": "2026-06-09T20:56:28",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -771,10 +3036,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:26",
+    "timestamp": "2026-06-09T20:56:29",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -788,10 +3054,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:31",
+    "timestamp": "2026-06-09T20:56:30",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -805,10 +3072,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:36",
+    "timestamp": "2026-06-09T20:56:31",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -822,10 +3090,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:41",
+    "timestamp": "2026-06-09T20:56:32",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -839,10 +3108,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:47",
+    "timestamp": "2026-06-09T20:56:33",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -856,10 +3126,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:51",
+    "timestamp": "2026-06-09T20:56:34",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -873,10 +3144,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:06:56",
+    "timestamp": "2026-06-09T20:56:35",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -890,10 +3162,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:01",
+    "timestamp": "2026-06-09T20:56:36",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -907,10 +3180,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:06",
+    "timestamp": "2026-06-09T20:56:37",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -924,10 +3198,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:11",
+    "timestamp": "2026-06-09T20:56:38",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -941,10 +3216,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:16",
+    "timestamp": "2026-06-09T20:56:39",
     "risk_score": 0.1,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -958,10 +3234,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:21",
+    "timestamp": "2026-06-09T20:56:41",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "Inverter_Fault",
+    "anomaly_detected": false,
     "explanation": "Inverter terdeteksi tidak bekerja optimal.",
     "recommendations": [
       "Restart inverter",
@@ -977,10 +3254,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:26",
+    "timestamp": "2026-06-09T20:56:42",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -994,10 +3272,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:31",
+    "timestamp": "2026-06-09T20:56:43",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1011,10 +3290,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:36",
+    "timestamp": "2026-06-09T20:56:44",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1028,10 +3308,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:41",
+    "timestamp": "2026-06-09T20:56:45",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1045,10 +3326,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:46",
+    "timestamp": "2026-06-09T20:56:46",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1062,10 +3344,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:51",
+    "timestamp": "2026-06-09T20:56:47",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "Grid_Instability",
+    "anomaly_detected": false,
     "explanation": "Ketidakstabilan tegangan/frekuensi grid.",
     "recommendations": [
       "Monitor frekuensi grid secara intensif",
@@ -1081,10 +3364,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:07:56",
+    "timestamp": "2026-06-09T20:56:48",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1098,10 +3382,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:01",
+    "timestamp": "2026-06-09T20:56:49",
     "risk_score": 0.2,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": true,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1115,10 +3400,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:06",
+    "timestamp": "2026-06-09T20:56:50",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1132,10 +3418,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:11",
+    "timestamp": "2026-06-09T20:56:51",
     "risk_score": 0.1,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1149,10 +3436,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:16",
+    "timestamp": "2026-06-09T20:56:52",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1166,10 +3454,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:21",
+    "timestamp": "2026-06-09T20:56:53",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1183,10 +3472,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:26",
+    "timestamp": "2026-06-09T20:56:54",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "Battery_Overheating",
+    "anomaly_detected": false,
     "explanation": "Suhu baterai melebihi batas aman.",
     "recommendations": [
       "Segera kurangi beban charging",
@@ -1202,10 +3492,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:31",
+    "timestamp": "2026-06-09T20:56:55",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1219,10 +3510,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:36",
+    "timestamp": "2026-06-09T20:56:57",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1236,10 +3528,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:41",
+    "timestamp": "2026-06-09T20:56:58",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1253,10 +3546,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:46",
+    "timestamp": "2026-06-09T20:56:59",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1270,10 +3564,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:51",
+    "timestamp": "2026-06-09T20:57:00",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1287,10 +3582,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:08:56",
+    "timestamp": "2026-06-09T20:57:01",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1304,10 +3600,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:09:01",
+    "timestamp": "2026-06-09T20:57:02",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1321,10 +3618,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:09:06",
+    "timestamp": "2026-06-09T20:57:03",
     "risk_score": 0.1,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1338,10 +3636,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:09:11",
+    "timestamp": "2026-06-09T20:57:04",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1355,10 +3654,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:09:16",
+    "timestamp": "2026-06-09T20:57:05",
     "risk_score": 0.0,
     "risk_level": "LOW",
     "dominant_fault": "Normal",
+    "anomaly_detected": false,
     "explanation": "Sistem beroperasi normal.",
     "recommendations": [
       "Lanjutkan monitoring rutin"
@@ -1372,10 +3672,11 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:09:21",
+    "timestamp": "2026-06-09T20:57:06",
     "risk_score": 0.15,
     "risk_level": "LOW",
     "dominant_fault": "PV_Fault",
+    "anomaly_detected": false,
     "explanation": "Panel surya terindikasi bermasalah.",
     "recommendations": [
       "Periksa sambungan kabel string",
@@ -1391,86 +3692,687 @@
     }
   },
   {
-    "timestamp": "2026-06-08T20:11:15",
-    "risk_score": 1.0,
-    "risk_level": "CRITICAL",
-    "dominant_fault": "Battery_Overheating",
-    "explanation": "Suhu baterai melebihi batas aman.",
+    "timestamp": "2026-06-09T20:57:07",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
     "recommendations": [
-      "Segera kurangi beban charging",
-      "Periksa sistem ventilasi",
-      "Aktifkan pendingin tambahan jika tersedia"
+      "Lanjutkan monitoring rutin"
     ],
     "sensor_snapshot": {
-      "pv_voltage": 437.0,
-      "pv_power_output": 7.5,
-      "battery_temperature": 85.0,
-      "grid_voltage": 220.0,
-      "sensor_latency": 20.0
+      "pv_voltage": 455.41648774515977,
+      "pv_power_output": 10.00443129540153,
+      "battery_temperature": 42.774101179024186,
+      "grid_voltage": 231.75161234436712,
+      "sensor_latency": 17.913416498165514
     }
   },
   {
-    "timestamp": "2026-06-08T20:19:24",
-    "risk_score": 1.0,
-    "risk_level": "CRITICAL",
-    "dominant_fault": "Battery_Overheating",
-    "explanation": "Suhu baterai melebihi batas aman.",
+    "timestamp": "2026-06-09T20:57:08",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
     "recommendations": [
-      "Segera kurangi beban charging",
-      "Periksa sistem ventilasi",
-      "Aktifkan pendingin tambahan jika tersedia"
+      "Lanjutkan monitoring rutin"
     ],
     "sensor_snapshot": {
-      "pv_voltage": 437.0,
-      "pv_power_output": 7.5,
-      "battery_temperature": 85.0,
-      "grid_voltage": 220.0,
-      "sensor_latency": 20.0
+      "pv_voltage": 439.7491030103999,
+      "pv_power_output": 6.924511079930929,
+      "battery_temperature": 46.241801888788,
+      "grid_voltage": 249.8197968069012,
+      "sensor_latency": 11.707311216093355
     }
   },
   {
-    "timestamp": "2026-06-08T20:25:53",
-    "risk_score": 1.0,
-    "risk_level": "CRITICAL",
-    "dominant_fault": "Battery_Overheating",
-    "explanation": "Suhu baterai melebihi batas aman.",
+    "timestamp": "2026-06-09T20:57:09",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
     "recommendations": [
-      "Segera kurangi beban charging",
-      "Periksa sistem ventilasi",
-      "Aktifkan pendingin tambahan jika tersedia"
+      "Lanjutkan monitoring rutin"
     ],
     "sensor_snapshot": {
-      "pv_voltage": 437.0,
-      "pv_power_output": 7.5,
-      "battery_temperature": 85.0,
-      "grid_voltage": 220.0,
-      "sensor_latency": 20.0
+      "pv_voltage": 419.3972744250588,
+      "pv_power_output": 6.160057271828826,
+      "battery_temperature": 31.395961763039693,
+      "grid_voltage": 230.82274911382703,
+      "sensor_latency": 20.213420647689222
     }
   },
   {
-    "timestamp": "2026-06-08T20:28:11",
-    "risk_score": 1.0,
-    "risk_level": "CRITICAL",
-    "dominant_fault": "Battery_Overheating",
-    "explanation": "Suhu baterai melebihi batas aman.",
+    "timestamp": "2026-06-09T20:57:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
     "recommendations": [
-      "Segera kurangi beban charging",
-      "Periksa sistem ventilasi",
-      "Aktifkan pendingin tambahan jika tersedia"
+      "Lanjutkan monitoring rutin"
     ],
     "sensor_snapshot": {
-      "pv_voltage": 437.0,
-      "pv_power_output": 7.5,
-      "battery_temperature": 85.0,
-      "grid_voltage": 220.0,
-      "sensor_latency": 20.0
+      "pv_voltage": 448.34285279381527,
+      "pv_power_output": 8.716987538935037,
+      "battery_temperature": 40.21697666063654,
+      "grid_voltage": 225.2471286239348,
+      "sensor_latency": 18.91801140085889
     }
   },
   {
-    "timestamp": "2026-06-08T21:16:18",
-    "risk_score": 1.0,
-    "risk_level": "CRITICAL",
+    "timestamp": "2026-06-09T20:57:11",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 483.00766290438094,
+      "pv_power_output": 11.038664759902886,
+      "battery_temperature": 43.548546736736114,
+      "grid_voltage": 221.04860725374064,
+      "sensor_latency": 14.36541394809055
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 401.6911658369461,
+      "pv_power_output": 8.946365857284574,
+      "battery_temperature": 39.48125670469264,
+      "grid_voltage": 235.6724654505652,
+      "sensor_latency": 11.804640848293236
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:14",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 431.79341616863127,
+      "pv_power_output": 10.016343135019827,
+      "battery_temperature": 25.81382064993388,
+      "grid_voltage": 238.2099163256578,
+      "sensor_latency": 12.057372060401647
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:15",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Sensor_Failure",
+    "anomaly_detected": true,
+    "explanation": "Sensor terindikasi rusak atau tidak akurat.",
+    "recommendations": [
+      "Kalibrasi sensor yang bermasalah",
+      "Bandingkan dengan pembacaan manual",
+      "Ganti sensor jika diperlukan"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 409.7697459064563,
+      "pv_power_output": 9.52052311061519,
+      "battery_temperature": 37.78955421905938,
+      "grid_voltage": 216.9029796116876,
+      "sensor_latency": 14.356745106433364
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:16",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 396.63647448079246,
+      "pv_power_output": 9.729763555023675,
+      "battery_temperature": 18.259211251268624,
+      "grid_voltage": 227.75458301111493,
+      "sensor_latency": 14.91347565369096
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:17",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 395.9433303470967,
+      "pv_power_output": 7.413049383942827,
+      "battery_temperature": 22.132836761320096,
+      "grid_voltage": 226.2534905236734,
+      "sensor_latency": 22.5558337073574
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:18",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 459.80832865046494,
+      "pv_power_output": 7.458772732497939,
+      "battery_temperature": 29.374008869237727,
+      "grid_voltage": 236.119286718694,
+      "sensor_latency": 22.281637054821807
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:19",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 374.38098481734136,
+      "pv_power_output": 5.502649300160963,
+      "battery_temperature": 29.67550260101696,
+      "grid_voltage": 239.7815982893908,
+      "sensor_latency": 15.26587753553942
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:20",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 432.6964839616699,
+      "pv_power_output": 9.85628968366703,
+      "battery_temperature": 30.829742430300936,
+      "grid_voltage": 226.3852368587306,
+      "sensor_latency": 19.000756292528468
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:21",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 399.3689230594941,
+      "pv_power_output": 6.913050364297856,
+      "battery_temperature": 44.95838616279644,
+      "grid_voltage": 228.5415127829503,
+      "sensor_latency": 22.52977697873935
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:22",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 464.3123737891999,
+      "pv_power_output": 6.667734736779431,
+      "battery_temperature": 22.760082127952685,
+      "grid_voltage": 234.5132346024352,
+      "sensor_latency": 20.53634359924025
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:23",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 413.1730837766418,
+      "pv_power_output": 8.300843045385408,
+      "battery_temperature": 32.28702586140424,
+      "grid_voltage": 233.09806009944552,
+      "sensor_latency": 27.02433233027266
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:24",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "PV_Fault",
+    "anomaly_detected": false,
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 410.8998081679433,
+      "pv_power_output": 5.017265510424342,
+      "battery_temperature": 36.58952264966208,
+      "grid_voltage": 216.18085816734552,
+      "sensor_latency": 25.395665970933425
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:25",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 459.2377326123559,
+      "pv_power_output": 6.282250446027096,
+      "battery_temperature": 54.923532986853616,
+      "grid_voltage": 230.25272873900664,
+      "sensor_latency": 22.00521421884128
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:26",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Overload_Condition",
+    "anomaly_detected": false,
+    "explanation": "Beban sistem melebihi kapasitas.",
+    "recommendations": [
+      "Kurangi beban secara bertahap",
+      "Prioritaskan beban kritis",
+      "Aktifkan load shedding jika tersedia"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 441.9200020578053,
+      "pv_power_output": 8.338716595031277,
+      "battery_temperature": 31.874006180993344,
+      "grid_voltage": 223.8080673785863,
+      "sensor_latency": 13.622238720974885
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:28",
+    "risk_score": 0.3,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "anomaly_detected": true,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 433.85567460906674,
+      "pv_power_output": 9.340091810434512,
+      "battery_temperature": 15.0,
+      "grid_voltage": 233.1051371934696,
+      "sensor_latency": 4.427115480276534
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:29",
+    "risk_score": 0.3,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Normal",
+    "anomaly_detected": true,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 440.14529888764457,
+      "pv_power_output": 7.339993158266409,
+      "battery_temperature": 37.38910684345538,
+      "grid_voltage": 214.06434876741343,
+      "sensor_latency": 11.971878920816964
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:30",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "PV_Fault",
+    "anomaly_detected": false,
+    "explanation": "Panel surya terindikasi bermasalah.",
+    "recommendations": [
+      "Periksa sambungan kabel string",
+      "Cek kebersihan panel",
+      "Ukur tegangan tiap string secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 392.91816028085645,
+      "pv_power_output": 6.707102834451981,
+      "battery_temperature": 33.55463629045862,
+      "grid_voltage": 245.8879813237008,
+      "sensor_latency": 29.70923154398657
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:31",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 438.5428301384534,
+      "pv_power_output": 9.273676960229984,
+      "battery_temperature": 48.022968099649134,
+      "grid_voltage": 223.40831199279864,
+      "sensor_latency": 1.0
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:32",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.0236446456245,
+      "pv_power_output": 8.846700634319802,
+      "battery_temperature": 32.153443421637895,
+      "grid_voltage": 219.6754105027929,
+      "sensor_latency": 23.046852242104386
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:33",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.0231174790565,
+      "pv_power_output": 4.161922980986287,
+      "battery_temperature": 35.211760471481085,
+      "grid_voltage": 219.3468153161328,
+      "sensor_latency": 21.93244244580516
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:34",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 432.1138231565323,
+      "pv_power_output": 10.341572854906042,
+      "battery_temperature": 49.62182604184265,
+      "grid_voltage": 240.2258136504674,
+      "sensor_latency": 18.99608649040513
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:35",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 392.2372729198173,
+      "pv_power_output": 6.547065248656245,
+      "battery_temperature": 41.31159049451121,
+      "grid_voltage": 221.55348776356612,
+      "sensor_latency": 22.08489409437808
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:36",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 434.84556489602073,
+      "pv_power_output": 6.528683479717622,
+      "battery_temperature": 35.05815966173553,
+      "grid_voltage": 226.66946943996336,
+      "sensor_latency": 12.121978053566968
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:37",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.3410677507156,
+      "pv_power_output": 6.697966632422463,
+      "battery_temperature": 24.00378120816169,
+      "grid_voltage": 239.5826179993061,
+      "sensor_latency": 14.407009943935302
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:38",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 389.0019638505783,
+      "pv_power_output": 4.878646944793422,
+      "battery_temperature": 44.293023921928246,
+      "grid_voltage": 229.7043963824876,
+      "sensor_latency": 17.39219195501499
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:39",
+    "risk_score": 0.35,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Communication_Failure",
+    "anomaly_detected": true,
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 416.335854836774,
+      "pv_power_output": 11.735909690049168,
+      "battery_temperature": 24.875336266814287,
+      "grid_voltage": 240.82297582966905,
+      "sensor_latency": 10.689616355446674
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:40",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 420.50062785287935,
+      "pv_power_output": 5.373672132698858,
+      "battery_temperature": 36.12244927103533,
+      "grid_voltage": 217.60534187430704,
+      "sensor_latency": 12.182845399505103
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:41",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 434.8407972816991,
+      "pv_power_output": 5.220403366016972,
+      "battery_temperature": 40.12946449617319,
+      "grid_voltage": 236.2770579589293,
+      "sensor_latency": 14.618910774846784
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:42",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": true,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 360.2927240548162,
+      "pv_power_output": 6.108257089291884,
+      "battery_temperature": 40.095454533202485,
+      "grid_voltage": 237.9349826223136,
+      "sensor_latency": 42.40025966360906
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:44",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.7034057469165,
+      "pv_power_output": 5.362937639310053,
+      "battery_temperature": 30.13673423736789,
+      "grid_voltage": 227.31123062633503,
+      "sensor_latency": 21.40286161871485
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 407.2034985791152,
+      "pv_power_output": 7.528405834839621,
+      "battery_temperature": 16.413281085910047,
+      "grid_voltage": 226.3720653467933,
+      "sensor_latency": 16.93101220964676
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 440.2468361602623,
+      "pv_power_output": 10.81549154141224,
+      "battery_temperature": 40.72995106929965,
+      "grid_voltage": 243.67680501447143,
+      "sensor_latency": 29.39111361457767
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:47",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
     "dominant_fault": "Battery_Overheating",
+    "anomaly_detected": false,
     "explanation": "Suhu baterai melebihi batas aman.",
     "recommendations": [
       "Segera kurangi beban charging",
@@ -1478,11 +4380,629 @@
       "Aktifkan pendingin tambahan jika tersedia"
     ],
     "sensor_snapshot": {
-      "pv_voltage": 437.0,
-      "pv_power_output": 7.5,
-      "battery_temperature": 85.0,
-      "grid_voltage": 220.0,
-      "sensor_latency": 20.0
+      "pv_voltage": 419.9533463428941,
+      "pv_power_output": 7.836681625471892,
+      "battery_temperature": 47.24014951936498,
+      "grid_voltage": 240.6472370520197,
+      "sensor_latency": 15.190390720730507
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.6654623911263,
+      "pv_power_output": 7.9679197750479585,
+      "battery_temperature": 37.36628376353587,
+      "grid_voltage": 243.95331292053504,
+      "sensor_latency": 19.621770596172727
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:49",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.5624900930935,
+      "pv_power_output": 6.996480659378054,
+      "battery_temperature": 49.29314882327093,
+      "grid_voltage": 247.6856387508253,
+      "sensor_latency": 15.03130297602208
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:50",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 428.3352435547778,
+      "pv_power_output": 5.926454600479618,
+      "battery_temperature": 34.12925591906393,
+      "grid_voltage": 228.9656422708872,
+      "sensor_latency": 16.12456145862393
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:51",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 442.6977351917839,
+      "pv_power_output": 7.450947110640778,
+      "battery_temperature": 39.60243938514911,
+      "grid_voltage": 251.90609730208368,
+      "sensor_latency": 17.07548576416601
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:52",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 397.72221755812353,
+      "pv_power_output": 8.836771053825741,
+      "battery_temperature": 25.996648449327616,
+      "grid_voltage": 234.5187983057488,
+      "sensor_latency": 10.891065685530547
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:53",
+    "risk_score": 0.15,
+    "risk_level": "LOW",
+    "dominant_fault": "Communication_Failure",
+    "anomaly_detected": false,
+    "explanation": "Gangguan komunikasi sensor/jaringan.",
+    "recommendations": [
+      "Cek koneksi jaringan edge node",
+      "Restart modul komunikasi",
+      "Verifikasi data secara manual"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 411.4085035141924,
+      "pv_power_output": 9.639329527590013,
+      "battery_temperature": 34.33326176522443,
+      "grid_voltage": 237.1898428168801,
+      "sensor_latency": 25.55131054617664
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:54",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 456.7336512704669,
+      "pv_power_output": 8.297226598076156,
+      "battery_temperature": 45.34836594919179,
+      "grid_voltage": 234.44129144696325,
+      "sensor_latency": 9.979974961480956
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:55",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 410.9722076678258,
+      "pv_power_output": 8.840008820260682,
+      "battery_temperature": 51.35619610461755,
+      "grid_voltage": 236.52551620224736,
+      "sensor_latency": 21.327968466696227
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:56",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 429.1812432703817,
+      "pv_power_output": 6.39515591126222,
+      "battery_temperature": 34.203770457764335,
+      "grid_voltage": 235.15056113542053,
+      "sensor_latency": 28.69060925119196
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:58",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 389.1452015578433,
+      "pv_power_output": 6.047000922456034,
+      "battery_temperature": 43.67652666951686,
+      "grid_voltage": 219.7664951300829,
+      "sensor_latency": 21.89232751260604
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:57:59",
+    "risk_score": 0.25,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Battery_Degradation",
+    "anomaly_detected": true,
+    "explanation": "Kapasitas baterai menurun dari spesifikasi awal.",
+    "recommendations": [
+      "Lakukan battery health check",
+      "Pertimbangkan penggantian sel baterai",
+      "Kurangi depth of discharge"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 377.1373177209133,
+      "pv_power_output": 4.374785973759537,
+      "battery_temperature": 34.61823944942118,
+      "grid_voltage": 236.6287897647067,
+      "sensor_latency": 10.206801622277448
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:00",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 393.9948783738009,
+      "pv_power_output": 8.8398715010162,
+      "battery_temperature": 37.01089540720375,
+      "grid_voltage": 223.92903897728584,
+      "sensor_latency": 6.6023971443971305
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:01",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 402.752698599558,
+      "pv_power_output": 6.321633320618919,
+      "battery_temperature": 28.47859586415023,
+      "grid_voltage": 220.2251678720856,
+      "sensor_latency": 31.938753637810752
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:02",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 445.9977791011896,
+      "pv_power_output": 5.658860232036086,
+      "battery_temperature": 31.13703773128484,
+      "grid_voltage": 225.3857994066949,
+      "sensor_latency": 20.809934779036123
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:03",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 448.73815656718426,
+      "pv_power_output": 8.977373706158913,
+      "battery_temperature": 31.688216739820344,
+      "grid_voltage": 230.5824862864449,
+      "sensor_latency": 17.488418118807765
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:04",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 371.8669923276137,
+      "pv_power_output": 8.691813860726896,
+      "battery_temperature": 54.56540476576666,
+      "grid_voltage": 233.1169856656544,
+      "sensor_latency": 34.12989106570708
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:05",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 406.46887151770346,
+      "pv_power_output": 6.712966684531198,
+      "battery_temperature": 26.34912124829119,
+      "grid_voltage": 225.5383936634304,
+      "sensor_latency": 26.820201895813216
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:06",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 437.4447349260121,
+      "pv_power_output": 4.775003227013303,
+      "battery_temperature": 30.61092113298741,
+      "grid_voltage": 224.75031557420763,
+      "sensor_latency": 30.48432253115332
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:07",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 417.3661718892194,
+      "pv_power_output": 6.971843857137014,
+      "battery_temperature": 38.476435316554266,
+      "grid_voltage": 225.5523538995808,
+      "sensor_latency": 27.241533045800868
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:08",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": true,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 457.61396164543567,
+      "pv_power_output": 8.67465560724061,
+      "battery_temperature": 48.64637394239081,
+      "grid_voltage": 217.58841259167875,
+      "sensor_latency": 30.26677631829451
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:09",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 436.83752355328255,
+      "pv_power_output": 8.903437507990516,
+      "battery_temperature": 25.810201818976623,
+      "grid_voltage": 241.52649792568823,
+      "sensor_latency": 14.308131192256814
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 413.3078723927797,
+      "pv_power_output": 8.723695792524605,
+      "battery_temperature": 44.59871507401918,
+      "grid_voltage": 230.53410179519608,
+      "sensor_latency": 17.57291207201976
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:11",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 415.5332657217731,
+      "pv_power_output": 7.605808917931192,
+      "battery_temperature": 48.98614405460247,
+      "grid_voltage": 227.62692591199576,
+      "sensor_latency": 4.354337274944307
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:12",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 418.5802541848788,
+      "pv_power_output": 7.1013409770677285,
+      "battery_temperature": 40.68269896820669,
+      "grid_voltage": 242.00714285416288,
+      "sensor_latency": 31.86281668309708
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 398.85106508097647,
+      "pv_power_output": 8.273231185900958,
+      "battery_temperature": 49.84114204689834,
+      "grid_voltage": 232.88813570271915,
+      "sensor_latency": 17.56494741103753
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:14",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 443.4803533912375,
+      "pv_power_output": 5.635505473535046,
+      "battery_temperature": 40.68663669679184,
+      "grid_voltage": 236.43469495323103,
+      "sensor_latency": 19.1134400222438
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:15",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 438.5607204435388,
+      "pv_power_output": 6.194582046419039,
+      "battery_temperature": 51.93424546570302,
+      "grid_voltage": 244.14300838615347,
+      "sensor_latency": 30.66368022484449
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:17",
+    "risk_score": 0.1,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 431.3567691913108,
+      "pv_power_output": 6.509743860227968,
+      "battery_temperature": 29.576179752098245,
+      "grid_voltage": 237.5382104454266,
+      "sensor_latency": 29.45625858137757
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:18",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 426.0643672339249,
+      "pv_power_output": 6.916177562106878,
+      "battery_temperature": 36.030986884680566,
+      "grid_voltage": 222.6645413002512,
+      "sensor_latency": 17.71092186537637
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:19",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 394.5450555241747,
+      "pv_power_output": 4.919335487402502,
+      "battery_temperature": 37.89205127670963,
+      "grid_voltage": 238.7530381486552,
+      "sensor_latency": 12.78334677073184
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:20",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 432.6048299785437,
+      "pv_power_output": 9.469120394947485,
+      "battery_temperature": 33.682817003840434,
+      "grid_voltage": 223.2173546768123,
+      "sensor_latency": 18.671502222047906
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:21",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 423.2275618166188,
+      "pv_power_output": 5.566076258945418,
+      "battery_temperature": 34.72475848336915,
+      "grid_voltage": 214.97843358323323,
+      "sensor_latency": 22.03207426261136
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:22",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "anomaly_detected": false,
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 470.0567273743603,
+      "pv_power_output": 3.406263925441668,
+      "battery_temperature": 39.38204357020928,
+      "grid_voltage": 217.4201100306432,
+      "sensor_latency": 37.07493695371757
+    }
+  },
+  {
+    "timestamp": "2026-06-09T20:58:23",
+    "risk_score": 0.45,
+    "risk_level": "MEDIUM",
+    "dominant_fault": "Sensor_Failure",
+    "anomaly_detected": true,
+    "explanation": "Sensor terindikasi rusak atau tidak akurat.",
+    "recommendations": [
+      "Kalibrasi sensor yang bermasalah",
+      "Bandingkan dengan pembacaan manual",
+      "Ganti sensor jika diperlukan"
+    ],
+    "sensor_snapshot": {
+      "pv_voltage": 387.6677225521345,
+      "pv_power_output": 8.50783383278075,
+      "battery_temperature": 41.77318072596932,
+      "grid_voltage": 218.69701578437736,
+      "sensor_latency": 14.527574743442347
     }
   }
 ]

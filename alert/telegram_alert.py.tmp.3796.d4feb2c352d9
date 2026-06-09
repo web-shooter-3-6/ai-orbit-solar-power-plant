@@ -331,15 +331,6 @@ class TelegramAlert:
         if not self.is_configured():
             return False
 
-        # Hormati preference dari bot interaktif (bot_config.json).
-        # 'off'    → matikan semua alert.
-        # 'medium' → hanya MEDIUM ke atas (sama dengan default ALERT_LEVELS).
-        # 'all'    → semua level yang perlu alert (default).
-        mode = _read_alert_mode()
-        if mode == "off":
-            print(f"[Telegram] Alert dinonaktifkan (mode=off), skip {level}")
-            return False
-
         # MEDIUM → buffer untuk summary, kirim ringkasan kalau window lewat
         if level == "MEDIUM":
             self._buffer_medium(analysis_result.get("dominant_fault", "UNKNOWN"))

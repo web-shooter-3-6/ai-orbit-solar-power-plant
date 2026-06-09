@@ -24,6 +24,8 @@ import json
 import time
 from pathlib import Path
 
+from filelock import FileLock, Timeout
+
 # ── Path setup: root repo masuk sys.path ──
 REPO_DIR = Path(__file__).resolve().parent.parent
 if str(REPO_DIR) not in sys.path:
@@ -52,7 +54,11 @@ except Exception as e:
 # ─────────────────────────────────────────
 DATA_PATH = REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv"
 REALTIME_PATH = REPO_DIR / "realtime_results.json"
-MAX_ENTRIES = 100
+# Lock file dipakai bersama SEMUA penulis realtime_results.json
+# (simulator + bot /inject) supaya tidak saling tabrakan di Windows.
+REALTIME_LOCK = str(REALTIME_PATH) + ".lock"
+LOCK_TIMEOUT = 5  # detik
+MAX_ENTRIES = 500  # simpan lebih banyak entri agar statistik realtime akurat
 ALERT_LEVELS = {"MEDIUM", "HIGH", "CRITICAL"}
 SLEEP_SEC = 1.0
 
@@ -81,18 +87,33 @@ def _to_feature_dict(row: dict) -> dict:
 
 
 def _append_realtime(entry: dict):
-    """Append satu entri ke realtime_results.json (maks MAX_ENTRIES terakhir)."""
+    """Append satu entri ke realtime_results.json (maks MAX_ENTRIES terakhir).
+
+    Windows-safe: penulisan dijaga FileLock (bukan temp + rename, yang bisa
+    kena WinError 32 saat file dipakai proses lain). Seluruh siklus
+    baca → append → tulis berada dalam SATU lock supaya penulis konkuren
+    (simulator + bot /inject) tidak saling menimpa / merusak file.
+    """
     try:
-        data = []
-        if REALTIME_PATH.exists():
-            with open(REALTIME_PATH, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            if not isinstance(data, list):
-                data = []
-        data.append(entry)
-        data = data[-MAX_ENTRIES:]
-        with open(REALTIME_PATH, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        lock = FileLock(REALTIME_LOCK, timeout=LOCK_TIMEOUT)
+        with lock:
+            data = []
+            if REALTIME_PATH.exists():
+                try:
+                    with open(REALTIME_PATH, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    if not isinstance(data, list):
+                        data = []
+                except json.JSONDecodeError:
+                    # File rusak (mis. sisa korupsi lama) → reset, jangan crash
+                    print("[REALTIME] realtime_results.json rusak, di-reset.")
+                    data = []
+            data.append(entry)
+            data = data[-MAX_ENTRIES:]
+            with open(REALTIME_PATH, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2, default=str)
+    except Timeout:
+        print(f"[REALTIME] Lock realtime_results.json timeout ({LOCK_TIMEOUT}s), skip tulis.")
     except Exception as e:
         print(f"[REALTIME] Gagal tulis realtime_results.json: {e}")
 
@@ -115,14 +136,26 @@ def process_row(row: dict, agent, engine, rootcause, bot):
             except (TypeError, ValueError):
                 snapshot[k] = 0.0
 
+        # Pastikan field konsisten di setiap entri:
+        # - risk_score selalu angka
+        # - dominant_fault selalu terisi (fallback "Normal", bukan None/kosong)
+        # - anomaly_detected selalu ada (True kalau risk_score > 0.25)
+        try:
+            risk_score = float(analysis.get("risk_score") or 0.0)
+        except (TypeError, ValueError):
+            risk_score = 0.0
+        dominant_fault = analysis.get("dominant_fault") or "Normal"
+        anomaly_detected = bool(analysis.get("anomaly_detected")) or (risk_score > 0.25)
+
         entry = {
-            "timestamp":       analysis.get("timestamp"),
-            "risk_score":      analysis.get("risk_score"),
-            "risk_level":      level,
-            "dominant_fault":  analysis.get("dominant_fault"),
-            "explanation":     decision.get("explanation", ""),
-            "recommendations": decision.get("recommendations", []),
-            "sensor_snapshot": snapshot,
+            "timestamp":        analysis.get("timestamp"),
+            "risk_score":       risk_score,
+            "risk_level":       level,
+            "dominant_fault":   dominant_fault,
+            "anomaly_detected": anomaly_detected,
+            "explanation":      decision.get("explanation", ""),
+            "recommendations":  decision.get("recommendations", []),
+            "sensor_snapshot":  snapshot,
         }
         _append_realtime(entry)
 

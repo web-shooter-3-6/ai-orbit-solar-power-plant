@@ -40,7 +40,6 @@ from datetime import datetime
 
 import requests
 from dotenv import load_dotenv
-from filelock import FileLock, Timeout
 
 # ── Path setup: root repo (alert/ -> parent = root) ──
 ALERT_DIR = Path(__file__).resolve().parent
@@ -50,10 +49,6 @@ load_dotenv(REPO_DIR / ".env")
 # File data (path relatif dari root repo)
 HISTORY_PATH = REPO_DIR / "agent_memory" / "history.json"
 REALTIME_PATH = REPO_DIR / "realtime_results.json"
-# Lock file HARUS sama dengan yang dipakai realtime_simulator.py supaya
-# kedua proses (bot + simulator) saling mengunci penulisan file yang sama.
-REALTIME_LOCK = str(REALTIME_PATH) + ".lock"
-LOCK_TIMEOUT = 5  # detik
 CONFIG_PATH = ALERT_DIR / "bot_config.json"
 DATA_PATH = REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv"
 
@@ -478,31 +473,20 @@ class TelegramBot:
                 except (TypeError, ValueError):
                     snapshot[low] = 0.0
 
-            try:
-                risk_score = float(analysis.get("risk_score") or 0.0)
-            except (TypeError, ValueError):
-                risk_score = 0.0
             entry = {
                 "timestamp": analysis.get("timestamp"),
-                "risk_score": risk_score,
+                "risk_score": analysis.get("risk_score"),
                 "risk_level": analysis.get("risk_level"),
-                "dominant_fault": analysis.get("dominant_fault") or "Normal",
-                "anomaly_detected": bool(analysis.get("anomaly_detected")) or (risk_score > 0.25),
+                "dominant_fault": analysis.get("dominant_fault"),
                 "explanation": decision.get("explanation", ""),
                 "recommendations": decision.get("recommendations", []),
                 "sensor_snapshot": snapshot,
             }
-            # Windows-safe: jaga seluruh baca → append → tulis dengan FileLock
-            # (lock yang SAMA dengan simulator) agar tidak tabrakan/corrupt.
-            lock = FileLock(REALTIME_LOCK, timeout=LOCK_TIMEOUT)
-            with lock:
-                data = self._read_json_list(REALTIME_PATH)
-                data.append(entry)
-                data = data[-100:]
-                with open(REALTIME_PATH, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=2, default=str)
-        except Timeout:
-            print(f"[BOT] Lock realtime_results.json timeout ({LOCK_TIMEOUT}s), skip tulis.")
+            data = self._read_json_list(REALTIME_PATH)
+            data.append(entry)
+            data = data[-100:]
+            with open(REALTIME_PATH, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"[BOT] Gagal tulis realtime hasil inject: {e}")
 
