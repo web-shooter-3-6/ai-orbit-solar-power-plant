@@ -407,7 +407,7 @@ def show_result(result: dict):
         df_pred = pd.DataFrame(
             [{"Model": k, "Hasil": str(v)} for k, v in preds.items()]
         )
-        st.dataframe(df_pred, width='stretch', hide_index=True)
+        st.dataframe(df_pred, hide_index=True)
 
         details = analysis.get("model_details", {})
         if details:
@@ -444,7 +444,7 @@ def page_live_monitor(agent, engine, rootcause, bot, feature_means, feature_orde
             f'<span>Klik untuk menjalankan 5 model deteksi anomali</span></div>',
             unsafe_allow_html=True,
         )
-        submitted = st.form_submit_button("Analisis Sekarang", width='stretch')
+        submitted = st.form_submit_button("Analisis Sekarang")
 
     if submitted:
         overrides = {
@@ -608,7 +608,7 @@ def page_history():
     else:
         st.dataframe(
             table.style.apply(color_row, axis=1),
-            width='stretch', hide_index=True,
+            hide_index=True,
         )
 
     st.divider()
@@ -622,7 +622,7 @@ def page_history():
         csv = table.to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download CSV", data=csv, file_name="history_anomali.csv",
-            mime="text/csv", width='stretch',
+            mime="text/csv",
         )
     with c2:
         st.markdown(
@@ -630,18 +630,18 @@ def page_history():
             f'<span>Hapus seluruh riwayat</span></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Clear History", width='stretch'):
+        if st.button("Clear History"):
             st.session_state["confirm_clear"] = True
 
     if st.session_state.get("confirm_clear"):
         st.warning("Yakin ingin menghapus SEMUA riwayat? Tindakan ini tidak bisa dibatalkan.")
         cc1, cc2 = st.columns(2)
-        if cc1.button("Ya, hapus", width='stretch'):
+        if cc1.button("Ya, hapus"):
             clear_history()
             st.session_state["confirm_clear"] = False
             st.success("History berhasil dihapus.")
             st.rerun()
-        if cc2.button("Batal", width='stretch'):
+        if cc2.button("Batal"):
             st.session_state["confirm_clear"] = False
             st.rerun()
 
@@ -664,7 +664,7 @@ def page_demo(agent, engine, rootcause, bot, feature_means, feature_order):
         f'<span>Jalankan 6 skenario sekaligus</span></div>',
         unsafe_allow_html=True,
     )
-    if st.button("Jalankan Demo", width='stretch'):
+    if st.button("Jalankan Demo"):
         progress = st.progress(0, text="Memulai demo...")
         results = []
         alert_sent = 0
@@ -813,7 +813,7 @@ def page_realtime(auto_refresh: bool):
         return [f"background-color: {color}22; color: #e8e8e8"] * len(row)
 
     st.dataframe(table.style.apply(color_row, axis=1),
-                 width='stretch', hide_index=True)
+                 hide_index=True)
 
     # ── Line chart risk score 20 terakhir ───────────────────
     icon_header("activity", "Risk Score (20 data terakhir)", 18, COLOR_NORMAL, tag="h3")
@@ -933,7 +933,7 @@ def main():
             )
         with col_btn:
             if st.button(
-                name, key=f"nav_{name}", width='stretch',
+                name, key=f"nav_{name}",
                 type="primary" if active else "secondary",
             ):
                 st.session_state["page"] = name
@@ -979,7 +979,7 @@ def main():
         f'<span>Verifikasi koneksi bot</span></div>',
         unsafe_allow_html=True,
     )
-    if st.sidebar.button("Kirim Test", width='stretch'):
+    if st.sidebar.button("Kirim Test"):
         if bot is None or not bot.is_configured():
             st.sidebar.warning("Telegram belum dikonfigurasi (.env kosong).")
         elif bot.send_test():
