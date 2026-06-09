@@ -147,6 +147,9 @@ DEMO_ORDER = [
 # ─────────────────────────────────────────
 # Lucide Icons (SVG inline)
 # ─────────────────────────────────────────
+# Di-cache supaya SVG hanya digenerate sekali per kombinasi (name,size,color),
+# tidak tiap render — mengurangi beban saat fragment Realtime Feed auto-refresh.
+@st.cache_data(show_spinner=False)
 def lucide_icon(name, size=16, color="currentColor"):
     icons = {
         "activity": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
@@ -757,21 +760,32 @@ def page_demo(agent, engine, rootcause, bot, feature_means, feature_order):
 # ─────────────────────────────────────────
 # HALAMAN 5 — Realtime Feed
 # ─────────────────────────────────────────
-def page_realtime(auto_refresh: bool):
+def page_realtime():
+    # Header statis di luar fragment supaya tidak ikut re-render tiap refresh.
     icon_header("cpu", "Realtime Feed", 26, COLOR_NORMAL, tag="h1")
     st.caption("Hasil analisis real-time yang diproses otomatis oleh sistem.")
+    realtime_content()
 
+
+@st.fragment(run_every=5)
+def realtime_content():
+    """Konten Realtime Feed yang auto-refresh tiap 5 detik.
+
+    Dibungkus @st.fragment(run_every=5) supaya HANYA bagian ini yang re-run
+    berkala — bukan seluruh halaman/sidebar. Ini menghilangkan loop re-render
+    (yang dulu memicu ratusan GET ulang untuk SVG icon dan crash) serta
+    mencegah redirect balik ke Live Monitor karena tidak ada st.rerun() global.
+    """
     # read_realtime() sudah membaca file dengan try/except dan hanya
     # mengembalikan list bila file ADA, TIDAK kosong, dan JSON valid.
     data = read_realtime()
     if not data:
         # Bedakan dua kondisi:
         # - File belum ada sama sekali → sistem memang belum memproses.
-        # - File ada tapi kosong/korup/belum valid → sedang loading, coba lagi.
+        # - File ada tapi kosong/korup/belum valid → sedang loading.
+        # Tidak perlu sleep+rerun manual: fragment re-run sendiri tiap 5 detik.
         if REALTIME_PATH.exists():
             st.info("Memuat data...")
-            time.sleep(2)
-            st.rerun()
         else:
             st.warning("Data realtime sedang diproses otomatis oleh sistem.")
         return
@@ -910,13 +924,8 @@ def page_realtime(auto_refresh: bool):
         if rc2.button("Batal"):
             st.session_state["confirm_reset_rt"] = False
             st.rerun()
-
-    # ── Auto-refresh: tunggu 3 detik lalu rerun ─────────────
-    # Saat dialog konfirmasi reset terbuka, jangan auto-rerun supaya tombol
-    # konfirmasi tidak hilang sebelum sempat diklik.
-    if auto_refresh and not st.session_state.get("confirm_reset_rt"):
-        time.sleep(3)
-        st.rerun()
+    # Tidak ada auto-refresh manual di sini: @st.fragment(run_every=5) yang
+    # mengurus refresh berkala, jadi sidebar & halaman lain tidak ikut re-run.
 
 
 # ─────────────────────────────────────────
@@ -992,9 +1001,8 @@ def main():
 
     page = st.session_state["page"]
 
-    # Toggle auto-refresh untuk halaman Realtime Feed
-    st.sidebar.divider()
-    auto_refresh = st.sidebar.toggle("Auto-refresh (Realtime, 3 detik)", value=False)
+    # Toggle auto-refresh dihapus: Realtime Feed kini auto-refresh sendiri
+    # lewat @st.fragment(run_every=5), tidak perlu kontrol manual.
 
     model_ok = models_available()
     bot = load_telegram()
@@ -1067,7 +1075,7 @@ def main():
     if page == "Live Monitor":
         page_live_monitor(agent, engine, rootcause, bot, feature_means, feature_order)
     elif page == "Realtime Feed":
-        page_realtime(auto_refresh)
+        page_realtime()
     elif page == "Statistik & Grafik":
         page_statistics()
     elif page == "History Anomali":
