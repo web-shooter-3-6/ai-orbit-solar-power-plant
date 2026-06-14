@@ -27,6 +27,33 @@ df = pd.read_csv(DATA_PATH)
 print(f"      {len(df)} baris, {len(df.columns)} kolom")
 
 # ─────────────────────────────────────────
+# STEP 1b: Normalisasi nama kolom → konvensi kanonik (berkapital)
+# ─────────────────────────────────────────
+# Dataset sumber memakai nama lowercase (pv_voltage, ...), sedangkan artefak
+# downstream (X_train.csv) dan agent.FEATURE_ORDER memakai nama berkapital
+# (PV_Voltage, ...). Rename ini idempoten — aman untuk dataset yang sudah
+# berkapital maupun yang lowercase — agar kontrak nama fitur tetap konsisten.
+CANON_COLS = [
+    "Timestamp", "Hour", "Day_Index", "PV_Voltage", "PV_Current",
+    "PV_Power_Output", "PV_Panel_Temperature", "Solar_Irradiance",
+    "PV_Efficiency", "PV_DC_Power", "PV_AC_Power", "PV_Inverter_Temperature",
+    "PV_Frequency", "Battery_SOC", "Battery_SOH", "Battery_Voltage",
+    "Battery_Current", "Battery_Temperature", "Battery_Charge_Rate",
+    "Battery_Discharge_Rate", "Battery_Internal_Resistance",
+    "Battery_Cycle_Count", "EV_Charging_Load", "EV_Charging_Current",
+    "EV_Charging_Voltage", "Charging_Station_Temperature", "Active_EV_Count",
+    "Charging_Duration", "Fast_Charging_Status", "Grid_Voltage", "Grid_Current",
+    "Grid_Frequency", "Power_Demand", "Reactive_Power", "Load_Factor",
+    "Energy_Export", "Energy_Import", "Power_Factor", "Sensor_Latency",
+    "Packet_Loss_Rate", "Signal_Strength", "Data_Transmission_Rate",
+    "Edge_Node_CPU_Usage", "Cloud_Response_Time", "DWT_Coeff_A1",
+    "DWT_Coeff_D1", "DWT_Coeff_D2", "Signal_Energy", "Signal_Entropy",
+    "RMS_Value", "Crest_Factor", "System_Condition_Label",
+]
+_canon_by_lower = {c.lower(): c for c in CANON_COLS}
+df = df.rename(columns={c: _canon_by_lower.get(str(c).lower(), c) for c in df.columns})
+
+# ─────────────────────────────────────────
 # STEP 2: Drop kolom yang ga berguna
 # ─────────────────────────────────────────
 print("\n[2/5] Drop kolom tidak relevan...")
@@ -65,30 +92,36 @@ for idx, name in enumerate(le.classes_):
     print(f"       {idx} = {name} ({count} data)")
 
 # ─────────────────────────────────────────
-# STEP 5: Normalisasi Fitur
+# STEP 5: Split Train / Test  (DILAKUKAN SEBELUM SCALING — cegah data leakage)
 # ─────────────────────────────────────────
-print("\n[5/5] Normalisasi fitur (StandardScaler)...")
+# FIX K1 (audit metodologi): split dulu, baru fit scaler dari train saja.
+# Sebelumnya scaler di-fit dari SELURUH data (train+test) → statistik test
+# bocor ke scaler. Urutan baru ini menutup celah leakage tersebut.
+print("\n[5/6] Split data train & test (80:20) — SEBELUM scaling...")
 
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
-
-print(f"      Semua fitur sudah di-scale ke mean=0, std=1")
-
-# ─────────────────────────────────────────
-# STEP 6: Split Train / Test
-# ─────────────────────────────────────────
-print("\n[6/6] Split data train & test (80:20)...")
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y_encoded,
+X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+    X, y_encoded,                # X masih mentah (belum di-scale)
     test_size=0.2,
     random_state=42,
     stratify=y_encoded   # pastikan proporsi label sama di train & test
 )
 
-print(f"      Train: {len(X_train)} baris")
-print(f"      Test : {len(X_test)} baris")
+print(f"      Train: {len(X_train_raw)} baris")
+print(f"      Test : {len(X_test_raw)} baris")
+
+# ─────────────────────────────────────────
+# STEP 6: Normalisasi Fitur  (fit HANYA dari train, transform keduanya)
+# ─────────────────────────────────────────
+print("\n[6/6] Normalisasi fitur (StandardScaler, fit dari train saja)...")
+
+scaler = StandardScaler()
+scaler.fit(X_train_raw)          # fit HANYA dari train → tidak ada leakage dari test
+
+X_train = pd.DataFrame(scaler.transform(X_train_raw), columns=X.columns)
+X_test  = pd.DataFrame(scaler.transform(X_test_raw),  columns=X.columns)
+
+print(f"      Scaler di-fit dari X_train saja; X_test hanya di-transform.")
+print(f"      Semua fitur di-scale ke mean=0, std=1 (basis statistik train).")
 
 # ─────────────────────────────────────────
 # STEP 7: Simpan Hasil

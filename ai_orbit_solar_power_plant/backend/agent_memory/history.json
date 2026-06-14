@@ -1,0 +1,738 @@
+[
+  {
+    "timestamp": "2026-06-14T17:25:48",
+    "risk_score": 0.75,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T17:26:17",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T19:42:39",
+    "risk_score": 0.75,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T19:43:19",
+    "risk_score": 1.0,
+    "risk_level": "CRITICAL",
+    "dominant_fault": "Battery_Overheating",
+    "explanation": "Suhu baterai melebihi batas aman.",
+    "recommendations": [
+      "Segera kurangi beban charging",
+      "Periksa sistem ventilasi",
+      "Aktifkan pendingin tambahan jika tersedia"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:00",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:01",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:02",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:03",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:04",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:05",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:07",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:08",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:09",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:11",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:12",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:14",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:15",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:16",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:17",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:18",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:19",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:20",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:21",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:22",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:23",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:24",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:25",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:26",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:27",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:28",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:30",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:31",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:32",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:33",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:34",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:35",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:36",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:37",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:38",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:39",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:40",
+    "risk_score": 0.2,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:41",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:42",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:43",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:44",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:39:49",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:44",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:48",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:49",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:50",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:41:51",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:42:45",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:42:46",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:42:47",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:43:57",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:00",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:03",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:06",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:10",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:13",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:16",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:19",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:22",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-14T23:44:25",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  }
+]

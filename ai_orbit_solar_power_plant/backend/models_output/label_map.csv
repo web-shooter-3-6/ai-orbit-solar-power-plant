@@ -1,0 +1,11 @@
+id,label
+0,Battery_Degradation
+1,Battery_Overheating
+2,Communication_Failure
+3,EV_Charging_Fault
+4,Grid_Instability
+5,Inverter_Fault
+6,Normal
+7,Overload_Condition
+8,PV_Fault
+9,Sensor_Failure

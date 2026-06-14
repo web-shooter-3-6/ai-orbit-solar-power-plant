@@ -251,6 +251,15 @@ ai-orbit-solar/
 
 > ⚠️ **Limitation:** the class labels are **not well correlated** with the raw sensor values (documented in the *Bias Analysis Report*). This is the root cause of the low supervised-model accuracy — and the reason the **rule-based layer exists**.
 
+### Data untuk Realtime Feed
+
+| File | Sumber | Tujuan |
+|------|--------|--------|
+| `Condition_Monitoring_Dataset.csv` | Kaggle (asli) | Training & evaluasi model |
+| `Realtime_Test_Sequence.csv` | Simulasi/buatan | Demo Realtime Feed |
+
+`Realtime_Test_Sequence.csv` (500 baris) dibuat khusus untuk **mendemonstrasikan respons sistem terhadap perubahan kondisi secara bertahap** (story arc: `Normal → PV_Fault → Normal → Battery_Overheating → Normal → Grid_Instability → Normal → Communication_Failure → Normal`), sehingga di Realtime Feed `risk_level` terlihat berganti-ganti (LOW → MEDIUM/HIGH/CRITICAL → LOW). File ini **TIDAK** dipakai untuk training maupun evaluasi model — evaluasi tetap memakai dataset asli `Condition_Monitoring_Dataset.csv` sesuai *Bias Analysis Report*. Kolomnya berkapital agar cocok dengan `FEATURE_ORDER`.
+
 ---
 
 ## 🤖 Models

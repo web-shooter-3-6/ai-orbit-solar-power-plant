@@ -26,6 +26,7 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix,
 )
+from sklearn.dummy import DummyClassifier
 
 # matplotlib pakai backend non-interaktif biar aman tanpa display (server/CI)
 import matplotlib
@@ -132,6 +133,17 @@ def main():
     cm = confusion_matrix(y_test, y_pred, labels=labels_present)
     print("      Confusion Matrix (baris=aktual, kolom=prediksi):")
     print(cm)
+
+    # ── FIX S5: Baseline majority-class (DummyClassifier) ───
+    # Bukti eksplisit bahwa akurasi XGBoost ≈ baseline tebak-kelas-terbanyak,
+    # konsisten dengan Bias Analysis Report (label ~tidak berkorelasi sensor).
+    dummy = DummyClassifier(strategy="most_frequent")
+    dummy.fit(X_train, y_train)
+    dummy_acc = dummy.score(X_test, y_test)
+    print("\n      Perbandingan dengan baseline majority-class:")
+    print(f"      XGBoost accuracy    : {acc:.4f}")
+    print(f"      Majority baseline   : {dummy_acc:.4f}")
+    print(f"      Selisih             : {abs(acc - dummy_acc):.4f}")
 
     # ── STEP 5: Simpan model ────────────────────────────────
     print("\n[5/6] Menyimpan model...")
