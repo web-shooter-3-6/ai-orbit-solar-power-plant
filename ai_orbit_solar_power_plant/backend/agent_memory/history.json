@@ -788,5 +788,25 @@
       "Cek kebersihan panel",
       "Ukur tegangan tiap string secara manual"
     ]
+  },
+  {
+    "timestamp": "2026-06-15T17:38:04",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
+  },
+  {
+    "timestamp": "2026-06-15T17:38:51",
+    "risk_score": 0.0,
+    "risk_level": "LOW",
+    "dominant_fault": "Normal",
+    "explanation": "Sistem beroperasi normal.",
+    "recommendations": [
+      "Lanjutkan monitoring rutin"
+    ]
   }
 ]

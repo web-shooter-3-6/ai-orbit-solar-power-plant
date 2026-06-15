@@ -1,22 +1,12 @@
-# ─────────────────────────────────────────────────────────
-# requirements.txt KHUSUS Reflex Cloud (reflex deploy).
-# Hanya dependency yang dibutuhkan app Reflex saat RUNTIME:
-#   state -> agent_bridge -> AnomalyAgent (torch + unpickle sklearn/xgboost)
-#   db_client (psycopg2) + telegram_alert (requests, dotenv).
-# Versi disamakan dengan root (versi terpasang & terverifikasi jalan)
-# agar artefak .pkl/.pt tetap kompatibel. TANPA psutil/filelock
-# (keduanya hanya dipakai dashboard.py & telegram_bot.py, bukan app Reflex).
-# ─────────────────────────────────────────────────────────
-reflex==0.9.5.post2
-
-# Data & ML (wajib: model di-load via pickle/torch saat inference)
-pandas==2.3.3
-numpy==2.3.5
+--extra-index-url https://download.pytorch.org/whl/cpu
+reflex
+pandas
+numpy
 scikit-learn==1.9.0
 xgboost==3.2.0
 torch==2.10.0
-
-# Storage Supabase + util
+python-dotenv
+requests
+psutil
+filelock
 psycopg2-binary==2.9.12
-python-dotenv==1.2.2
-requests==2.33.0

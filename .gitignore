@@ -9,3 +9,14 @@ data/Condition_Monitoring_Dataset.csv
 agent_memory/history.json
 .env
 __pycache__/
+
+# Data & model artifacts (tidak perlu untuk deploy dashboard)
+data/Condition_Monitoring_Dataset.csv
+models/output/X_train.csv
+models/output/X_test.csv
+models/output/*.pkl
+models/output/*.pt
+notebook/
+
+# Reflex build artifacts
+.web/

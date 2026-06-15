@@ -27,9 +27,12 @@ import sys
 # ─────────────────────────────────────────────────────────
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Path dataset (untuk get_feature_means). Storage Realtime Feed & History
-# sudah PINDAH dari file JSON lokal ke Supabase PostgreSQL (lihat db_client).
-DATA_PATH = os.path.join(BACKEND_DIR, "data", "Condition_Monitoring_Dataset.csv")
+# Path file rata-rata fitur kelas Normal (untuk get_feature_means).
+# Dulu dihitung on-the-fly dari Condition_Monitoring_Dataset.csv (21MB) yang
+# bikin backend.zip > limit Reflex Cloud. Kini di-precompute ke JSON kecil
+# (~2KB) supaya deploy ringan. Storage Realtime Feed & History tetap di
+# Supabase PostgreSQL (lihat db_client).
+MEANS_PATH = os.path.join(BACKEND_DIR, "data", "normal_means.json")
 
 # Klien DB Supabase (import aman: bila modul/psycopg2 bermasalah, set None
 # sehingga semua operasi DB graceful — aplikasi tetap jalan mode lokal).
@@ -148,17 +151,22 @@ def get_telegram():
 # Penyusunan dict 49 fitur
 # ─────────────────────────────────────────────────────────
 def get_feature_means() -> dict:
-    """Hitung rata-rata tiap fitur dari baris berlabel 'Normal' (cache sekali).
+    """Muat rata-rata tiap fitur kelas 'Normal' dari normal_means.json (cache sekali).
 
     FIX K2 (audit): baseline default HARUS merepresentasikan sampel Normal
     sejati, bukan rata-rata SEMUA kelas. Rata-rata campuran semua kelas berada
     di area kepadatan rendah sehingga Autoencoder/KMeans menandainya anomali —
     membuat input default Live Monitor mulai dari risiko ~0.2 (false positive).
-    Logika ini disamakan persis dengan tests/test_risk_score.baseline_means().
 
-    Casing-agnostic: kolom dataset bisa lowercase, hasil dipetakan ke nama
-    FEATURE_ORDER (berkapital) supaya cocok dengan AnomalyAgent.analyze().
-    Bila dataset tidak ada / gagal dibaca → return {} (fitur akan jadi 0.0).
+    Nilai ini DI-PRECOMPUTE dari baris berlabel 'Normal' di
+    Condition_Monitoring_Dataset.csv (logika identik dengan
+    tests/test_risk_score.baseline_means()), lalu disimpan ke JSON kecil
+    supaya backend.zip tidak perlu mengangkut CSV 21MB.
+
+    Kunci JSON sudah berupa nama FEATURE_ORDER (berkapital) sehingga cocok
+    dengan AnomalyAgent.analyze().
+    Bila normal_means.json tidak ada / gagal dibaca → return {} (fitur akan
+    jadi 0.0), sama seperti perilaku fallback sebelumnya.
     """
     global _feature_means
     if _feature_means is not None:
@@ -166,24 +174,23 @@ def get_feature_means() -> dict:
 
     means = {}
     try:
-        import pandas as pd
+        import json
 
-        if os.path.exists(DATA_PATH):
-            df = pd.read_csv(DATA_PATH)
-            lower_map = {str(c).lower(): c for c in df.columns}
-            # Saring hanya baris kelas 'Normal' (baseline normal sejati).
-            label_col = lower_map.get("system_condition_label")
-            if label_col is not None:
-                df = df[df[label_col] == "Normal"]
+        if os.path.exists(MEANS_PATH):
+            with open(MEANS_PATH, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            # Ambil hanya fitur yang ada di FEATURE_ORDER, pastikan bertipe float.
             for feat in get_feature_order():
-                col = lower_map.get(feat.lower())
-                if col is not None and pd.api.types.is_numeric_dtype(df[col]):
-                    means[feat] = float(df[col].mean())
+                if feat in raw:
+                    try:
+                        means[feat] = float(raw[feat])
+                    except (TypeError, ValueError):
+                        pass
         else:
-            print(f"[agent_bridge] ! Dataset tidak ditemukan: {DATA_PATH} "
+            print(f"[agent_bridge] ! File rata-rata tidak ditemukan: {MEANS_PATH} "
                   f"(fitur non-input dipakai 0.0)")
     except Exception as e:
-        print(f"[agent_bridge] ! Gagal hitung rata-rata fitur ({e}), pakai 0.0")
+        print(f"[agent_bridge] ! Gagal muat rata-rata fitur ({e}), pakai 0.0")
 
     _feature_means = means
     return _feature_means
