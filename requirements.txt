@@ -7,7 +7,7 @@ scikit-learn==1.9.0
 xgboost==3.2.0
 python-dotenv==1.2.2
 requests
+packaging==26.2
 psutil==7.2.2
 filelock==3.29.0
 psycopg2-binary==2.9.12
-packaging>=24.2
