@@ -9,6 +9,8 @@
 # scikit-learn==1.9.0 dipertahankan (cocok dengan model .pkl tersimpan).
 # ─────────────────────────────────────────────────────────
 
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.10.0
 # App & dashboard
 reflex==0.9.5.post2
 streamlit==1.58.0
