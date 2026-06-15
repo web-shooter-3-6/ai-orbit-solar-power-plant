@@ -8,4 +8,4 @@ requests==2.33.0
 psutil==7.2.2
 filelock==3.29.0
 psycopg2-binary==2.9.12
-torch @ https://download.pytorch.org/whl/cpu/torch-2.10.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl
+torch==2.10.0
