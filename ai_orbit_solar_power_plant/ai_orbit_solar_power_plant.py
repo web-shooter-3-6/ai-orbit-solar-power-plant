@@ -8,6 +8,13 @@ AppState.current_page. Kelima halaman (Live Monitor, Realtime Feed,
 Statistik & Grafik, History Anomali, Demo Otomatis) sudah terpasang.
 """
 
+# Muat variabel lingkungan dari .env (SUPABASE_DB_URL, TELEGRAM_TOKEN, dll)
+# SEBELUM import .state -> backend.agent_bridge -> db_client yang membaca
+# os.environ. Penting untuk deploy Reflex Cloud (Secrets fitur Pro-only),
+# di mana .env di-bundle ke dalam folder app ini.
+from dotenv import load_dotenv
+load_dotenv()
+
 import reflex as rx
 
 from .state import AppState
