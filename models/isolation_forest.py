@@ -29,7 +29,20 @@ BASE_DIR   = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "output"
 MODEL_PATH = OUTPUT_DIR / "isolation_forest_model.pkl"
 
-NORMAL_LABEL = 6   # index 'Normal' dari label_map
+
+def _normal_label_index():
+    """Cari index encoded untuk kelas 'Normal' dari label_map.csv (robust
+    terhadap perubahan jumlah/urutan kelas). Fallback ke 6 bila tak ditemukan."""
+    label_map = OUTPUT_DIR / "label_map.csv"
+    if label_map.exists():
+        m = pd.read_csv(label_map)
+        hit = m[m["label"] == "Normal"]
+        if len(hit):
+            return int(hit["id"].iloc[0])
+    return 6
+
+
+NORMAL_LABEL = _normal_label_index()   # index 'Normal' dari label_map
 
 # Hyperparameter (selaras config.yaml -> models.isolation_forest)
 PARAMS = dict(

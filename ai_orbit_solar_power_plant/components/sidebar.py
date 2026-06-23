@@ -11,21 +11,67 @@ from ..state import AppState
 from .theme import COLORS, stat_value
 
 
-def nav_item(label: str, page_key: str, icon: str) -> rx.Component:
-    """Satu item navigasi. Aktif = garis kiri hijau + teks terang."""
+def _pending_badge(count_var) -> rx.Component:
+    """Badge notifikasi merah dengan angka (mis. jumlah aksi menunggu konfirmasi)."""
+    return rx.box(
+        rx.text(
+            count_var.to_string(),
+            font_size="10px",
+            weight="medium",
+            color="white",
+            line_height="1",
+        ),
+        bg=COLORS["critical"],
+        border_radius="9999px",
+        min_width="18px",
+        height="18px",
+        padding_left="5px",
+        padding_right="5px",
+        display="flex",
+        align_items="center",
+        justify_content="center",
+    )
+
+
+def nav_item(label: str, page_key: str, icon: str, badge=None,
+             show_badge=None) -> rx.Component:
+    """Satu item navigasi. Aktif = garis kiri hijau + teks terang.
+
+    `badge`/`show_badge` (opsional): bila `show_badge` True, tampilkan badge
+    merah berisi angka `badge` di sisi kanan item (mis. notifikasi pending).
+    """
     active = AppState.current_page == page_key
     text_color = rx.cond(active, COLORS["text_primary"], COLORS["text_secondary"])
+
+    # Bagian kiri: ikon + label.
+    children = [
+        rx.icon(icon, size=16, color=text_color),
+        rx.text(
+            label,
+            color=text_color,
+            weight=rx.cond(active, "medium", "regular"),
+            font_size="14px",
+        ),
+    ]
+    # Badge (opsional) didorong ke kanan. Dibangun hanya bila `badge` diberikan
+    # supaya _pending_badge tidak dipanggil dengan None untuk item biasa
+    # (rx.cond mengevaluasi kedua cabang komponen secara eager).
+    if badge is not None:
+        children.append(rx.spacer())
+        children.append(
+            rx.cond(
+                show_badge if show_badge is not None else (badge > 0),
+                _pending_badge(badge),
+                rx.fragment(),
+            )
+        )
+
     return rx.box(
         rx.hstack(
-            rx.icon(icon, size=16, color=text_color),
-            rx.text(
-                label,
-                color=text_color,
-                weight=rx.cond(active, "medium", "regular"),
-                font_size="14px",
-            ),
+            *children,
             align="center",
             spacing="3",
+            width="100%",
         ),
         on_click=lambda: AppState.set_page(page_key),
         # Garis kiri 2px hanya saat aktif (transparan saat tidak)
@@ -71,6 +117,11 @@ def sidebar() -> rx.Component:
             nav_item("Realtime Feed", "realtime_feed", "radio"),
             nav_item("Statistik & Grafik", "statistics", "bar-chart-3"),
             nav_item("History Anomali", "history", "list"),
+            nav_item(
+                "Ethical Guardian", "ethical_guardian", "shield",
+                badge=AppState.guardian_pending_count,
+                show_badge=AppState.guardian_has_pending,
+            ),
             nav_item("Demo Otomatis", "demo", "play"),
 
             rx.spacer(),

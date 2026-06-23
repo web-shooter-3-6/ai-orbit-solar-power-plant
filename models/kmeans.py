@@ -34,7 +34,15 @@ BASE_DIR   = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "output"
 MODEL_PATH = OUTPUT_DIR / "kmeans_model.pkl"
 
-N_CLUSTERS   = 10    # sesuai jumlah kelas asli di dataset
+def _n_classes(default=10):
+    """Jumlah kelas dari label_map.csv (tahan thd dataset relabel 7 kelas)."""
+    lm = OUTPUT_DIR / "label_map.csv"
+    if lm.exists():
+        return int(pd.read_csv(lm)["id"].nunique())
+    return default
+
+
+N_CLUSTERS   = _n_classes()   # = jumlah kelas dataset aktif (10 asli / 7 relabel)
 RANDOM_STATE = 42
 
 

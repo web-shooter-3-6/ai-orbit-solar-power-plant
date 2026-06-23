@@ -14,9 +14,37 @@ __pycache__/
 data/Condition_Monitoring_Dataset.csv
 models/output/X_train.csv
 models/output/X_test.csv
+models/output/y_train.csv
+models/output/y_test.csv
 models/output/*.pkl
 models/output/*.pt
+models/output/kmeans_threshold.json
+models/output/normal_means.json
 notebook/
 
 # Reflex build artifacts
 .web/
+
+# ─────────────────────────────────────────────────────────
+# Cleanup audit (2026-06): pola tambahan
+# ─────────────────────────────────────────────────────────
+# Editor / OS temp files
+*.tmp
+*.tmp.*
+*.bak
+.DS_Store
+Thumbs.db
+
+# Runtime state & log (BUKAN source code — regenerate saat app jalan)
+realtime_results.json
+**/agent_memory/history.json
+**/ethical_audit_log.json
+**/guardian_config.json
+
+# Backup lokal & dataset relabel besar (jangan masuk repo)
+models/backup_before_relabel/
+data/Condition_Monitoring_Dataset_Labeled.csv
+
+# Tooling lokal
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

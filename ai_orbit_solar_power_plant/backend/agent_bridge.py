@@ -42,6 +42,61 @@ except Exception as e:  # pragma: no cover
     print(f"[agent_bridge] ! db_client tidak tersedia ({e}), storage DB dimatikan")
     db_client = None
 
+# Ethical Guardian (import aman: bila modul bermasalah, set None sehingga
+# pipeline tetap jalan TANPA aksi otonom — fail safe, hanya deteksi & notifikasi).
+try:
+    from . import ethical_guardian
+except Exception as e:  # pragma: no cover
+    print(f"[agent_bridge] ! ethical_guardian tidak tersedia ({e}), aksi otonom dimatikan")
+    ethical_guardian = None
+
+# Tiered Response: pemetaan severity → aksi otonom yang diusulkan.
+# LOW/MEDIUM tidak punya aksi fisik (None): LOW hanya di-log, MEDIUM hanya
+# notifikasi. HIGH → throttle (reversibel), CRITICAL → isolate (semi-reversibel),
+# KECUALI fault katastrofik dengan keyakinan sangat tinggi → shutdown (irreversibel,
+# wajib konfirmasi manusia). Setiap aksi WAJIB lolos Ethical Guardian dulu.
+
+# Fault yang risikonya katastrofik (thermal runaway baterai / kegagalan inverter
+# yang berpotensi memicu kebakaran). Untuk kondisi ini, mengisolasi saja tidak
+# cukup — shutdown total adalah aksi yang pantas, dan karena irreversibel ia
+# WAJIB menunggu konfirmasi manusia (verdict REQUIRE_HUMAN_CONFIRMATION).
+_CATASTROPHIC_FAULTS = {"Battery_Overheating", "Inverter_Fault"}
+
+# Ambang skor minimum untuk eskalasi ke shutdown (keyakinan sangat tinggi).
+_SHUTDOWN_ESCALATION_SCORE = 0.90
+
+# Detail simulasi aksi (semua SIMULASI — hanya update status/field, tanpa kontrol
+# hardware nyata). Persentase reduksi daya untuk throttle dicatat di sini.
+_THROTTLE_REDUCTION_PCT = 30
+
+
+def _select_action(analysis: dict):
+    """Pilih action_type berdasarkan severity + jenis fault (Tiered Response).
+
+    - HIGH                                   → "throttle" (reversibel)
+    - CRITICAL + fault katastrofik + score≥0.90 → "shutdown" (irreversibel)
+    - CRITICAL (lainnya)                     → "isolate" (semi-reversibel)
+    - LOW / MEDIUM / UNKNOWN                  → None (tidak ada aksi fisik)
+
+    Eskalasi ke shutdown sengaja dibatasi pada fault yang benar-benar katastrofik
+    (mis. thermal runaway baterai) dengan keyakinan sangat tinggi, supaya aksi
+    irreversibel hanya muncul saat memang dibutuhkan — dan selalu lewat
+    konfirmasi manusia.
+    """
+    level = analysis.get("risk_level", "UNKNOWN")
+    if level == "HIGH":
+        return "throttle"
+    if level == "CRITICAL":
+        fault = analysis.get("dominant_fault", "")
+        try:
+            score = float(analysis.get("risk_score") or 0.0)
+        except (TypeError, ValueError):
+            score = 0.0
+        if fault in _CATASTROPHIC_FAULTS and score >= _SHUTDOWN_ESCALATION_SCORE:
+            return "shutdown"
+        return "isolate"
+    return None  # LOW / MEDIUM / UNKNOWN
+
 # Snapshot 5 fitur utama untuk ditampilkan di Realtime Feed.
 # Map: key snapshot (lowercase) -> nama fitur FEATURE_ORDER (kapital).
 _SNAPSHOT_MAP = {
@@ -213,6 +268,105 @@ def build_sensor_data(overrides: dict) -> dict:
 
 
 # ─────────────────────────────────────────────────────────
+# Tiered Response + Ethical Guardian
+# ─────────────────────────────────────────────────────────
+def _empty_action_fields() -> dict:
+    """Field aksi default (LOW/MEDIUM atau guardian tak tersedia): tidak ada aksi."""
+    return {
+        "action_taken": None,        # aksi yang BENAR-BENAR dieksekusi (None bila tidak)
+        "proposed_action": None,     # aksi yang DIUSULKAN guardian (dipakai notifikasi pending)
+        "action_status": "none",     # none|executed|pending_confirmation|blocked
+        "guardian_reason": None,     # alasan keputusan guardian (untuk audit/notifikasi)
+        "component_status": None,    # status komponen tersimulasi: throttled|isolated
+        "action_detail": None,       # detail aksi (mis. "reduction 30%")
+        "confirmation_window_seconds": None,  # window konfirmasi (bila pending)
+    }
+
+
+def _evaluate_tiered_response(analysis: dict) -> dict:
+    """Terapkan Tiered Response + Ethical Guardian pada hasil analisis.
+
+    Memetakan risk_level → action_type, lalu (bila ada aksi) memanggil
+    ethical_guardian.evaluate_action() dan menerjemahkan verdict menjadi field
+    aksi siap-pakai. SEMUA aksi adalah SIMULASI (update field saja).
+
+    Confidence yang dipakai = risk_score (skor agregat ensemble model 0.0–1.0).
+    Graceful: bila guardian None / error, kembalikan field default "no action".
+    Return dict field aksi (lihat _empty_action_fields).
+    """
+    fields = _empty_action_fields()
+
+    risk_level = analysis.get("risk_level", "UNKNOWN")
+    action_type = _select_action(analysis)
+
+    # LOW/MEDIUM (atau level tak dikenal) → tidak ada aksi fisik.
+    if action_type is None:
+        return fields
+
+    # Guardian tak tersedia → fail safe: jangan ambil aksi otonom.
+    if ethical_guardian is None:
+        fields["action_status"] = "blocked"
+        fields["guardian_reason"] = "Ethical guardian unavailable; autonomous action withheld"
+        return fields
+
+    confidence = float(analysis.get("risk_score") or 0.0)
+    fault_detected = analysis.get("dominant_fault")
+
+    # Aksi yang diusulkan (sebelum verdict guardian) — dipakai notifikasi pending
+    # agar pesan bisa menyebut aksi spesifik walau belum/ tidak dieksekusi.
+    fields["proposed_action"] = action_type
+
+    # Konteks interlock: flag bisa di-toggle via env (lihat ethical_guardian).
+    # Diteruskan eksplisit agar mudah diperluas (mis. dari config/DB) nanti.
+    context = {
+        "maintenance_mode": os.getenv("MAINTENANCE_MODE", "").strip().lower()
+        in ("1", "true", "yes", "on"),
+        "technician_on_site": os.getenv("TECHNICIAN_ON_SITE", "").strip().lower()
+        in ("1", "true", "yes", "on"),
+    }
+
+    try:
+        # Sertakan fault pemicu agar reason guardian deskriptif & dapat diaudit.
+        verdict = ethical_guardian.evaluate_action(
+            action_type, risk_level, confidence, context,
+            fault_detected=fault_detected,
+        )
+    except Exception as e:
+        print(f"[agent_bridge] ! Guardian evaluate_action gagal: {e}")
+        return fields
+
+    v = verdict.get("verdict")
+    reason = verdict.get("reason", "")
+    fields["guardian_reason"] = reason
+
+    if v == "EXECUTE":
+        # Eksekusi aksi SIMULASI: hanya update status komponen & field.
+        fields["action_taken"] = action_type
+        fields["action_status"] = "executed"
+        if action_type == "throttle":
+            fields["component_status"] = "throttled"
+            fields["action_detail"] = f"power reduction {_THROTTLE_REDUCTION_PCT}%"
+        elif action_type == "isolate":
+            fields["component_status"] = "isolated"
+            fields["action_detail"] = "component isolated from grid"
+        elif action_type == "shutdown":
+            fields["component_status"] = "shutdown"
+            fields["action_detail"] = "system shutdown"
+    elif v == "REQUIRE_HUMAN_CONFIRMATION":
+        window = verdict.get("confirmation_window_seconds")
+        fields["action_status"] = "pending_confirmation"
+        fields["confirmation_window_seconds"] = window
+        fields["action_detail"] = (
+            f"awaiting human confirmation ({window}s)" if window else
+            "awaiting human confirmation"
+        )
+    else:  # BLOCKED
+        fields["action_status"] = "blocked"
+
+    return fields
+
+
+# ─────────────────────────────────────────────────────────
 # Wrapper analisis lengkap
 # ─────────────────────────────────────────────────────────
 def run_full_analysis(sensor_data: dict) -> dict:
@@ -275,12 +429,27 @@ def run_full_analysis(sensor_data: dict) -> dict:
         except Exception as e:
             print(f"[agent_bridge] ! Gagal log_analysis(): {e}")
 
-    # Kirim alert hanya untuk level berisiko (best effort, tidak boleh crash)
-    if telegram is not None and analysis.get("risk_level") in (
-        "MEDIUM", "HIGH", "CRITICAL"
-    ):
+    # ── Tiered Response + Ethical Guardian ───────────────
+    # Tentukan aksi otonom berdasarkan severity, lalu evaluasi lewat guardian.
+    # Field aksi di-merge ke `analysis` agar IKUT terkirim ke Telegram (alasan
+    # aksi) dan tersimpan di hasil akhir + DB. Graceful: tidak boleh crash.
+    try:
+        action_fields = _evaluate_tiered_response(analysis)
+    except Exception as e:
+        print(f"[agent_bridge] ! Tiered response gagal: {e}")
+        action_fields = _empty_action_fields()
+    analysis.update(action_fields)
+
+    # Notifikasi Telegram (best effort, tidak boleh crash).
+    # Aksi PENDING konfirmasi manusia memakai pesan KHUSUS yang mencolok & beda
+    # dari alert biasa (operator harus tahu ada aksi menunggu keputusan mereka).
+    # Selain itu, alert anomali biasa untuk level berisiko.
+    if telegram is not None:
         try:
-            telegram.send_alert(analysis, decision_result)
+            if analysis.get("action_status") == "pending_confirmation":
+                telegram.send_pending_confirmation(analysis)
+            elif analysis.get("risk_level") in ("MEDIUM", "HIGH", "CRITICAL"):
+                telegram.send_alert(analysis, decision_result)
         except Exception as e:
             print(f"[agent_bridge] ! Gagal kirim alert Telegram: {e}")
 
@@ -309,6 +478,10 @@ def run_full_analysis(sensor_data: dict) -> dict:
                 "explanation": result.get("explanation", ""),
                 "recommendations": result.get("recommendations", []),
                 "sensor_snapshot": snapshot,
+                # Field Ethical Guardian / Tiered Response (nullable, backward-compat).
+                "action_taken": result.get("action_taken"),
+                "action_status": result.get("action_status", "none"),
+                "guardian_reason": result.get("guardian_reason"),
             }
             db_client.insert_history(db_row)
             db_client.insert_realtime_result(db_row)
@@ -352,3 +525,231 @@ def get_telegram_status() -> dict:
     except Exception as e:
         print(f"[agent_bridge] ! Gagal cek status Telegram: {e}")
         return {"configured": False}
+
+
+# ─────────────────────────────────────────────────────────
+# Ethical Guardian — wrapper untuk dashboard (semua graceful)
+# ─────────────────────────────────────────────────────────
+def get_guardian_audit_log() -> list:
+    """Ambil audit log guardian (list of dict diperkaya) untuk halaman dashboard.
+
+    Tiap entri ditambah field turunan agar siap tampil:
+      - confidence_pct : confidence diformat persen (mis. "85%")
+      - reversibility  : pakai nilai tersimpan; fallback hitung dari action_type
+                         (untuk entri lama yang belum menyimpan field ini)
+    Urutan tetap terlama→terbaru (sesuai append). Graceful → [] bila guardian off.
+    """
+    if ethical_guardian is None:
+        return []
+    try:
+        raw = ethical_guardian.get_audit_log()
+    except Exception as e:
+        print(f"[agent_bridge] ! Gagal baca audit log guardian: {e}")
+        return []
+
+    out = []
+    for e in raw:
+        action_type = e.get("action_type")
+        try:
+            conf = float(e.get("confidence") or 0.0)
+        except (TypeError, ValueError):
+            conf = 0.0
+        try:
+            # Utamakan reversibility yang sudah dipersist; fallback ke kalkulasi.
+            rev = e.get("reversibility") or (
+                ethical_guardian.classify_reversibility(action_type)
+                if action_type else "-"
+            )
+        except Exception:
+            rev = "-"
+        # Fault pemicu (entri lama tanpa field ini → "-"). Memberi transparansi
+        # KONDISI di balik aksi langsung di tabel audit.
+        fault = e.get("fault_detected")
+        # Eskalasi bertingkat (Opsi C): level & hasil akhir untuk tabel dashboard.
+        try:
+            esc_level = int(e.get("escalation_level", 0) or 0)
+        except (TypeError, ValueError):
+            esc_level = 0
+        verdict = str(e.get("verdict", "-"))
+        final_outcome = e.get("final_outcome")
+        # Entri LAMA (pra-fitur Opsi C) tidak punya field tracking sama sekali —
+        # jangan diperlakukan sebagai "pending" (akan memicu auto-execute massal
+        # pada riwayat lama). Hanya entri ber-skema baru yang bisa "pending".
+        has_tracking = ("final_outcome" in e) or ("escalation_level" in e)
+        if final_outcome:
+            outcome = str(final_outcome)
+        elif verdict == "REQUIRE_HUMAN_CONFIRMATION" and has_tracking:
+            outcome = "pending"  # masih menunggu / dalam eskalasi
+        else:
+            outcome = "-"        # legacy / verdict langsung → tak relevan
+        out.append({
+            "timestamp": str(e.get("timestamp", "-")),
+            "fault": str(fault) if fault else "-",
+            "action_type": str(action_type or "-"),
+            "severity": str(e.get("severity", "-")),
+            "confidence": conf,
+            "confidence_pct": f"{conf * 100:.0f}%",
+            "reversibility": rev,
+            "verdict": verdict,
+            "reason": str(e.get("reason", "")),
+            "escalation_level": esc_level,
+            "final_outcome": outcome,
+        })
+    return out
+
+
+def get_guardian_interlock() -> bool:
+    """Status toggle Safety Interlock saat ini (graceful → False)."""
+    if ethical_guardian is None:
+        return False
+    try:
+        return bool(ethical_guardian.get_interlock_state())
+    except Exception as e:
+        print(f"[agent_bridge] ! Gagal baca interlock: {e}")
+        return False
+
+
+def set_guardian_interlock(active: bool) -> bool:
+    """Persist toggle Safety Interlock (dibaca ulang oleh check_safety_interlock).
+
+    Graceful → False bila guardian tak tersedia / gagal tulis.
+    """
+    if ethical_guardian is None:
+        return False
+    try:
+        return bool(ethical_guardian.set_interlock_state(bool(active)))
+    except Exception as e:
+        print(f"[agent_bridge] ! Gagal set interlock: {e}")
+        return False
+
+
+def resolve_guardian_pending(action_type: str, severity: str, confidence: float,
+                             confirmed: bool, fault_detected: str = None,
+                             pending_timestamp: str = None,
+                             escalation_level: int = 0) -> None:
+    """Catat resolusi manusia (konfirmasi/batal) atas aksi pending. Graceful.
+
+    `pending_timestamp` & `escalation_level` diteruskan agar entri pending asli
+    ditandai final_outcome (human_confirmed/human_cancelled) → menghentikan
+    eskalasi bertingkat (Opsi C).
+    """
+    if ethical_guardian is None:
+        return
+    try:
+        ethical_guardian.record_human_resolution(
+            action_type, severity, confidence, confirmed,
+            fault_detected=fault_detected,
+            pending_timestamp=pending_timestamp,
+            escalation_level=escalation_level,
+        )
+    except Exception as e:
+        print(f"[agent_bridge] ! Gagal catat resolusi pending: {e}")
+
+
+# ─────────────────────────────────────────────────────────
+# Eskalasi bertingkat (Opsi C) — dipanggil oleh monitor di state.py
+# ─────────────────────────────────────────────────────────
+def _pending_to_analysis(pending_record: dict) -> dict:
+    """Bangun dict 'analysis' minimal dari record pending untuk pesan Telegram."""
+    try:
+        conf = float(pending_record.get("confidence") or 0.0)
+    except (TypeError, ValueError):
+        conf = 0.0
+    fault = pending_record.get("fault") or pending_record.get("fault_detected")
+    action = (pending_record.get("action_type")
+              or pending_record.get("proposed_action") or "?")
+    return {
+        "dominant_fault": fault if fault else "UNKNOWN",
+        "proposed_action": action,
+        "risk_score": conf,
+        "confirmation_window_seconds": getattr(
+            ethical_guardian, "ESCALATION_WINDOW_SECONDS", 30
+        ) if ethical_guardian else 30,
+    }
+
+
+def escalate_pending_action(pending_record: dict, escalation_level: int) -> None:
+    """Naikkan eskalasi aksi pending ke `escalation_level` (1 atau 2).
+
+    Update audit log (escalation_level entri pending) + kirim Telegram ke kontak
+    yang sesuai level. Semua graceful: kegagalan satu langkah tak menggagalkan
+    yang lain & tak meng-crash monitor. Bila kontak level itu kosong di .env,
+    pengiriman di-skip namun level tetap tercatat (transisi berbasis waktu).
+    """
+    ts = pending_record.get("timestamp")
+    # 1) Tandai level eskalasi pada entri pending (sumber kebenaran server-side).
+    if ethical_guardian is not None and ts:
+        try:
+            ethical_guardian._update_entry_by_timestamp(
+                ts, escalation_level=escalation_level,
+            )
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal update level eskalasi: {e}")
+    # 2) Kirim notifikasi Telegram ke kontak level ini.
+    telegram = get_telegram()
+    if telegram is not None:
+        try:
+            telegram.send_escalation(
+                escalation_level, _pending_to_analysis(pending_record)
+            )
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal kirim eskalasi L{escalation_level}: {e}")
+
+
+def auto_execute_pending_action(pending_record: dict) -> None:
+    """Eksekusi otomatis aksi pending (fallback Opsi B) setelah eskalasi habis.
+
+    Update audit log (final_outcome=auto_executed_after_timeout, level 3) + kirim
+    pesan final ke KETIGA kontak + catat baris hasil ke Supabase. Semua graceful.
+    """
+    ts = pending_record.get("timestamp")
+    action_type = pending_record.get("action_type") or "?"
+    severity = pending_record.get("severity") or "-"
+    fault = pending_record.get("fault") or pending_record.get("fault_detected")
+    try:
+        conf = float(pending_record.get("confidence") or 0.0)
+    except (TypeError, ValueError):
+        conf = 0.0
+
+    # 1) Catat keputusan auto-execute ke audit log (in-place pada entri pending).
+    if ethical_guardian is not None and ts:
+        try:
+            ethical_guardian.auto_execute_after_timeout(
+                action_type, severity, conf, ts, fault_detected=fault,
+            )
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal catat auto-execute: {e}")
+
+    # 2) Beri tahu KETIGA kontak sekaligus.
+    telegram = get_telegram()
+    if telegram is not None:
+        try:
+            telegram.send_auto_executed(_pending_to_analysis(pending_record))
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal kirim notifikasi auto-execute: {e}")
+
+    # 3) Catat baris hasil ke Supabase (best-effort, backward-compatible).
+    if db_client is not None:
+        try:
+            db_row = {
+                "timestamp": ts or "",
+                "risk_score": conf,
+                "risk_level": severity,
+                "dominant_fault": fault or "Normal",
+                "anomaly_detected": True,
+                "explanation": "Auto-executed after escalation timeout (Opsi C)",
+                "recommendations": [],
+                "sensor_snapshot": {},
+                "action_taken": action_type,
+                "action_status": "auto_executed",
+                "guardian_reason": (
+                    "Tidak ada respon dari semua kontak dalam 90 detik — "
+                    "aksi dieksekusi otomatis"
+                ),
+                "escalation_level": 3,
+                "final_outcome": "auto_executed_after_timeout",
+            }
+            db_client.insert_history(db_row)
+            db_client.insert_realtime_result(db_row)
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal simpan auto-execute ke Supabase: {e}")

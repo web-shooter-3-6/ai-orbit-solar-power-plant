@@ -46,6 +46,11 @@ from .lstm import LSTMClassifier
 # ─────────────────────────────────────────
 # Konstanta global
 # ─────────────────────────────────────────
+# Fallback mapping (urutan LabelEncoder dataset ASLI 10 kelas). Hanya dipakai
+# bila label_encoder.pkl gagal dimuat. Sumber kebenaran sebenarnya adalah
+# self.label_encoder.classes_ — lihat _decode_label() — sehingga decoding
+# otomatis mengikuti model yang dimuat (mis. dataset relabel 7 kelas, di mana
+# index→nama BERBEDA: 5=Normal, 6=PV_Fault, dst).
 LABEL_NAMES = [
     "Battery_Degradation",    # 0
     "Battery_Overheating",    # 1
@@ -187,6 +192,21 @@ class AnomalyAgent:
             self.kmeans_threshold = 5.0
             print(f"   ! Kalibrasi KMeans gagal ({e}), pakai default {self.kmeans_threshold}")
 
+    def _decode_label(self, idx: int) -> str:
+        """idx encoded → nama kelas. Sumber kebenaran = label_encoder yang
+        dimuat bersama model (otomatis cocok dgn jumlah/urutan kelas model).
+        Fallback ke LABEL_NAMES hanya bila encoder tak tersedia / idx di luar
+        rentang (mis. model lama 10-kelas tapi encoder baru 7-kelas)."""
+        try:
+            classes = list(self.label_encoder.classes_)
+            if 0 <= idx < len(classes):
+                return str(classes[idx])
+        except Exception:
+            pass
+        if 0 <= idx < len(LABEL_NAMES):
+            return LABEL_NAMES[idx]
+        return f"UNKNOWN({idx})"
+
     # ─────────────────────────────────────────
     # PRE-PROCESS satu baris sensor
     # ─────────────────────────────────────────
@@ -222,7 +242,7 @@ class AnomalyAgent:
             # 1) XGBoost ────────────────────────────────────
             try:
                 xgb_idx = int(self.xgb.predict(X)[0])
-                xgb_label = LABEL_NAMES[xgb_idx]
+                xgb_label = self._decode_label(xgb_idx)
                 predictions["XGBoost"] = xgb_label
                 details["xgboost_label"] = xgb_label
                 votes.append(xgb_label)
@@ -279,7 +299,7 @@ class AnomalyAgent:
                 with torch.no_grad():
                     logits = self.lstm(torch.from_numpy(seq).to(DEVICE))
                     lstm_idx = int(logits.argmax(1).item())
-                lstm_label = LABEL_NAMES[lstm_idx]
+                lstm_label = self._decode_label(lstm_idx)
                 predictions["LSTM"] = lstm_label
                 details["lstm_label"] = lstm_label
                 votes.append(lstm_label)

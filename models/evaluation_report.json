@@ -1,0 +1,238 @@
+{
+  "generated_at": "2026-06-23T22:26:28",
+  "sklearn_runtime": "1.7.2",
+  "test_set": {
+    "source": "models/output/X_test.csv (+ y_test.csv)",
+    "origin_dataset": "data/Condition_Monitoring_Dataset.csv",
+    "split": "80/20, random_state=42, stratify=y (identik training)",
+    "note": "Split 20% ASLI hasil models/preprocessing.py; X_test sudah ter-scale (StandardScaler fit dari train saja). Model di-retrain dgn scikit-learn versi runtime → tanpa mismatch.",
+    "n_rows": 10000,
+    "n_features": 49,
+    "label_distribution": {
+      "Battery_Degradation": 728,
+      "Battery_Overheating": 700,
+      "Communication_Failure": 586,
+      "Grid_Instability": 897,
+      "Inverter_Fault": 564,
+      "Normal": 4759,
+      "PV_Fault": 1766
+    }
+  },
+  "models_evaluated": [
+    "XGBoost",
+    "Isolation Forest"
+  ],
+  "models_in_project_not_evaluated": [
+    "KMeans",
+    "Autoencoder",
+    "LSTM"
+  ],
+  "models_requested_but_absent": [
+    "Random Forest",
+    "SVM",
+    "Neural Network"
+  ],
+  "results": {
+    "XGBoost": {
+      "metrics": {
+        "accuracy": 0.9918,
+        "precision_weighted": 0.9918274055119697,
+        "recall_weighted": 0.9918,
+        "f1_weighted": 0.9918042961552064
+      },
+      "majority_baseline": {
+        "majority_class": "Normal",
+        "accuracy": 0.4759
+      },
+      "labels_present": [
+        "Battery_Degradation",
+        "Battery_Overheating",
+        "Communication_Failure",
+        "Grid_Instability",
+        "Inverter_Fault",
+        "Normal",
+        "PV_Fault"
+      ],
+      "confusion_matrix": [
+        [
+          722,
+          0,
+          1,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          693,
+          1,
+          1,
+          0,
+          4,
+          1
+        ],
+        [
+          0,
+          1,
+          580,
+          2,
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          888,
+          2,
+          4,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          554,
+          3,
+          5
+        ],
+        [
+          7,
+          0,
+          0,
+          3,
+          3,
+          4724,
+          22
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          1,
+          6,
+          1757
+        ]
+      ],
+      "classification_report": {
+        "Battery_Degradation": {
+          "precision": 0.987688098495212,
+          "recall": 0.9917582417582418,
+          "f1-score": 0.9897189856065799,
+          "support": 728.0
+        },
+        "Battery_Overheating": {
+          "precision": 0.9985590778097982,
+          "recall": 0.99,
+          "f1-score": 0.994261119081779,
+          "support": 700.0
+        },
+        "Communication_Failure": {
+          "precision": 0.9965635738831615,
+          "recall": 0.9897610921501706,
+          "f1-score": 0.9931506849315068,
+          "support": 586.0
+        },
+        "Grid_Instability": {
+          "precision": 0.9899665551839465,
+          "recall": 0.9899665551839465,
+          "f1-score": 0.9899665551839465,
+          "support": 897.0
+        },
+        "Inverter_Fault": {
+          "precision": 0.9875222816399287,
+          "recall": 0.9822695035460993,
+          "f1-score": 0.9848888888888889,
+          "support": 564.0
+        },
+        "Normal": {
+          "precision": 0.9949452401010952,
+          "recall": 0.9926455137633957,
+          "f1-score": 0.9937940464920585,
+          "support": 4759.0
+        },
+        "PV_Fault": {
+          "precision": 0.983212087297146,
+          "recall": 0.9949037372593431,
+          "f1-score": 0.9890233605403884,
+          "support": 1766.0
+        },
+        "accuracy": 0.9918,
+        "macro avg": {
+          "precision": 0.9912081306300412,
+          "recall": 0.9901863776658854,
+          "f1-score": 0.9906862343893067,
+          "support": 10000.0
+        },
+        "weighted avg": {
+          "precision": 0.9918274055119697,
+          "recall": 0.9918,
+          "f1-score": 0.9918042961552064,
+          "support": 10000.0
+        }
+      },
+      "confusion_matrix_png": "models\\confusion_matrices\\xgboost_confusion_matrix.png"
+    },
+    "Isolation Forest": {
+      "metrics": {
+        "anomaly_detection_rate": 0.12917382178973477,
+        "false_positive_rate": 0.052111788190796385,
+        "precision_anomaly": 0.7318918918918919,
+        "f1_anomaly": 0.21959130716834252,
+        "accuracy_binary": 0.5188,
+        "roc_auc": 0.6453999389541759
+      },
+      "counts": {
+        "TN": 4511,
+        "FP": 248,
+        "FN": 4564,
+        "TP": 677,
+        "n_normal": 4759,
+        "n_anomaly": 5241
+      },
+      "confusion_matrix": [
+        [
+          4511,
+          248
+        ],
+        [
+          4564,
+          677
+        ]
+      ],
+      "classification_report": {
+        "Normal": {
+          "precision": 0.49707988980716256,
+          "recall": 0.9478882118092036,
+          "f1-score": 0.6521613416220905,
+          "support": 4759.0
+        },
+        "Anomali": {
+          "precision": 0.7318918918918919,
+          "recall": 0.12917382178973477,
+          "f1-score": 0.21959130716834252,
+          "support": 5241.0
+        },
+        "accuracy": 0.5188,
+        "macro avg": {
+          "precision": 0.6144858908495272,
+          "recall": 0.5385310167994691,
+          "f1-score": 0.4358763243952165,
+          "support": 10000.0
+        },
+        "weighted avg": {
+          "precision": 0.6201448600997692,
+          "recall": 0.5188,
+          "f1-score": 0.4254513865648812,
+          "support": 10000.0
+        }
+      },
+      "confusion_matrix_png": "models\\confusion_matrices\\isolation_forest_confusion_matrix.png"
+    }
+  },
+  "errors": {}
+}

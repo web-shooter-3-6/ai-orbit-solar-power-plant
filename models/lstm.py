@@ -45,11 +45,20 @@ torch.manual_seed(SEED)
 np.random.seed(SEED)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-LABEL_NAMES = [
-    "Battery_Degradation", "Battery_Overheating", "Communication_Failure",
-    "EV_Charging_Fault", "Grid_Instability", "Inverter_Fault", "Normal",
-    "Overload_Condition", "PV_Fault", "Sensor_Failure",
-]
+def load_label_names():
+    """Nama kelas DINAMIS dari label_map.csv (tahan thd dataset relabel 7 kelas)."""
+    lm = OUTPUT_DIR / "label_map.csv"
+    if lm.exists():
+        m = pd.read_csv(lm).sort_values("id")
+        return list(m["label"].astype(str))
+    return [
+        "Battery_Degradation", "Battery_Overheating", "Communication_Failure",
+        "EV_Charging_Fault", "Grid_Instability", "Inverter_Fault", "Normal",
+        "Overload_Condition", "PV_Fault", "Sensor_Failure",
+    ]
+
+
+LABEL_NAMES = load_label_names()
 
 
 class LSTMClassifier(nn.Module):

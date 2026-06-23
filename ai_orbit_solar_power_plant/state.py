@@ -9,6 +9,7 @@ Semua logic berat didelegasikan ke backend/agent_bridge.py.
 """
 
 import asyncio
+from datetime import date, datetime
 
 import reflex as rx
 
@@ -19,7 +20,21 @@ from .backend.agent_bridge import (
     get_history_data,
     clear_history,
     get_telegram_status,
+    get_guardian_audit_log,
+    get_guardian_interlock,
+    set_guardian_interlock,
+    resolve_guardian_pending,
+    escalate_pending_action,
+    auto_execute_pending_action,
 )
+
+# Eskalasi bertingkat (Opsi C) — selaras dengan konstanta ethical_guardian.
+# _ESC_WINDOW : durasi tiap window (detik); countdown banner = sisa window INI.
+# _ESC_TOTAL  : total waktu sebelum auto-execute (3 window). Sebuah pending
+#               dianggap "masih aktif" selama elapsed < _ESC_TOTAL.
+_ESC_WINDOW = 30
+_ESC_MAX_LEVEL = 3
+_ESC_TOTAL = _ESC_WINDOW * _ESC_MAX_LEVEL  # 90
 
 # Peta nama atribut slider (lowercase) -> nama fitur FEATURE_ORDER (berkapital)
 # yang dipahami oleh AnomalyAgent.analyze().
@@ -95,6 +110,39 @@ class AppState(rx.State):
     telegram_connected: bool = False
     model_status: str = "Loaded"
 
+    # ── Ethical Guardian ──
+    # Tabel audit: [timestamp, fault, action_type, severity, confidence_pct,
+    #               reversibility, verdict, reason] (terbaru di atas).
+    guardian_audit_rows: list[list[str]] = []
+    guardian_has_log: bool = False
+    guardian_blocked_today: str = "0"
+    guardian_executed_today: str = "0"
+    guardian_interlock_active: bool = False
+    # Banner pending confirmation (aksi irreversibel menunggu manusia)
+    guardian_pending_active: bool = False
+    guardian_pending_action: str = ""
+    guardian_pending_severity: str = ""
+    guardian_pending_fault: str = ""
+    guardian_pending_reason: str = ""
+    guardian_pending_countdown: int = 0
+    # Eskalasi bertingkat (Opsi C): 0=window awal, 1=kontak kedua dihubungi,
+    # 2=kontak ketiga dihubungi, 3=auto-execute. Menggerakkan warna & teks banner.
+    guardian_pending_escalation_level: int = 0
+    # Badge global (terlihat dari halaman manapun via sidebar): jumlah aksi
+    # pending konfirmasi yang masih dalam window & belum ditangani.
+    guardian_pending_count: int = 0
+    # Guard agar monitor eskalasi cross-page hanya berjalan SATU loop per sesi.
+    guardian_badge_polling: bool = False
+    # Internal (backend-only)
+    guardian_pending_ts: str = ""
+    guardian_pending_conf: float = 0.0
+    _guardian_resolved: list[str] = []   # timestamp entri pending yang sudah ditangani
+
+    @rx.var
+    def guardian_has_pending(self) -> bool:
+        """True bila ada minimal satu aksi menunggu konfirmasi (untuk badge sidebar)."""
+        return self.guardian_pending_count > 0
+
     # ─────────────────────────────────────────
     # Navigasi
     # ─────────────────────────────────────────
@@ -108,6 +156,9 @@ class AppState(rx.State):
         # Hentikan auto-refresh bila meninggalkan halaman Realtime Feed.
         if self.current_page == "realtime_feed" and page != "realtime_feed":
             self.stop_refresh()
+        # Catatan: countdown/eskalasi guardian kini ditangani monitor CROSS-PAGE
+        # (guardian_escalation_monitor) yang berjalan sejak app dimuat, jadi tidak
+        # perlu dihentikan/dimulai ulang saat berpindah halaman.
         self.current_page = page
         # Mulai auto-refresh begitu masuk halaman Realtime Feed.
         if page == "realtime_feed":
@@ -361,3 +412,247 @@ class AppState(rx.State):
         """Perbarui status koneksi Telegram."""
         status = get_telegram_status()
         self.telegram_connected = status.get("configured", False)
+
+    # ─────────────────────────────────────────
+    # Ethical Guardian
+    # ─────────────────────────────────────────
+    def load_guardian(self):
+        """Muat audit log guardian + counter harian + status interlock + pending.
+
+        Dipanggil saat halaman Ethical Guardian dimuat (on_mount) dan oleh tombol
+        Refresh. Mengevaluasi pending (termasuk auto-execute zombie dari sesi lama)
+        & memastikan monitor eskalasi cross-page berjalan.
+        """
+        log = get_guardian_audit_log()  # terlama→terbaru, dict diperkaya
+        self.guardian_has_log = len(log) > 0
+
+        # Tabel: terbaru di atas → list[list[str]] sesuai pola tabel lain.
+        # Kolom "fault" disisipkan setelah timestamp untuk transparansi kondisi.
+        # Dua kolom terakhir (eskalasi, outcome) mendukung Opsi C.
+        self.guardian_audit_rows = [
+            [
+                e["timestamp"], e["fault"], e["action_type"], e["severity"],
+                e["confidence_pct"], e["reversibility"], e["verdict"], e["reason"],
+                str(e["escalation_level"]), e["final_outcome"],
+            ]
+            for e in reversed(log)
+        ]
+
+        # Counter "hari ini" berdasarkan tanggal pada timestamp ISO.
+        today = date.today().isoformat()
+        self.guardian_blocked_today = str(sum(
+            1 for e in log
+            if e["verdict"] == "BLOCKED" and e["timestamp"].startswith(today)
+        ))
+        self.guardian_executed_today = str(sum(
+            1 for e in log
+            if e["verdict"] == "EXECUTE" and e["timestamp"].startswith(today)
+        ))
+
+        # Status toggle interlock (dari config file backend).
+        self.guardian_interlock_active = get_guardian_interlock()
+
+        # Segarkan badge global (jumlah pending) dari log yang baru dimuat.
+        self._refresh_pending_count(log)
+
+        # Evaluasi pending: set tampilan, picu transisi eskalasi yang terlewat,
+        # atau auto-execute bila window total sudah habis (termasuk "zombie
+        # pending" dari sesi sebelumnya saat app restart).
+        self._evaluate_escalation(log)
+
+        # Pastikan monitor eskalasi cross-page berjalan (guard membuatnya idempoten).
+        return AppState.guardian_escalation_monitor
+
+    def _find_active_pending(self, log: list[dict]):
+        """Cari entri REQUIRE_HUMAN_CONFIRMATION TERBARU yang belum diresolusi
+        (final_outcome masih "pending") & belum ditandai resolved di sesi ini.
+
+        Return (entry_dict, elapsed_seconds) atau None. elapsed bisa >= total
+        (menandakan perlu auto-execute / zombie).
+        """
+        now = datetime.now()
+        found = None
+        for e in log:  # terlama→terbaru: ambil yang paling baru yang cocok
+            if e["verdict"] != "REQUIRE_HUMAN_CONFIRMATION":
+                continue
+            if e.get("final_outcome") != "pending":
+                continue  # sudah diresolusi manusia / auto-executed
+            ts = e["timestamp"]
+            if ts in self._guardian_resolved:
+                continue
+            try:
+                started = datetime.fromisoformat(ts)
+            except (ValueError, TypeError):
+                continue
+            found = (e, (now - started).total_seconds())
+        return found
+
+    def _apply_pending_display(self, entry: dict, elapsed: float) -> int:
+        """Set state banner dari entri pending + elapsed. Countdown = sisa window
+        SAAT INI (reset tiap naik level). Return level eskalasi saat ini (0/1/2)."""
+        level = min(int(elapsed // _ESC_WINDOW), _ESC_MAX_LEVEL - 1)
+        self.guardian_pending_active = True
+        self.guardian_pending_ts = entry["timestamp"]
+        self.guardian_pending_action = entry["action_type"]
+        self.guardian_pending_severity = entry["severity"]
+        self.guardian_pending_fault = entry["fault"]
+        self.guardian_pending_reason = entry["reason"]
+        self.guardian_pending_conf = entry["confidence"]
+        self.guardian_pending_countdown = _ESC_WINDOW - int(elapsed) % _ESC_WINDOW
+        self.guardian_pending_escalation_level = level
+        return level
+
+    def _evaluate_escalation(self, log: list[dict]):
+        """Versi SINKRON (dipakai load_guardian): set tampilan + picu transisi
+        eskalasi yang terlewat, atau auto-execute bila window total habis.
+
+        Monitor background memakai logika setara tetapi melakukan I/O di LUAR lock
+        (lihat guardian_escalation_monitor)."""
+        found = self._find_active_pending(log)
+        if found is None:
+            self._clear_pending()
+            return
+        entry, elapsed = found
+        if elapsed >= _ESC_TOTAL:
+            # Window total habis → eksekusi otomatis (juga menangani zombie pending).
+            self._guardian_resolved.append(entry["timestamp"])
+            self._clear_pending()
+            auto_execute_pending_action(entry)
+            return
+        level = self._apply_pending_display(entry, elapsed)
+        stored = int(entry.get("escalation_level", 0) or 0)
+        for lvl in range(stored + 1, level + 1):
+            escalate_pending_action(entry, lvl)
+
+    def _clear_pending(self):
+        """Reset seluruh state banner pending."""
+        self.guardian_pending_active = False
+        self.guardian_pending_ts = ""
+        self.guardian_pending_action = ""
+        self.guardian_pending_severity = ""
+        self.guardian_pending_fault = ""
+        self.guardian_pending_reason = ""
+        self.guardian_pending_conf = 0.0
+        self.guardian_pending_countdown = 0
+        self.guardian_pending_escalation_level = 0
+
+    def toggle_interlock(self, value: bool):
+        """Aktifkan/nonaktifkan Safety Interlock (Maintenance Mode).
+
+        Benar-benar mengubah nilai yang dibaca check_safety_interlock() di backend
+        (persist ke guardian_config.json), bukan sekadar UI.
+        """
+        set_guardian_interlock(value)
+        self.guardian_interlock_active = value
+
+    def confirm_pending(self):
+        """Operator menyetujui eksekusi aksi pending → catat & bersihkan banner.
+
+        Meneruskan timestamp + level eskalasi agar entri pending asli ditandai
+        final_outcome="human_confirmed" sehingga eskalasi bertingkat berhenti.
+        """
+        resolve_guardian_pending(
+            self.guardian_pending_action, self.guardian_pending_severity,
+            self.guardian_pending_conf, True,
+            fault_detected=self.guardian_pending_fault,
+            pending_timestamp=self.guardian_pending_ts,
+            escalation_level=self.guardian_pending_escalation_level,
+        )
+        self._guardian_resolved.append(self.guardian_pending_ts)
+        self._clear_pending()
+        self.load_guardian()
+
+    def cancel_pending(self):
+        """Operator membatalkan aksi pending → catat & bersihkan banner.
+
+        Menandai entri pending asli final_outcome="human_cancelled" (stop eskalasi).
+        """
+        resolve_guardian_pending(
+            self.guardian_pending_action, self.guardian_pending_severity,
+            self.guardian_pending_conf, False,
+            fault_detected=self.guardian_pending_fault,
+            pending_timestamp=self.guardian_pending_ts,
+            escalation_level=self.guardian_pending_escalation_level,
+        )
+        self._guardian_resolved.append(self.guardian_pending_ts)
+        self._clear_pending()
+        self.load_guardian()
+
+    # ─────────────────────────────────────────
+    # Badge global pending (terlihat dari halaman manapun via sidebar)
+    # ─────────────────────────────────────────
+    def _refresh_pending_count(self, log=None):
+        """Hitung jumlah aksi pending konfirmasi yang masih dalam window TOTAL
+        eskalasi (90 detik) & belum diresolusi, lalu set guardian_pending_count
+        (sumber badge sidebar).
+
+        Dideduplikasi per (action_type, fault) agar satu situasi fault yang
+        memicu PULUHAN entri beruntun (perilaku worker realtime) tetap tampil
+        sebagai SATU permintaan konfirmasi, bukan angka yang membengkak.
+        """
+        if log is None:
+            log = get_guardian_audit_log()
+        now = datetime.now()
+        aktif = set()
+        for e in log:
+            if e["verdict"] != "REQUIRE_HUMAN_CONFIRMATION":
+                continue
+            if e.get("final_outcome") != "pending":
+                continue
+            ts = e["timestamp"]
+            if ts in self._guardian_resolved:
+                continue
+            try:
+                started = datetime.fromisoformat(ts)
+            except (ValueError, TypeError):
+                continue
+            if (now - started).total_seconds() < _ESC_TOTAL:
+                aktif.add((e["action_type"], e["fault"]))
+        self.guardian_pending_count = len(aktif)
+
+    @rx.event(background=True)
+    async def guardian_escalation_monitor(self):
+        """Monitor eskalasi bertingkat CROSS-PAGE (Opsi C), tiap 1 detik.
+
+        Dipanggil saat aplikasi dimuat (on_load route "/") sehingga badge sidebar
+        AKURAT & eskalasi BERJALAN di halaman manapun, bukan hanya saat membuka
+        Ethical Guardian. Guard `guardian_badge_polling` memastikan hanya satu
+        loop per sesi (sekali aktif, tetap aktif selama sesi).
+
+        Setiap detik: segarkan badge, hitung level eskalasi dari elapsed
+        (= now - timestamp pending, server-side & persisten → akurat walau
+        refresh/pindah halaman), dan picu transisi yang terlewat. I/O Telegram +
+        tulis audit log dilakukan DI LUAR `async with self` agar UI tak membeku.
+        """
+        async with self:
+            if self.guardian_badge_polling:
+                return
+            self.guardian_badge_polling = True
+
+        while True:
+            transitions = []      # daftar (entry, level) yang perlu dieskalasi
+            auto_exec_entry = None
+            async with self:
+                log = get_guardian_audit_log()
+                self._refresh_pending_count(log)
+                found = self._find_active_pending(log)
+                if found is None:
+                    self._clear_pending()
+                else:
+                    entry, elapsed = found
+                    if elapsed >= _ESC_TOTAL:
+                        self._guardian_resolved.append(entry["timestamp"])
+                        self._clear_pending()
+                        auto_exec_entry = entry
+                    else:
+                        level = self._apply_pending_display(entry, elapsed)
+                        stored = int(entry.get("escalation_level", 0) or 0)
+                        transitions = [
+                            (entry, lvl) for lvl in range(stored + 1, level + 1)
+                        ]
+            # ── I/O di luar lock (network + tulis file) ──
+            for entry, lvl in transitions:
+                escalate_pending_action(entry, lvl)
+            if auto_exec_entry is not None:
+                auto_execute_pending_action(auto_exec_entry)
+            await asyncio.sleep(1)

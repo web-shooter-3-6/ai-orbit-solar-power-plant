@@ -23,6 +23,9 @@ init_tables() dari Python setelah SUPABASE_DB_URL terisi):
         explanation     TEXT,
         recommendations JSONB,
         sensor_snapshot JSONB,
+        action_taken    TEXT,     -- Ethical Guardian: aksi otonom yang dieksekusi
+        action_status   TEXT,     -- none|executed|pending_confirmation|blocked
+        guardian_reason TEXT,     -- alasan keputusan guardian (audit)
         created_at      TIMESTAMPTZ DEFAULT now()
     );
 
@@ -36,8 +39,22 @@ init_tables() dari Python setelah SUPABASE_DB_URL terisi):
         explanation     TEXT,
         recommendations JSONB,
         sensor_snapshot JSONB,
+        action_taken    TEXT,
+        action_status   TEXT,
+        guardian_reason TEXT,
         created_at      TIMESTAMPTZ DEFAULT now()
     );
+
+Kolom action_taken/action_status/guardian_reason — serta escalation_level &
+final_outcome (Eskalasi Bertingkat / Opsi C) — DITAMBAHKAN belakangan dan bersifat
+NULLABLE + backward-compatible: bila tabel lama belum punya kolom ini, insert/get
+otomatis fallback ke skema 8-kolom lama. Jalankan init_tables() untuk migrasi
+otomatis (ALTER TABLE ADD COLUMN IF NOT EXISTS), atau lihat SQL ALTER manual:
+
+    ALTER TABLE realtime_results ADD COLUMN IF NOT EXISTS escalation_level INTEGER;
+    ALTER TABLE realtime_results ADD COLUMN IF NOT EXISTS final_outcome TEXT;
+    ALTER TABLE history          ADD COLUMN IF NOT EXISTS escalation_level INTEGER;
+    ALTER TABLE history          ADD COLUMN IF NOT EXISTS final_outcome TEXT;
 ──────────────────────────────────────────────────────────────
 """
 
@@ -61,6 +78,21 @@ except Exception as _e:  # pragma: no cover
 
 # Supaya pesan status koneksi hanya muncul SEKALI (hindari spam tiap operasi).
 _announced = False
+
+# Kolom Ethical Guardian (ditambahkan belakangan). Semua nullable & backward-
+# compatible: insert/get mencoba menyertakannya, tapi fallback ke skema lama
+# bila tabel belum dimigrasi (lihat _insert_row / _get_rows / init_tables).
+_BASE_INSERT_COLS = (
+    "timestamp", "risk_score", "risk_level", "dominant_fault",
+    "anomaly_detected", "explanation", "recommendations", "sensor_snapshot",
+)
+# escalation_level & final_outcome ditambahkan untuk Eskalasi Bertingkat (Opsi C).
+_EXTRA_COLS = (
+    "action_taken", "action_status", "guardian_reason",
+    "escalation_level", "final_outcome",
+)
+# Tipe SQL per kolom guardian (default TEXT); dipakai saat migrasi ADD COLUMN.
+_EXTRA_COL_TYPES = {"escalation_level": "INTEGER"}
 
 
 # ─────────────────────────────────────────────────────────
@@ -103,46 +135,83 @@ def get_connection():
 # ─────────────────────────────────────────────────────────
 # Helper internal insert (dipakai realtime & history)
 # ─────────────────────────────────────────────────────────
+def _row_values(data: dict, cols: tuple) -> tuple:
+    """Susun tuple nilai sesuai urutan `cols` (JSONB di-dump, sisanya .get())."""
+    vals = []
+    for c in cols:
+        if c == "recommendations":
+            vals.append(json.dumps(data.get("recommendations", [])))
+        elif c == "sensor_snapshot":
+            vals.append(json.dumps(data.get("sensor_snapshot", {})))
+        elif c == "explanation":
+            vals.append(data.get("explanation", ""))
+        elif c == "action_status":
+            vals.append(data.get("action_status", "none"))
+        else:
+            vals.append(data.get(c))
+    return tuple(vals)
+
+
+def _do_insert(conn, table: str, data: dict, cols: tuple, rolling_limit: int) -> None:
+    """Eksekusi INSERT (+ rolling window) untuk himpunan kolom `cols`.
+
+    Tidak menangani error — caller-lah yang membungkus try/except agar bisa
+    fallback ke skema kolom lama bila kolom baru belum ada di tabel.
+    """
+    placeholders = ", ".join(["%s"] * len(cols))
+    col_list = ", ".join(cols)
+    with conn.cursor() as cur:
+        cur.execute(
+            f"INSERT INTO {table} ({col_list}) VALUES ({placeholders})",
+            _row_values(data, cols),
+        )
+        # Rolling window: simpan hanya N baris terbaru (mis. realtime=500).
+        if rolling_limit and rolling_limit > 0:
+            cur.execute(
+                f"""
+                DELETE FROM {table}
+                WHERE id NOT IN (
+                    SELECT id FROM {table}
+                    ORDER BY created_at DESC LIMIT %s
+                )
+                """,
+                (rolling_limit,),
+            )
+    conn.commit()
+
+
 def _insert_row(table: str, data: dict, rolling_limit: int = 0) -> bool:
     """Insert 1 baris ke `table`. Bila rolling_limit > 0, sisakan hanya
-    `rolling_limit` baris terbaru (hapus sisanya). Graceful (return bool)."""
+    `rolling_limit` baris terbaru (hapus sisanya). Graceful (return bool).
+
+    Backward-compatible: coba insert DENGAN kolom Ethical Guardian; bila tabel
+    belum dimigrasi (UndefinedColumn), fallback ke skema 8-kolom lama pada
+    koneksi baru — penyimpanan tetap jalan tanpa migrasi.
+    """
+    conn = get_connection()
+    if conn is None:
+        return False
+
+    full_cols = _BASE_INSERT_COLS + _EXTRA_COLS
+    try:
+        _do_insert(conn, table, data, full_cols, rolling_limit)
+        conn.close()
+        return True
+    except Exception as e:
+        # Kemungkinan kolom baru belum ada. Transaksi sudah abort → tutup & ulang
+        # pada koneksi baru dengan skema lama (graceful fallback).
+        print(f"[db_client] Insert {table} dengan kolom guardian gagal ({e}); "
+              f"fallback ke skema lama.")
+        try:
+            conn.close()
+        except Exception:
+            pass
+
     conn = get_connection()
     if conn is None:
         return False
     try:
-        with conn.cursor() as cur:
-            cur.execute(
-                f"""
-                INSERT INTO {table}
-                (timestamp, risk_score, risk_level, dominant_fault,
-                 anomaly_detected, explanation, recommendations,
-                 sensor_snapshot)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    data.get("timestamp"),
-                    data.get("risk_score"),
-                    data.get("risk_level"),
-                    data.get("dominant_fault"),
-                    data.get("anomaly_detected"),
-                    data.get("explanation", ""),
-                    json.dumps(data.get("recommendations", [])),
-                    json.dumps(data.get("sensor_snapshot", {})),
-                ),
-            )
-            # Rolling window: simpan hanya N baris terbaru (mis. realtime=500).
-            if rolling_limit and rolling_limit > 0:
-                cur.execute(
-                    f"""
-                    DELETE FROM {table}
-                    WHERE id NOT IN (
-                        SELECT id FROM {table}
-                        ORDER BY created_at DESC LIMIT %s
-                    )
-                    """,
-                    (rolling_limit,),
-                )
-        conn.commit()
+        _do_insert(conn, table, data, _BASE_INSERT_COLS, rolling_limit)
         conn.close()
         return True
     except Exception as e:
@@ -152,27 +221,53 @@ def _insert_row(table: str, data: dict, rolling_limit: int = 0) -> bool:
         return False
 
 
+def _do_select(conn, table: str, cols: tuple, limit: int) -> list:
+    """Eksekusi SELECT untuk himpunan kolom `cols`. Tidak menangani error."""
+    col_list = ", ".join(cols)
+    with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(
+            f"""
+            SELECT {col_list}
+            FROM {table}
+            ORDER BY created_at DESC LIMIT %s
+            """,
+            (limit,),
+        )
+        rows = cur.fetchall()
+    return list(reversed([dict(r) for r in rows]))  # terlama dulu
+
+
 def _get_rows(table: str, limit: int) -> list:
     """Ambil `limit` baris terbaru dari `table`, urut terlama→terbaru.
-    Graceful (return [] bila gagal/kosong)."""
+    Graceful (return [] bila gagal/kosong).
+
+    Backward-compatible: coba SELECT termasuk kolom Ethical Guardian; bila tabel
+    belum dimigrasi, fallback ke skema lama (caller membaca via .get()).
+    """
+    conn = get_connection()
+    if conn is None:
+        return []
+
+    full_cols = _BASE_INSERT_COLS + _EXTRA_COLS
+    try:
+        rows = _do_select(conn, table, full_cols, limit)
+        conn.close()
+        return rows
+    except Exception as e:
+        print(f"[db_client] Get {table} dengan kolom guardian gagal ({e}); "
+              f"fallback ke skema lama.")
+        try:
+            conn.close()
+        except Exception:
+            pass
+
     conn = get_connection()
     if conn is None:
         return []
     try:
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            cur.execute(
-                f"""
-                SELECT timestamp, risk_score, risk_level, dominant_fault,
-                       anomaly_detected, explanation, recommendations,
-                       sensor_snapshot
-                FROM {table}
-                ORDER BY created_at DESC LIMIT %s
-                """,
-                (limit,),
-            )
-            rows = cur.fetchall()
+        rows = _do_select(conn, table, _BASE_INSERT_COLS, limit)
         conn.close()
-        return list(reversed([dict(r) for r in rows]))  # terlama dulu
+        return rows
     except Exception as e:
         print(f"[db_client] Get {table} gagal: {e}")
         if conn:
@@ -251,16 +346,28 @@ def init_tables() -> bool:
         explanation     TEXT,
         recommendations JSONB,
         sensor_snapshot JSONB,
+        action_taken    TEXT,
+        action_status   TEXT,
+        guardian_reason TEXT,
+        escalation_level INTEGER,
+        final_outcome   TEXT,
         created_at      TIMESTAMPTZ DEFAULT now()
     );
     """
     try:
         with conn.cursor() as cur:
-            cur.execute(ddl.format(t="realtime_results"))
-            cur.execute(ddl.format(t="history"))
+            for t in ("realtime_results", "history"):
+                cur.execute(ddl.format(t=t))
+                # Migrasi tabel LAMA yang sudah ada tapi belum punya kolom guardian
+                # (CREATE IF NOT EXISTS tidak menambah kolom ke tabel eksisting).
+                for col in _EXTRA_COLS:
+                    col_type = _EXTRA_COL_TYPES.get(col, "TEXT")
+                    cur.execute(
+                        f"ALTER TABLE {t} ADD COLUMN IF NOT EXISTS {col} {col_type}"
+                    )
         conn.commit()
         conn.close()
-        print("[db_client] Tabel realtime_results & history siap.")
+        print("[db_client] Tabel realtime_results & history siap (kolom guardian termigrasi).")
         return True
     except Exception as e:
         print(f"[db_client] init_tables gagal: {e}")

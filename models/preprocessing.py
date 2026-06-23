@@ -11,7 +11,10 @@ from pathlib import Path
 # ─────────────────────────────────────────
 BASE_DIR   = Path(__file__).resolve().parent        # .../models
 REPO_DIR   = BASE_DIR.parent                         # root repo
-DATA_PATH  = REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv"
+# Sumber dataset bisa di-override via env var DATASET_CSV (dipakai saat retrain
+# dengan dataset relabel). Default tetap dataset asli — perilaku lama tak berubah.
+DATA_PATH  = (Path(os.environ["DATASET_CSV"]) if os.environ.get("DATASET_CSV")
+              else REPO_DIR / "data" / "Condition_Monitoring_Dataset.csv")
 OUTPUT_DIR = BASE_DIR / "output"                     # .../models/output
 
 print("=" * 50)

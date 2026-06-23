@@ -1,0 +1,75 @@
+======================================================================
+  LAPORAN EVALUASI MODEL ML — AI-ORBIT SOLAR POWER PLANT
+======================================================================
+  Dibuat            : 2026-06-23T22:26:28
+  Runtime sklearn   : 1.7.2 (model di-retrain di versi ini → tanpa mismatch pickle)
+  Test set          : models/output/X_test.csv (+ y_test.csv) (10000 baris, 49 fitur)
+  Dataset sumber    : data/Condition_Monitoring_Dataset.csv
+  Split             : 80/20, random_state=42, stratify=y (identik training)
+  Distribusi label  : {'Battery_Degradation': 728, 'Battery_Overheating': 700, 'Communication_Failure': 586, 'Grid_Instability': 897, 'Inverter_Fault': 564, 'Normal': 4759, 'PV_Fault': 1766}
+
+  Model dievaluasi  : XGBoost, Isolation Forest
+  Model lain di proj.: KMeans, Autoencoder, LSTM (unsupervised/sequence, di luar scope)
+  Diminta tapi TIDAK ADA di project: Random Forest, SVM, Neural Network
+======================================================================
+
+----------------------------------------------------------------------
+MODEL 1: XGBoost — Supervised Classifier (10 kelas kondisi)
+----------------------------------------------------------------------
+  Accuracy            : 99.18%
+  Precision (weighted): 99.18%
+  Recall    (weighted): 99.18%
+  F1-score  (weighted): 99.18%
+  Baseline majority-class ('Normal'): 47.59%
+
+  Classification report per kelas:
+                           precision    recall  f1-score   support
+    
+      Battery_Degradation     0.9877    0.9918    0.9897       728
+      Battery_Overheating     0.9986    0.9900    0.9943       700
+    Communication_Failure     0.9966    0.9898    0.9932       586
+         Grid_Instability     0.9900    0.9900    0.9900       897
+           Inverter_Fault     0.9875    0.9823    0.9849       564
+                   Normal     0.9949    0.9926    0.9938      4759
+                 PV_Fault     0.9832    0.9949    0.9890      1766
+    
+                 accuracy                         0.9918     10000
+                macro avg     0.9912    0.9902    0.9907     10000
+             weighted avg     0.9918    0.9918    0.9918     10000
+    
+  Confusion matrix (baris=aktual, kolom=prediksi):
+    kelas: Battery_Degradation, Battery_Overheating, Communication_Failure, Grid_Instability, Inverter_Fault, Normal, PV_Fault
+    [[ 722    0    1    0    0    5    0]
+     [   0  693    1    1    0    4    1]
+     [   0    1  580    2    1    2    0]
+     [   1    0    0  888    2    4    2]
+     [   0    0    0    2  554    3    5]
+     [   7    0    0    3    3 4724   22]
+     [   1    0    0    1    1    6 1757]]
+
+----------------------------------------------------------------------
+MODEL 2: Isolation Forest — Unsupervised Anomaly Detector
+----------------------------------------------------------------------
+  CATATAN: metrik berbeda dari supervised. Tugas = memisahkan Normal vs
+  Anomali (semua label != Normal). Model dilatih HANYA dari data Normal.
+
+  Anomaly detection rate (recall anomali): 12.92% [677/5241]
+  False positive rate (Normal->Anomali)  : 5.21% [248/4759]
+  Precision (anomali)                    : 73.19%
+  F1-score  (anomali)                    : 21.96%
+  Accuracy  (biner)                      : 51.88%
+  ROC-AUC                                : 0.6454
+
+  Classification report (0=Normal, 1=Anomali):
+                  precision    recall  f1-score   support
+    
+          Normal     0.4971    0.9479    0.6522      4759
+         Anomali     0.7319    0.1292    0.2196      5241
+    
+        accuracy                         0.5188     10000
+       macro avg     0.6145    0.5385    0.4359     10000
+    weighted avg     0.6201    0.5188    0.4255     10000
+    
+  Confusion matrix [ [TN FP] [FN TP] ]:
+    [[4511  248]
+     [4564  677]]

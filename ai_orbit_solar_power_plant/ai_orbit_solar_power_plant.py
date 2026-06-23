@@ -24,6 +24,7 @@ from .pages.live_monitor import live_monitor_page
 from .pages.realtime_feed import realtime_feed_page
 from .pages.statistics import statistics_page
 from .pages.history import history_page
+from .pages.ethical_guardian import ethical_guardian_page
 from .pages.demo import demo_page
 
 
@@ -44,7 +45,11 @@ def index() -> rx.Component:
                         rx.cond(
                             AppState.current_page == "history",
                             history_page(),
-                            demo_page(),
+                            rx.cond(
+                                AppState.current_page == "ethical_guardian",
+                                ethical_guardian_page(),
+                                demo_page(),
+                            ),
                         ),
                     ),
                 ),
@@ -70,4 +75,11 @@ app = rx.App(
         "background_color": COLORS["bg_primary"],
     },
 )
-app.add_page(index, route="/", on_load=AppState.check_telegram)
+app.add_page(
+    index,
+    route="/",
+    # check_telegram: status koneksi; guardian_escalation_monitor: monitor
+    # eskalasi bertingkat (Opsi C) cross-page — menjaga badge pending akurat di
+    # halaman manapun SEKALIGUS menggerakkan eskalasi & auto-execute timeout.
+    on_load=[AppState.check_telegram, AppState.guardian_escalation_monitor],
+)

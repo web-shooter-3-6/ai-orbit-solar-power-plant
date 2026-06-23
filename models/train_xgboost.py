@@ -45,19 +45,19 @@ MODEL_PATH   = OUTPUT_DIR / "xgboost_model.pkl"
 FEATIMP_PATH = OUTPUT_DIR / "feature_importance.png"
 CONFMAT_PATH = OUTPUT_DIR / "xgboost_confusion_matrix.png"
 
-# Mapping label (urutan = hasil LabelEncoder dari preprocessing)
-LABEL_NAMES = [
-    "Battery_Degradation",    # 0
-    "Battery_Overheating",    # 1
-    "Communication_Failure",  # 2
-    "EV_Charging_Fault",      # 3
-    "Grid_Instability",       # 4
-    "Inverter_Fault",         # 5
-    "Normal",                 # 6
-    "Overload_Condition",     # 7
-    "PV_Fault",               # 8
-    "Sensor_Failure",         # 9
-]
+# Mapping label dibaca DINAMIS dari label_map.csv (hasil preprocessing) supaya
+# tahan terhadap perubahan jumlah/urutan kelas (mis. dataset relabel 7 kelas).
+def load_label_names():
+    label_map = OUTPUT_DIR / "label_map.csv"
+    if label_map.exists():
+        m = pd.read_csv(label_map).sort_values("id")
+        return list(m["label"].astype(str))
+    # fallback: 10 kelas dataset asli
+    return [
+        "Battery_Degradation", "Battery_Overheating", "Communication_Failure",
+        "EV_Charging_Fault", "Grid_Instability", "Inverter_Fault", "Normal",
+        "Overload_Condition", "PV_Fault", "Sensor_Failure",
+    ]
 
 # Hyperparameter (sesuai permintaan)
 PARAMS = dict(
@@ -87,6 +87,7 @@ def main():
     y_train = pd.read_csv(OUTPUT_DIR / "y_train.csv")["label"].values
     y_test  = pd.read_csv(OUTPUT_DIR / "y_test.csv")["label"].values
 
+    LABEL_NAMES = load_label_names()
     feature_names = list(X_train.columns)
     n_classes = len(np.unique(y_train))
     print(f"      Train : {X_train.shape[0]} baris × {X_train.shape[1]} fitur")

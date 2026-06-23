@@ -35,7 +35,19 @@ BASE_DIR   = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "output"
 MODEL_PATH = OUTPUT_DIR / "autoencoder_model.pt"
 
-NORMAL_LABEL = 6
+def _normal_label_index():
+    """Index encoded 'Normal' dari label_map.csv (robust thd jumlah/urutan
+    kelas). Fallback 6 (dataset asli 10 kelas)."""
+    lm = OUTPUT_DIR / "label_map.csv"
+    if lm.exists():
+        m = pd.read_csv(lm)
+        hit = m[m["label"] == "Normal"]
+        if len(hit):
+            return int(hit["id"].iloc[0])
+    return 6
+
+
+NORMAL_LABEL = _normal_label_index()
 EPOCHS       = 50
 BATCH_SIZE   = 64
 LR           = 1e-3
