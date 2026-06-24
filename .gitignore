@@ -12,15 +12,11 @@ __pycache__/
 
 # Data & model artifacts (tidak perlu untuk deploy dashboard)
 data/Condition_Monitoring_Dataset.csv
+data/Condition_Monitoring_Dataset_Labeled.csv
 models/output/X_train.csv
 models/output/X_test.csv
-models/output/y_train.csv
-models/output/y_test.csv
-models/output/*.pkl
-models/output/*.pt
-models/output/kmeans_threshold.json
-models/output/normal_means.json
-notebook/
+models/output/X_test.csv
+models/backup_before_relabel/
 
 # Reflex build artifacts
 .web/

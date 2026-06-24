@@ -21,6 +21,7 @@ models/confusion_matrices/
 models/evaluate_models.py
 models/evaluation_report.txt
 models/evaluation_report_v2.txt
+models/backup_before_relabel/
 
 # Runtime files
 realtime_results.json
