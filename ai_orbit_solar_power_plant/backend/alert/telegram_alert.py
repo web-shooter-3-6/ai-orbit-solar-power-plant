@@ -509,6 +509,45 @@ class TelegramAlert:
         return ada_sukses
 
     # ─────────────────────────────────────────
+    # RESOLUSI MANUSIA (konfirmasi / pembatalan dari dashboard)
+    # ─────────────────────────────────────────
+    @staticmethod
+    def build_human_resolution_message(confirmed: bool, analysis: dict) -> str:
+        """Susun pesan saat operator MENGONFIRMASI atau MEMBATALKAN aksi pending.
+
+        Dipisah dari pengiriman supaya bisa diuji tanpa jaringan.
+        """
+        fault, action, score_pct = TelegramAlert._analysis_bits(analysis)
+        if confirmed:
+            lines = [
+                "✅ AKSI DIKONFIRMASI OPERATOR ✅",
+                f"Operator menyetujui & mengeksekusi {action}.",
+                f"Kondisi: {fault} (confidence {score_pct}).",
+            ]
+        else:
+            lines = [
+                "🚫 AKSI DIBATALKAN OPERATOR 🚫",
+                f"Operator membatalkan aksi {action}.",
+                f"Kondisi: {fault} (confidence {score_pct}).",
+            ]
+        lines.append("[AI-ORBIT Solar Monitor]")
+        return "\n".join(lines)
+
+    def send_human_resolution(self, confirmed: bool, analysis: dict) -> bool:
+        """Kirim notifikasi hasil resolusi manusia ke SEMUA kontak (broadcast).
+
+        Hormati mode 'off'. Tanpa cooldown (satu peristiwa resolusi = satu pesan).
+        Return True bila minimal satu kontak menerima pesan. Graceful.
+        """
+        if not self.is_configured():
+            return False
+        if _read_alert_mode() == "off":
+            print("[Telegram] Alert dinonaktifkan (mode=off), skip resolusi manusia")
+            return False
+        message = self.build_human_resolution_message(confirmed, analysis)
+        return self._send_with_retry(message, "PENDING_CONFIRMATION")
+
+    # ─────────────────────────────────────────
     # Summary MEDIUM
     # ─────────────────────────────────────────
     def _buffer_medium(self, fault: str):

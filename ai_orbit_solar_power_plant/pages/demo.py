@@ -11,7 +11,13 @@ garis pemisah bawah, bukan kotak.
 import reflex as rx
 
 from ..state import AppState
-from ..components.theme import COLORS, FONT_MONO, page_header, level_color
+from ..components.theme import (
+    COLORS,
+    FONT_MONO,
+    PAGE_MAX_WIDTH,
+    page_header,
+    level_color,
+)
 
 
 def demo_result_row(result) -> rx.Component:
@@ -82,7 +88,7 @@ def demo_page() -> rx.Component:
         ),
         spacing="6",
         width="100%",
-        max_width="1100px",
+        max_width=PAGE_MAX_WIDTH,
     )
 
 

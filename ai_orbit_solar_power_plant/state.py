@@ -24,6 +24,7 @@ from .backend.agent_bridge import (
     get_guardian_interlock,
     set_guardian_interlock,
     resolve_guardian_pending,
+    mark_guardian_pending_resolved,
     escalate_pending_action,
     auto_execute_pending_action,
 )
@@ -36,6 +37,9 @@ _ESC_WINDOW = 30
 _ESC_MAX_LEVEL = 3
 _ESC_TOTAL = _ESC_WINDOW * _ESC_MAX_LEVEL  # 90
 
+# Pagination audit log Ethical Guardian: jumlah baris per halaman.
+_AUDIT_PAGE_SIZE = 25
+
 # Peta nama atribut slider (lowercase) -> nama fitur FEATURE_ORDER (berkapital)
 # yang dipahami oleh AnomalyAgent.analyze().
 _SLIDER_TO_FEATURE = {
@@ -44,6 +48,15 @@ _SLIDER_TO_FEATURE = {
     "pv_panel_temperature": "PV_Panel_Temperature",
     "sensor_latency": "Sensor_Latency",
     "battery_temperature": "Battery_Temperature",
+}
+
+# Pilihan time window untuk grafik Distribusi Fault (Realtime) → durasi (detik).
+# Urutan dict dipertahankan sebagai urutan opsi dropdown.
+REALTIME_FAULT_WINDOWS = {
+    "1 Jam Terakhir": 3600,
+    "6 Jam Terakhir": 6 * 3600,
+    "24 Jam Terakhir": 24 * 3600,
+    "7 Hari Terakhir": 7 * 24 * 3600,
 }
 
 
@@ -85,6 +98,9 @@ class AppState(rx.State):
     realtime_top_fault: str = "Normal"
     realtime_last_update: str = "-"
     realtime_table_rows: list[list[str]] = []
+    # Grafik Distribusi Fault (Realtime): window terpilih + data agregat.
+    realtime_fault_window: str = "24 Jam Terakhir"
+    realtime_fault_distribution: list[dict] = []  # [{"fault": .., "count": ..}, ..]
 
     # ── Ringkasan Statistik & Grafik ──
     stat_total: str = "0"
@@ -115,6 +131,8 @@ class AppState(rx.State):
     #               reversibility, verdict, reason] (terbaru di atas).
     guardian_audit_rows: list[list[str]] = []
     guardian_has_log: bool = False
+    # Pagination audit log: halaman aktif (1-based). Di-reset ke 1 tiap refresh.
+    guardian_audit_page: int = 1
     guardian_blocked_today: str = "0"
     guardian_executed_today: str = "0"
     guardian_interlock_active: bool = False
@@ -142,6 +160,61 @@ class AppState(rx.State):
     def guardian_has_pending(self) -> bool:
         """True bila ada minimal satu aksi menunggu konfirmasi (untuk badge sidebar)."""
         return self.guardian_pending_count > 0
+
+    # ── Pagination audit log (25 baris/halaman) ──
+    @rx.var
+    def guardian_audit_total(self) -> int:
+        """Jumlah total entri audit log."""
+        return len(self.guardian_audit_rows)
+
+    @rx.var
+    def guardian_audit_total_pages(self) -> int:
+        """Jumlah halaman (minimal 1, walau log kosong)."""
+        total = len(self.guardian_audit_rows)
+        if total == 0:
+            return 1
+        return (total + _AUDIT_PAGE_SIZE - 1) // _AUDIT_PAGE_SIZE
+
+    @rx.var
+    def guardian_audit_page_rows(self) -> list[list[str]]:
+        """Slice baris audit log untuk halaman aktif (25 baris/halaman)."""
+        start = (self.guardian_audit_page - 1) * _AUDIT_PAGE_SIZE
+        return self.guardian_audit_rows[start:start + _AUDIT_PAGE_SIZE]
+
+    @rx.var
+    def guardian_audit_page_label(self) -> str:
+        """Indikator 'Halaman X dari Y'."""
+        return f"Halaman {self.guardian_audit_page} dari {self.guardian_audit_total_pages}"
+
+    @rx.var
+    def guardian_audit_range_label(self) -> str:
+        """Info 'Menampilkan X-Y dari Z entri'."""
+        total = len(self.guardian_audit_rows)
+        if total == 0:
+            return "Menampilkan 0 dari 0 entri"
+        start = (self.guardian_audit_page - 1) * _AUDIT_PAGE_SIZE
+        end = min(start + _AUDIT_PAGE_SIZE, total)
+        return f"Menampilkan {start + 1}-{end} dari {total} entri"
+
+    @rx.var
+    def guardian_audit_on_first_page(self) -> bool:
+        """True bila di halaman pertama (untuk disable tombol Sebelumnya)."""
+        return self.guardian_audit_page <= 1
+
+    @rx.var
+    def guardian_audit_on_last_page(self) -> bool:
+        """True bila di halaman terakhir (untuk disable tombol Berikutnya)."""
+        return self.guardian_audit_page >= self.guardian_audit_total_pages
+
+    def guardian_audit_prev_page(self):
+        """Pindah ke halaman audit log sebelumnya (clamp di halaman 1)."""
+        if self.guardian_audit_page > 1:
+            self.guardian_audit_page -= 1
+
+    def guardian_audit_next_page(self):
+        """Pindah ke halaman audit log berikutnya (clamp di halaman terakhir)."""
+        if self.guardian_audit_page < self.guardian_audit_total_pages:
+            self.guardian_audit_page += 1
 
     # ─────────────────────────────────────────
     # Navigasi
@@ -367,6 +440,43 @@ class AppState(rx.State):
         last10 = data[-10:][::-1]
         self.realtime_table_rows = [self._entry_to_row(e) for e in last10]
 
+        # Grafik distribusi fault dalam time window terpilih (auto-update tiap refresh).
+        self._compute_realtime_fault_distribution()
+
+    def _compute_realtime_fault_distribution(self):
+        """Hitung distribusi fault dari realtime_data dalam time window terpilih.
+
+        Memfilter entri berdasarkan selisih waktu (now - timestamp) ≤ window, lalu
+        menghitung kemunculan tiap dominant_fault (termasuk Normal), terurut menurun.
+        Entri dengan timestamp tak-terbaca di-skip dengan graceful.
+        """
+        window = REALTIME_FAULT_WINDOWS.get(self.realtime_fault_window, 24 * 3600)
+        now = datetime.now()
+        counts: dict[str, int] = {}
+        for e in self.realtime_data:
+            ts = e.get("timestamp")
+            try:
+                started = datetime.fromisoformat(str(ts))
+            except (ValueError, TypeError):
+                continue
+            try:
+                if (now - started).total_seconds() > window:
+                    continue
+            except TypeError:
+                # timestamp tz-aware vs now() naive → abaikan entri ini.
+                continue
+            fault = str(e.get("dominant_fault", "Normal"))
+            counts[fault] = counts.get(fault, 0) + 1
+        self.realtime_fault_distribution = [
+            {"fault": k, "count": v}
+            for k, v in sorted(counts.items(), key=lambda x: -x[1])
+        ]
+
+    def set_realtime_fault_window(self, value: str):
+        """Ganti time window grafik Distribusi Fault & hitung ulang seketika."""
+        self.realtime_fault_window = value
+        self._compute_realtime_fault_distribution()
+
     def load_history(self):
         """Muat ulang riwayat analisis + hitung statistik & tabel History."""
         data = get_history_data()
@@ -425,6 +535,8 @@ class AppState(rx.State):
         """
         log = get_guardian_audit_log()  # terlama→terbaru, dict diperkaya
         self.guardian_has_log = len(log) > 0
+        # Pagination: selalu kembali ke halaman 1 saat audit log dimuat ulang.
+        self.guardian_audit_page = 1
 
         # Tabel: terbaru di atas → list[list[str]] sesuai pola tabel lain.
         # Kolom "fault" disisipkan setelah timestamp untuk transparansi kondisi.
@@ -545,38 +657,76 @@ class AppState(rx.State):
         set_guardian_interlock(value)
         self.guardian_interlock_active = value
 
+    def _resolve_pending_group(self, confirmed: bool):
+        """Resolusi SELURUH grup pending yang ditampilkan banner (Konfirmasi/Batal).
+
+        FIX (tombol tidak berfungsi): satu situasi fault yang berlangsung memicu
+        BANYAK entri REQUIRE_HUMAN_CONFIRMATION beruntun (worker realtime). Badge &
+        banner men-dedup-nya jadi SATU permintaan, tetapi versi lama hanya menutup
+        SATU timestamp — sehingga monitor langsung menampilkan ulang banner dengan
+        entri pending berikutnya dan tombol seolah "tidak berfungsi".
+
+        Kini SATU klik menutup seluruh grup pending dengan (action_type, fault) yang
+        sama yang masih aktif: satu baris resolusi kanonik dicatat untuk entri yang
+        ditampilkan (resolve_guardian_pending), sisanya cukup ditandai final_outcome
+        (mark_guardian_pending_resolved) agar tidak muncul lagi.
+        """
+        shown_ts = self.guardian_pending_ts
+        shown_action = self.guardian_pending_action
+        shown_fault = self.guardian_pending_fault
+
+        # Catat SATU baris resolusi kanonik untuk entri yang sedang ditampilkan.
+        resolve_guardian_pending(
+            shown_action, self.guardian_pending_severity,
+            self.guardian_pending_conf, confirmed,
+            fault_detected=shown_fault,
+            pending_timestamp=shown_ts,
+            escalation_level=self.guardian_pending_escalation_level,
+        )
+        self._guardian_resolved.append(shown_ts)
+
+        # Tutup entri pending lain di grup yang sama (action_type + fault) yang
+        # masih aktif & belum diresolusi — cukup tandai final_outcome (tanpa baris
+        # resolusi ganda). Ini yang membuat banner benar-benar hilang setelah klik.
+        now = datetime.now()
+        for e in get_guardian_audit_log():
+            if e["verdict"] != "REQUIRE_HUMAN_CONFIRMATION":
+                continue
+            if e.get("final_outcome") != "pending":
+                continue
+            ts = e["timestamp"]
+            if ts in self._guardian_resolved:
+                continue
+            if e["action_type"] != shown_action or e["fault"] != shown_fault:
+                continue
+            try:
+                started = datetime.fromisoformat(ts)
+            except (ValueError, TypeError):
+                continue
+            if (now - started).total_seconds() >= _ESC_TOTAL:
+                continue  # sudah lewat window total → biarkan monitor auto-execute
+            mark_guardian_pending_resolved(
+                ts, confirmed, escalation_level=self.guardian_pending_escalation_level
+            )
+            self._guardian_resolved.append(ts)
+
+        self._clear_pending()
+        self.load_guardian()
+
     def confirm_pending(self):
         """Operator menyetujui eksekusi aksi pending → catat & bersihkan banner.
 
-        Meneruskan timestamp + level eskalasi agar entri pending asli ditandai
-        final_outcome="human_confirmed" sehingga eskalasi bertingkat berhenti.
+        Menutup seluruh grup pending (final_outcome="human_confirmed") sehingga
+        eskalasi bertingkat berhenti & banner hilang. Lihat _resolve_pending_group.
         """
-        resolve_guardian_pending(
-            self.guardian_pending_action, self.guardian_pending_severity,
-            self.guardian_pending_conf, True,
-            fault_detected=self.guardian_pending_fault,
-            pending_timestamp=self.guardian_pending_ts,
-            escalation_level=self.guardian_pending_escalation_level,
-        )
-        self._guardian_resolved.append(self.guardian_pending_ts)
-        self._clear_pending()
-        self.load_guardian()
+        self._resolve_pending_group(True)
 
     def cancel_pending(self):
         """Operator membatalkan aksi pending → catat & bersihkan banner.
 
-        Menandai entri pending asli final_outcome="human_cancelled" (stop eskalasi).
+        Menutup seluruh grup pending (final_outcome="human_cancelled", stop eskalasi).
         """
-        resolve_guardian_pending(
-            self.guardian_pending_action, self.guardian_pending_severity,
-            self.guardian_pending_conf, False,
-            fault_detected=self.guardian_pending_fault,
-            pending_timestamp=self.guardian_pending_ts,
-            escalation_level=self.guardian_pending_escalation_level,
-        )
-        self._guardian_resolved.append(self.guardian_pending_ts)
-        self._clear_pending()
-        self.load_guardian()
+        self._resolve_pending_group(False)
 
     # ─────────────────────────────────────────
     # Badge global pending (terlihat dari halaman manapun via sidebar)

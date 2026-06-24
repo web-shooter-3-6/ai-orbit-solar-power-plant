@@ -29,6 +29,11 @@ COLORS = {
 FONT_MONO = "JetBrains Mono, monospace"
 FONT_SANS = "Inter, sans-serif"
 
+# ── Lebar maksimum konten halaman ──
+# Satu sumber kebenaran agar SEMUA halaman punya lebar kontainer yang konsisten
+# (sebelumnya Live Monitor 900px, halaman lain 1100px — kini seragam).
+PAGE_MAX_WIDTH = "1100px"
+
 
 # ─────────────────────────────────────────────────────────
 # Helper komponen
@@ -73,6 +78,22 @@ def section_divider() -> rx.Component:
         padding_top="1.5em",
         margin_top="1.5em",
         width="100%",
+    )
+
+
+def section_label(text: str, margin_bottom: str = "0.75em") -> rx.Component:
+    """Label kecil uppercase di atas sebuah section/grafik/tabel.
+
+    Sumber tunggal gaya label section (sebelumnya diduplikasi di tiap halaman
+    dengan spacing yang sedikit berbeda) → konsisten antar halaman.
+    """
+    return rx.text(
+        text,
+        font_size="11px",
+        letter_spacing="2px",
+        text_transform="uppercase",
+        color=COLORS["text_secondary"],
+        margin_bottom=margin_bottom,
     )
 
 

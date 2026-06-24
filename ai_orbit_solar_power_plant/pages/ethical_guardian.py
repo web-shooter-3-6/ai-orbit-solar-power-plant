@@ -17,9 +17,11 @@ from ..state import AppState
 from ..components.theme import (
     COLORS,
     FONT_MONO,
+    PAGE_MAX_WIDTH,
     page_header,
     stat_value,
     section_divider,
+    section_label,
     level_color,
     th,
 )
@@ -343,7 +345,7 @@ def _audit_table() -> rx.Component:
         ),
         rx.table.body(
             rx.foreach(
-                AppState.guardian_audit_rows,
+                AppState.guardian_audit_page_rows,
                 lambda row: rx.table.row(
                     rx.table.cell(
                         row[0], color=COLORS["text_secondary"], font_size="12px"
@@ -379,6 +381,62 @@ def _audit_table() -> rx.Component:
         ),
         variant="ghost",
         width="100%",
+    )
+
+
+def _audit_table_scrollable() -> rx.Component:
+    """Bungkus tabel audit (10 kolom) dengan scroll horizontal agar tidak
+    overflow / terpotong pada viewport sempit (responsive guard)."""
+    return rx.box(
+        _audit_table(),
+        width="100%",
+        overflow_x="auto",
+    )
+
+
+def _audit_pagination() -> rx.Component:
+    """Kontrol navigasi pagination audit log (25 baris/halaman).
+
+    Tampil hanya bila ada > 1 halaman. Berisi info jumlah entri, tombol
+    Sebelumnya/Berikutnya (disabled di ujung), dan indikator halaman.
+    """
+    return rx.hstack(
+        rx.text(
+            AppState.guardian_audit_range_label,
+            font_size="12px",
+            color=COLORS["text_secondary"],
+        ),
+        rx.spacer(),
+        rx.button(
+            rx.icon("chevron-left", size=14),
+            "Sebelumnya",
+            on_click=AppState.guardian_audit_prev_page,
+            disabled=AppState.guardian_audit_on_first_page,
+            variant="outline",
+            color_scheme="gray",
+            size="1",
+        ),
+        rx.text(
+            AppState.guardian_audit_page_label,
+            font_size="12px",
+            weight="medium",
+            color=COLORS["text_primary"],
+            font_family=FONT_MONO,
+            white_space="nowrap",
+        ),
+        rx.button(
+            "Berikutnya",
+            rx.icon("chevron-right", size=14),
+            on_click=AppState.guardian_audit_next_page,
+            disabled=AppState.guardian_audit_on_last_page,
+            variant="outline",
+            color_scheme="gray",
+            size="1",
+        ),
+        width="100%",
+        align="center",
+        spacing="4",
+        margin_top="1em",
     )
 
 
@@ -485,17 +543,19 @@ def ethical_guardian_page() -> rx.Component:
         ),
         # Audit log atau empty state.
         rx.box(
-            rx.text(
-                "Audit Log",
-                font_size="11px",
-                letter_spacing="2px",
-                text_transform="uppercase",
-                color=COLORS["text_secondary"],
-                margin_bottom="0.75em",
-            ),
+            section_label("Audit Log"),
             rx.cond(
                 AppState.guardian_has_log,
-                _audit_table(),
+                rx.box(
+                    _audit_table_scrollable(),
+                    # Kontrol pagination hanya tampil bila lebih dari 1 halaman.
+                    rx.cond(
+                        AppState.guardian_audit_total_pages > 1,
+                        _audit_pagination(),
+                        rx.box(),
+                    ),
+                    width="100%",
+                ),
                 _empty_state(),
             ),
             width="100%",
@@ -503,7 +563,7 @@ def ethical_guardian_page() -> rx.Component:
         on_mount=AppState.load_guardian,
         spacing="6",
         width="100%",
-        max_width="1100px",
+        max_width=PAGE_MAX_WIDTH,
     )
 
 

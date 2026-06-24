@@ -12,19 +12,14 @@ warna aksen hijau, grid & teks abu-abu.
 import reflex as rx
 
 from ..state import AppState
-from ..components.theme import COLORS, page_header, stat_value, section_divider
-
-
-def _chart_label(text: str) -> rx.Component:
-    """Label kecil uppercase di atas tiap grafik."""
-    return rx.text(
-        text,
-        font_size="11px",
-        letter_spacing="2px",
-        text_transform="uppercase",
-        color=COLORS["text_secondary"],
-        margin_bottom="0.75em",
-    )
+from ..components.theme import (
+    COLORS,
+    PAGE_MAX_WIDTH,
+    page_header,
+    stat_value,
+    section_divider,
+    section_label,
+)
 
 
 def statistics_page() -> rx.Component:
@@ -51,7 +46,7 @@ def statistics_page() -> rx.Component:
         section_divider(),
         # Bar chart distribusi fault
         rx.box(
-            _chart_label("Distribusi Fault"),
+            section_label("Distribusi Fault"),
             rx.recharts.bar_chart(
                 rx.recharts.cartesian_grid(
                     stroke=COLORS["border"], stroke_dasharray="3 3"
@@ -70,7 +65,7 @@ def statistics_page() -> rx.Component:
         section_divider(),
         # Pie chart distribusi risk level
         rx.box(
-            _chart_label("Distribusi Risk Level"),
+            section_label("Distribusi Risk Level"),
             rx.recharts.pie_chart(
                 rx.recharts.pie(
                     data=AppState.risk_level_distribution,
@@ -86,7 +81,7 @@ def statistics_page() -> rx.Component:
         on_mount=AppState.load_history,
         spacing="6",
         width="100%",
-        max_width="1100px",
+        max_width=PAGE_MAX_WIDTH,
     )
 
 

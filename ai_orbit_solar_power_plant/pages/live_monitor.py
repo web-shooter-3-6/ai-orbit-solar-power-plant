@@ -15,6 +15,7 @@ from ..state import AppState
 from ..components.theme import (
     COLORS,
     FONT_MONO,
+    PAGE_MAX_WIDTH,
     page_header,
     stat_value,
     section_divider,
@@ -287,7 +288,7 @@ def live_monitor_page() -> rx.Component:
         ),
         spacing="6",
         width="100%",
-        max_width="900px",
+        max_width=PAGE_MAX_WIDTH,
     )
 
 

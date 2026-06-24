@@ -645,6 +645,43 @@ def resolve_guardian_pending(action_type: str, severity: str, confidence: float,
     except Exception as e:
         print(f"[agent_bridge] ! Gagal catat resolusi pending: {e}")
 
+    # Notifikasi Telegram hasil resolusi (best-effort, graceful, tidak boleh crash).
+    telegram = get_telegram()
+    if telegram is not None:
+        try:
+            telegram.send_human_resolution(confirmed, {
+                "dominant_fault": fault_detected or "UNKNOWN",
+                "proposed_action": action_type,
+                "risk_score": confidence,
+            })
+        except Exception as e:
+            print(f"[agent_bridge] ! Gagal kirim notifikasi resolusi: {e}")
+
+
+def mark_guardian_pending_resolved(pending_timestamp: str, confirmed: bool,
+                                   escalation_level: int = 0) -> None:
+    """Tandai SATU entri pending sebagai diresolusi (final_outcome) TANPA menambah
+    baris resolusi baru ke audit log. Graceful.
+
+    Satu situasi fault yang berlangsung lama memicu BANYAK entri pending beruntun
+    (perilaku worker realtime; lihat _refresh_pending_count yang men-dedup per
+    action_type+fault). Saat operator menekan Konfirmasi/Batalkan SEKALI, seluruh
+    grup pending itu harus ikut tertutup. resolve_guardian_pending() mencatat SATU
+    baris resolusi kanonik untuk entri yang ditampilkan; fungsi ini menutup entri
+    pending lain di grup yang sama — cukup menandai final_outcome agar tidak
+    muncul lagi sebagai pending (tanpa membanjiri log dengan baris resolusi ganda).
+    """
+    if ethical_guardian is None:
+        return
+    try:
+        ethical_guardian._update_entry_by_timestamp(
+            pending_timestamp,
+            escalation_level=escalation_level,
+            final_outcome=("human_confirmed" if confirmed else "human_cancelled"),
+        )
+    except Exception as e:
+        print(f"[agent_bridge] ! Gagal tandai pending grup: {e}")
+
 
 # ─────────────────────────────────────────────────────────
 # Eskalasi bertingkat (Opsi C) — dipanggil oleh monitor di state.py

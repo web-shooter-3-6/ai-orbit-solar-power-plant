@@ -10,7 +10,7 @@ Gaya "Modern Minimalist": tombol outline, tabel garis tipis.
 import reflex as rx
 
 from ..state import AppState
-from ..components.theme import page_header, analysis_table
+from ..components.theme import PAGE_MAX_WIDTH, page_header, analysis_table
 
 
 def history_page() -> rx.Component:
@@ -40,7 +40,7 @@ def history_page() -> rx.Component:
         on_mount=AppState.load_history,
         spacing="6",
         width="100%",
-        max_width="1100px",
+        max_width=PAGE_MAX_WIDTH,
     )
 
 
