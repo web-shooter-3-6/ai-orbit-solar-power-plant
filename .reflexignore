@@ -1,0 +1,33 @@
+# Claude/AI tools
+.claude/
+CLAUDE.md
+
+# Development files
+*.tmp
+*.tmp.*
+*.bak
+notebook/
+tests/
+
+# Large files yang tidak diperlukan backend
+data/Condition_Monitoring_Dataset.csv
+data/Condition_Monitoring_Dataset_Labeled.csv
+models/backup_before_relabel/
+models/output/y_train.csv
+models/output/y_test.csv
+models/output/X_train.csv
+models/output/X_test.csv
+models/confusion_matrices/
+models/evaluate_models.py
+models/evaluation_report.txt
+models/evaluation_report_v2.txt
+
+# Runtime files
+realtime_results.json
+agent_memory/
+**/agent_memory/
+
+# Docs yang tidak perlu di backend
+*.md
+docs/
+scripts/

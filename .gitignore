@@ -48,3 +48,51 @@ data/Condition_Monitoring_Dataset_Labeled.csv
 # Tooling lokal
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# ─────────────────────────────────────────────────────────
+# Cleanup audit (lanjutan): exclude jejak AI tools, temp, OS, dll.
+# (Pola yang sudah ada di atas sengaja tidak diulang di sini.)
+# ─────────────────────────────────────────────────────────
+# Claude / AI assistant tools
+.claude/
+CLAUDE.md
+claude.md
+.cursorrules
+.aider*
+.copilot/
+
+# Editor / temp tambahan
+*.orig
+*.swp
+*.swo
+*~
+
+# OS files tambahan
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# Python tambahan
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment & secrets (pertahankan .env.example sebagai template)
+.env.*
+!.env.example
+*.env
+
+# Runtime state (folder agent memory)
+agent_memory/
+backend/agent_memory/
+
+# Reflex
+reflex.db
