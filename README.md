@@ -1,6 +1,6 @@
 # ⚡ AI-ORBIT Solar Power Plant Anomaly Monitoring System
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-660066?logo=eclipsemosquitto&logoColor=white)](https://mosquitto.org/)
@@ -47,12 +47,16 @@
 
 ### Prerequisites
 
-- **Python 3.9+**
-- **Docker Desktop** (only for the realtime pipeline)
-- Install dependencies:
+- **Python 3.12+** (Reflex frontend is developed on 3.14)
+- **Docker Desktop** (optional — only for the legacy TimescaleDB / MQTT pipeline)
+- Install dependencies (the project is configured for [uv](https://docs.astral.sh/uv/)):
 
 ```bash
-pip install -r requirements.txt
+# recommended — uses pyproject.toml + CPU-only torch index
+uv sync
+
+# or with pip
+pip install -r ai_orbit_solar_power_plant/requirements.txt
 ```
 
 <details>
@@ -71,7 +75,8 @@ python -m venv .venv
 source .venv/bin/activate
 
 # 3. Install Python dependencies
-pip install -r requirements.txt
+uv sync                                              # recommended
+# or: pip install -r ai_orbit_solar_power_plant/requirements.txt
 
 # 4. Configure environment variables
 copy .env.example .env      # Windows
@@ -89,13 +94,21 @@ python tests/test_risk_score.py
 ### Environment Variables (`.env`)
 
 ```ini
+# Storage
+DB_PASSWORD=your_db_password                 # local TimescaleDB / Postgres
+SUPABASE_DB_URL=postgresql://...             # cloud storage for Realtime Feed & History
+
+# Telegram alerts (optional)
 TELEGRAM_TOKEN=your_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
-DB_PASSWORD=your_db_password
+ADMIN_TELEGRAM_ID_1=telegram_id_allowed_to_approve   # approve high-risk actions
+ADMIN_TELEGRAM_ID_2=telegram_id_allowed_to_approve
+
+# LLM agent (optional)
 ANTHROPIC_API_KEY=optional_for_llm
 ```
 
-> All Telegram functionality is **gracefully disabled** if the token/chat id are empty — the rest of the system keeps running.
+> See `.env.example` for the full template. All Telegram functionality is **gracefully disabled** if the token/chat id are empty, and the cloud `SUPABASE_DB_URL` falls back to local file storage (`realtime_results.json`) when unset — the rest of the system keeps running.
 
 ### Run Modes
 
@@ -103,6 +116,8 @@ ANTHROPIC_API_KEY=optional_for_llm
 ```bash
 streamlit run dashboard.py
 ```
+
+> **Two frontends:** the **Streamlit** dashboard (`dashboard.py`) is the primary UI and the one used in cloud deployment (`Procfile` / `railway.json`). The repo also ships a **Reflex** app under `ai_orbit_solar_power_plant/` (config in `rxconfig.py`) — run it with `reflex run`. Both consume the same agent/model layer.
 
 #### 🎬 Mode 2 — Automated Demo
 ```bash
@@ -197,14 +212,22 @@ ai-orbit-solar/
 │   ├── anomaly_agent.py      # Multi-model risk scoring
 │   ├── decision_engine.py    # Fault explanation & recommendations
 │   ├── root_cause.py         # Pattern detection & history
-│   └── guardrails.py         # Input validation
+│   ├── guardrails.py         # Input validation
+│   ├── orchestrator.py       # Agent orchestration
+│   ├── aggregator.py         # Model vote aggregation
+│   ├── drift_monitor.py      # Data / concept drift monitoring
+│   ├── memory.py             # Agent memory
+│   └── prompts.py            # LLM prompts
 ├── agent_memory/
 │   └── history.json          # Analysis history
 ├── alert/
-│   └── telegram_alert.py     # Telegram notification (cooldown + retry + summary)
-├── features/                 # Feature engineering
+│   ├── telegram_alert.py     # Telegram notification (cooldown + retry + summary)
+│   ├── telegram_bot.py       # Telegram approval bot
+│   └── audit_log.py          # Action audit log
+├── features/
+│   └── engineer.py           # Feature engineering
 ├── ingestion/
-│   ├── mqtt_client.py        # MQTT subscriber + agent pipeline
+│   ├── mqtt_client.py        # MQTT subscriber + agent pipeline (legacy)
 │   └── db_writer.py          # TimescaleDB writer (CSV fallback)
 ├── models/
 │   ├── preprocessing.py      # Data preprocessing
@@ -213,24 +236,44 @@ ai-orbit-solar/
 │   ├── isolation_forest.py   # Isolation Forest model
 │   ├── kmeans.py             # KMeans clustering
 │   ├── lstm.py               # LSTM model
+│   ├── online_detector.py    # Online / incremental detector
+│   ├── evaluate_models.py    # Model evaluation
 │   └── output/               # Trained model files (.pkl, .pt)
 ├── simulator/
-│   ├── mqtt_publisher.py     # Simulate sensor data via MQTT
+│   ├── mqtt_publisher.py     # Simulate sensor data via MQTT (legacy)
 │   ├── generate_anomaly.py   # Anomaly data generator
 │   └── generate_normal.py    # Normal data generator
 ├── scripts/
 │   ├── run_demo.py           # End-to-end demo script
-│   └── run_realtime.py       # Realtime pipeline runner
+│   ├── run_realtime.py       # Realtime pipeline runner
+│   ├── realtime_simulator.py # MQTT-free realtime feeder (used in deployment)
+│   ├── train_models.py       # Train all models
+│   ├── retrain.py            # Retrain on new data
+│   ├── scheduled_tasks.py    # Background scheduled jobs
+│   └── seed_normal_data.py   # Seed baseline normal data
 ├── tests/
-│   └── test_risk_score.py    # Risk score unit tests
+│   ├── test_risk_score.py    # Risk score unit tests
+│   ├── test_guardrails.py    # Guardrail tests
+│   ├── test_memory.py        # Agent memory tests
+│   ├── test_online_learning.py
+│   ├── test_simulator.py
+│   └── test_e2e.py           # End-to-end tests
 ├── data/
-│   └── Condition_Monitoring_Dataset.csv
-├── dashboard.py              # Streamlit web dashboard
+│   ├── Condition_Monitoring_Dataset.csv   # Training / eval dataset
+│   └── Realtime_Test_Sequence.csv         # Realtime Feed demo sequence
+├── ai_orbit_solar_power_plant/  # Reflex app (alternative frontend)
+│   ├── ai_orbit_solar_power_plant.py      # Reflex app entrypoint (rx.App)
+│   ├── pages/  components/  backend/       # UI pages, components, agent backend
+│   ├── state.py                            # Reflex state
+│   └── requirements.txt                    # pip dependency list
+├── dashboard.py              # Streamlit web dashboard (primary UI)
 ├── run_all_models.py         # Train all models
-├── docker-compose.yml        # Docker services
-├── mosquitto.conf            # MQTT broker config
+├── rxconfig.py               # Reflex config
+├── pyproject.toml            # Project metadata & dependencies (uv)
+├── railway.json / Procfile   # Cloud deployment (Railway)
+├── docker-compose.yml        # Docker services (legacy realtime stack)
+├── mosquitto.conf            # MQTT broker config (legacy)
 ├── config.yaml               # System configuration
-├── requirements.txt          # Python dependencies
 └── .env.example              # Environment variables template
 ```
 
